@@ -21,8 +21,6 @@ class Assets {
   static const String libMain = 'lib/main.dart';
   static const String recipeCardRecipeCard =
       'lib/shared/recipe_card/recipe_card.dart';
-  static const String routesRouteHandler = 'lib/core/routes/route_handler.dart';
-  static const String routesRoutes = 'lib/core/routes/routes.dart';
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';
   static const String themesAppTypography =
       'lib/core/themes/app_typography.dart';

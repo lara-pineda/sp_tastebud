@@ -1,6 +1,7 @@
 import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/utils/hex_to_color.dart';
 
 class LoginPage extends StatefulWidget {
@@ -40,10 +41,8 @@ class _LoginState extends State<LoginPage> {
     print("\nlogin button clicked!");
     print(_emailController.text);
     print(_passwordController.text);
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const SignupPage()),
-    // );
+    // launch logic for user auth
+    context.go("/search");
   }
 
   Color getColor() {
@@ -244,9 +243,6 @@ class _LoginState extends State<LoginPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: '#F06F6F'.toColor(),
                         foregroundColor: const Color(0xFFF7EBE8),
-                        // shape: RoundedRectangleBorder(
-                        //   borderRadius: BorderRadius.circular(7.0),
-                        // ),
                       ),
                       child: const Text("Log In"),
                     ),

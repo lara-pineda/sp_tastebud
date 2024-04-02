@@ -1,11 +1,8 @@
 import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/utils/hex_to_color.dart';
-import 'package:sp_tastebud/features/auth/ui/login_ui.dart';
-// import '../config/themes/app_palette.dart';
-
-import 'package:sp_tastebud/features/auth/ui/signup_ui.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({super.key, required this.appName1, required this.appName2});
@@ -18,20 +15,16 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
+  // switch page to signup
   void signupClicked() {
     print("create account button clicked!");
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SignupPage()),
-    );
+    context.go("/signup");
   }
 
+  // switch page to login
   void signinClicked() {
     print("sign in button clicked!");
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
+    context.go("/login");
   }
 
   @override
@@ -86,7 +79,6 @@ class _MainMenuState extends State<MainMenu> {
             // app name
             Text.rich(
               TextSpan(
-                // style: DefaultTextStyle.of(context).style,
                 children: [
                   TextSpan(
                     text: widget.appName1,
@@ -136,9 +128,6 @@ class _MainMenuState extends State<MainMenu> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: '#F06F6F'.toColor(),
                   foregroundColor: const Color(0xFFF7EBE8),
-                  // shape: RoundedRectangleBorder(
-                  //   borderRadius: BorderRadius.circular(7.0),
-                  // ),
                 ),
                 child: const Text("Sign In"),
               ),
@@ -153,12 +142,6 @@ class _MainMenuState extends State<MainMenu> {
                 onPressed: signupClicked,
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.black87,
-                  // shape: RoundedRectangleBorder(
-                  //   borderRadius: BorderRadius.circular(7.0),
-                  // ),
-                  // side: BorderSide(
-                  //   color: '#000000'.toColor(),
-                  // ),
                 ),
                 child: const Text("Create Account"),
               ),
