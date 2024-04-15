@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sp_tastebud/features/auth/bloc/login_bloc.dart';
-import 'package:sp_tastebud/features/auth/ui/login_ui.dart';
-import 'package:sp_tastebud/features/auth/ui/main_menu_ui.dart';
-import 'package:sp_tastebud/features/auth/ui/signup_ui.dart';
-import 'package:sp_tastebud/features/ingredients/ui/ingredient_management_ui.dart';
-import 'package:sp_tastebud/features/navigation/ui/navigation_bar_ui.dart';
-import 'package:sp_tastebud/features/recipe-collection/ui/recipe_collection_ui.dart';
-import 'package:sp_tastebud/features/recipe/search-recipe/ui/search_recipe_ui.dart';
-import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'features/navigation/bloc/app_navigation_bloc.dart';
 import 'firebase_options.dart';
 
+// UI widgets
+import 'features/auth/ui/login_ui.dart';
+import 'features/auth/ui/main_menu_ui.dart';
+import 'features/auth/ui/signup_ui.dart';
+import 'features/ingredients/ui/ingredient_management_ui.dart';
+import 'features/navigation/ui/navigation_bar_ui.dart';
+import 'features/recipe-collection/ui/recipe_collection_ui.dart';
+import 'features/recipe/search-recipe/ui/search_recipe_ui.dart';
+import 'features/user-profile/ui/user_profile_ui.dart';
+
+// Blocs
+import 'features/navigation/bloc/app_navigation_bloc.dart';
 import 'features/auth/bloc/signup_bloc.dart';
+import 'features/auth/bloc/login_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,10 +41,8 @@ class MyApp extends StatelessWidget {
       // removes debug tag when running app test
       debugShowCheckedModeBanner: false,
 
-      /// App Name
       title: 'TasteBud',
 
-      /// App Theme
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black87),
         scaffoldBackgroundColor: Colors.white,
@@ -50,14 +50,6 @@ class MyApp extends StatelessWidget {
       ),
 
       routerConfig: _router,
-
-      // initialRoute: '/',
-      // onGenerateRoute: RouteGenerator().generateRoute,
-
-      /// main menu screen
-      // home: const MainMenu(appName1: 'Taste', appName2: 'Bud'),
-      // home: const LoginPage(),
-      // home: const SignupPage(),
 
       /// components
       // home: const CustomSearchBar(),
@@ -71,6 +63,7 @@ class MyApp extends StatelessWidget {
   // for nested navigation with ShellRoute
   final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
+  // routes
   late final _router = GoRouter(
     initialLocation: "/",
     navigatorKey: _rootNavigatorKey,

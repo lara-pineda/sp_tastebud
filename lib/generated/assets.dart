@@ -32,7 +32,6 @@ class Assets {
   static const String imagesStarIcon = 'assets/images/StarIcon.svg';
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
-  static const String libScratch = 'lib/scratch.dart';
   static const String recipeCardRecipeCard =
       'lib/shared/recipe_card/recipe_card.dart';
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';
@@ -42,8 +41,6 @@ class Assets {
       'lib/features/user-profile/ui/checkbox_list_tile.dart';
   static const String uiCustomCheckbox =
       'lib/features/user-profile/ui/custom_checkbox.dart';
-  static const String uiGeneratedRoutes =
-      'lib/features/navigation/ui/generated_routes.dart';
   static const String uiIngredientManagementUi =
       'lib/features/ingredients/ui/ingredient_management_ui.dart';
   static const String uiLoginUi = 'lib/features/auth/ui/login_ui.dart';
