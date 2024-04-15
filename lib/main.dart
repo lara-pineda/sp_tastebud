@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sp_tastebud/features/auth/bloc/login_bloc.dart';
 import 'package:sp_tastebud/features/auth/ui/login_ui.dart';
 import 'package:sp_tastebud/features/auth/ui/main_menu_ui.dart';
 import 'package:sp_tastebud/features/auth/ui/signup_ui.dart';
@@ -12,6 +13,7 @@ import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'features/navigation/bloc/app_navigation_bloc.dart';
 import 'firebase_options.dart';
 
 import 'features/auth/bloc/signup_bloc.dart';
@@ -83,8 +85,8 @@ class MyApp extends StatelessWidget {
         name: "login",
         path: "/login",
         builder: (context, state) {
-          return BlocProvider<SignupBloc>(
-            create: (context) => SignupBloc(FirebaseAuth.instance),
+          return BlocProvider<LoginBloc>(
+            create: (context) => LoginBloc(FirebaseAuth.instance),
             child: LoginPage(),
           );
         },
@@ -101,8 +103,12 @@ class MyApp extends StatelessWidget {
       ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
-        builder: (context, state, child) =>
-            AppBottomNavBar(appName1: 'Taste', appName2: 'Bud'),
+        builder: (context, state, child) {
+          return BlocProvider<AppNavigationBloc>(
+            create: (context) => AppNavigationBloc(),
+            child: AppBottomNavBar(appName1: 'Taste', appName2: 'Bud'),
+          );
+        },
         routes: [
           GoRoute(
             name: "search",

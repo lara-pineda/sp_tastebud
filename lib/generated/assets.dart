@@ -9,10 +9,16 @@ class Assets {
       'lib/features/navigation/bloc/app_navigation_event.dart';
   static const String blocAppNavigationState =
       'lib/features/navigation/bloc/app_navigation_state.dart';
-  static const String blocAuthBloc = 'lib/features/auth/bloc/signup_bloc.dart';
-  static const String blocAuthEvent =
+  static const String blocLoginBloc = 'lib/features/auth/bloc/login_bloc.dart';
+  static const String blocLoginEvent =
+      'lib/features/auth/bloc/login_event.dart';
+  static const String blocLoginState =
+      'lib/features/auth/bloc/login_state.dart';
+  static const String blocSignupBloc =
+      'lib/features/auth/bloc/signup_bloc.dart';
+  static const String blocSignupEvent =
       'lib/features/auth/bloc/signup_event.dart';
-  static const String blocAuthState =
+  static const String blocSignupState =
       'lib/features/auth/bloc/signup_state.dart';
   static const String constantsAssetsPath =
       'lib/core/constants/assets_path.dart';
@@ -26,6 +32,7 @@ class Assets {
   static const String imagesStarIcon = 'assets/images/StarIcon.svg';
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
+  static const String libScratch = 'lib/scratch.dart';
   static const String recipeCardRecipeCard =
       'lib/shared/recipe_card/recipe_card.dart';
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';

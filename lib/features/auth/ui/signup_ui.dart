@@ -38,23 +38,13 @@ class _SignupState extends State<SignupPage> {
     });
   }
 
-  void loginClicked() {
-    print("\nlogin button clicked!");
-    print(_emailController.text);
-    print(_confirmPasswordController.text);
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const SignupPage()),
-    // );
-  }
-
   Color getColor() {
     return Colors.black87;
   }
 
   @override
   Widget build(BuildContext context) {
-    final authBloc = BlocProvider.of<SignupBloc>(context);
+    final signupBloc = BlocProvider.of<SignupBloc>(context);
 
     return Scaffold(
       // make widgets fixed even when keyboard appears
@@ -260,7 +250,7 @@ class _SignupState extends State<SignupPage> {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-                        authBloc.add(SignUpRequested(
+                        signupBloc.add(SignUpRequested(
                             email: _emailController.text,
                             password: _confirmPasswordController.text));
                       },

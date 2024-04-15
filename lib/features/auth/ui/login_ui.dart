@@ -1,8 +1,11 @@
 import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/utils/hex_to_color.dart';
+
+import '../bloc/login_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -36,20 +39,14 @@ class _LoginState extends State<LoginPage> {
     });
   }
 
-  void loginClicked() {
-    print("\nlogin button clicked!");
-    print(_emailController.text);
-    print(_passwordController.text);
-    // launch logic for user auth
-    context.go("/search");
-  }
-
   Color getColor() {
     return Colors.black87;
   }
 
   @override
   Widget build(BuildContext context) {
+    final loginBloc = BlocProvider.of<LoginBloc>(context);
+
     return Scaffold(
       // make widgets fixed even when keyboard appears
       resizeToAvoidBottomInset: false,
@@ -238,7 +235,11 @@ class _LoginState extends State<LoginPage> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
-                      onPressed: loginClicked,
+                      onPressed: () {
+                        loginBloc.add(LoginRequested(
+                            email: _emailController.text,
+                            password: _passwordController.text));
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: '#F06F6F'.toColor(),
                         foregroundColor: const Color(0xFFF7EBE8),
@@ -271,6 +272,25 @@ class _LoginState extends State<LoginPage> {
             ),
 
             SizedBox(height: (40.toVHLength).toPX()),
+
+            // Listen to state changes
+            BlocListener<LoginBloc, LoginState>(
+              listener: (context, state) {
+                // If login is successful, navigate to search recipe
+                if (state is LoginSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Login successful!")));
+                  context.go('/search');
+
+                  // Login failed
+                } else if (state is LoginFailure) {
+                  // Show error message
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(state.error)));
+                }
+              },
+              child: Container(),
+            ),
           ],
         ),
       ),
