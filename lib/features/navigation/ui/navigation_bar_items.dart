@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sp_tastebud/features/ingredients/ui/ingredient_management_ui.dart';
 import 'package:sp_tastebud/features/recipe-collection/ui/recipe_collection_ui.dart';
-// main pages
 import 'package:sp_tastebud/features/recipe/search-recipe/ui/search_recipe_ui.dart';
 import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
 

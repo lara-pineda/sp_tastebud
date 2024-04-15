@@ -17,11 +17,10 @@ class _LoginState extends State<LoginPage> {
 
   // for remember me functionality
   bool _isChecked = false;
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
 
   // getting text field values
-  // String _password;
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   // toggles the password show status
   void _togglePassword() {

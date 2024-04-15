@@ -1,7 +1,11 @@
 import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/utils/hex_to_color.dart';
+
+import '../bloc/signup_bloc.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -15,12 +19,10 @@ class _SignupState extends State<SignupPage> {
   bool _obscureCreatePassword = true;
   bool _obscureConfirmPassword = true;
 
+  // getting text field values
   TextEditingController _emailController = TextEditingController();
   TextEditingController _createPasswordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
-
-  // getting text field values
-  // String _password;
 
   // toggles the password show status
   void _toggleCreatePassword() {
@@ -52,6 +54,8 @@ class _SignupState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authBloc = BlocProvider.of<SignupBloc>(context);
+
     return Scaffold(
       // make widgets fixed even when keyboard appears
       resizeToAvoidBottomInset: false,
@@ -255,7 +259,11 @@ class _SignupState extends State<SignupPage> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        authBloc.add(SignUpRequested(
+                            email: _emailController.text,
+                            password: _confirmPasswordController.text));
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: '#F06F6F'.toColor(),
                         foregroundColor: const Color(0xFFF7EBE8),
@@ -291,6 +299,25 @@ class _SignupState extends State<SignupPage> {
             ),
 
             SizedBox(height: (40.toVHLength).toPX()),
+
+            // Listen to state changes
+            BlocListener<SignupBloc, SignupState>(
+              listener: (context, state) {
+                // If signup is successful, navigate to main menu
+                if (state is SignupSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Signup successful!")));
+                  context.go('/');
+
+                  // Signup failed
+                } else if (state is SignupFailure) {
+                  // Show error message
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(state.error)));
+                }
+              },
+              child: Container(),
+            ),
           ],
         ),
       ),

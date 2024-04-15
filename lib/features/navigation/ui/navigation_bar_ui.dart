@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sp_tastebud/core/utils/hex_to_color.dart';
-import 'package:sp_tastebud/features/navigation/ui/bloc/app_navigation_bloc.dart';
-import 'package:sp_tastebud/features/navigation/ui/view/navigation_bar_items.dart';
+import 'package:sp_tastebud/features/navigation/bloc/app_navigation_bloc.dart';
+import 'package:sp_tastebud/features/navigation/ui/navigation_bar_items.dart';
 
 class AppBottomNavBar extends StatelessWidget {
   const AppBottomNavBar(

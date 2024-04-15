@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sp_tastebud/features/navigation/ui/bloc/app_navigation_bloc.dart';
-import 'package:sp_tastebud/features/navigation/ui/view/navigation_bar_ui.dart';
+import 'package:sp_tastebud/features/navigation/bloc/app_navigation_bloc.dart';
+import 'package:sp_tastebud/features/navigation/ui/navigation_bar_ui.dart';
 
 class RouteGenerator {
   final AppNavigationBloc appNavBloc = AppNavigationBloc();

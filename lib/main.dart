@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/features/auth/ui/login_ui.dart';
 import 'package:sp_tastebud/features/auth/ui/main_menu_ui.dart';
 import 'package:sp_tastebud/features/auth/ui/signup_ui.dart';
 import 'package:sp_tastebud/features/ingredients/ui/ingredient_management_ui.dart';
-import 'package:sp_tastebud/features/navigation/ui/view/navigation_bar_ui.dart';
+import 'package:sp_tastebud/features/navigation/ui/navigation_bar_ui.dart';
 import 'package:sp_tastebud/features/recipe-collection/ui/recipe_collection_ui.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/ui/search_recipe_ui.dart';
 import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'firebase_options.dart';
+
+import 'features/auth/bloc/signup_bloc.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // // initialize firebase
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  // initialize firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(MyApp());
 }
@@ -75,12 +82,22 @@ class MyApp extends StatelessWidget {
       GoRoute(
         name: "login",
         path: "/login",
-        builder: (context, state) => const LoginPage(),
+        builder: (context, state) {
+          return BlocProvider<SignupBloc>(
+            create: (context) => SignupBloc(FirebaseAuth.instance),
+            child: LoginPage(),
+          );
+        },
       ),
       GoRoute(
         name: "signup",
         path: "/signup",
-        builder: (context, state) => const SignupPage(),
+        builder: (context, state) {
+          return BlocProvider<SignupBloc>(
+            create: (context) => SignupBloc(FirebaseAuth.instance),
+            child: SignupPage(),
+          );
+        },
       ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,

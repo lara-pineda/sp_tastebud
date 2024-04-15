@@ -43,6 +43,11 @@ dependencies:
 
   # app architecture
   equatable: ^2.0.5
+  bloc: ^8.1.4
+  flutter_bloc: ^8.1.5
+
+  # routing
+  go_router: ^13.2.2
 
   # for svg icons
   flutter_svg: ^2.0.10+1
@@ -50,11 +55,12 @@ dependencies:
   # for using css units of measurement
   dimension: ^0.1.7
 
-  # for rating stars
+  # for rating star component
   flutter_rating_bar: ^4.0.1
-  bloc: ^8.1.4
-  flutter_bloc: ^8.1.5
-  go_router: ^13.2.2
+
+  # firebase
+  firebase_core: ^2.29.0
+  firebase_auth: ^4.19.1
 
 
 dev_dependencies:

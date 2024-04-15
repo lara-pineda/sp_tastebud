@@ -15,13 +15,12 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
-  // switch page to signup
+  // navigate to signup page
   void signupClicked() {
-    print("create account button clicked!");
     context.go("/signup");
   }
 
-  // switch page to login
+  // navigate to login page
   void signinClicked() {
     print("sign in button clicked!");
     context.go("/login");

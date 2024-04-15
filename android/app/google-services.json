@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "42153647475",
+    "project_id": "sp-tastebud",
+    "storage_bucket": "sp-tastebud.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:42153647475:android:09bc796d448e5b341cf906",
+        "android_client_info": {
+          "package_name": "com.example.tastebud.sp.sp_tastebud"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcSznRdjeOqoh4IPy_U_m3JJhksedSmdo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
