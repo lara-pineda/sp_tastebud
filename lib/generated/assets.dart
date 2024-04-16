@@ -20,6 +20,14 @@ class Assets {
       'lib/features/auth/bloc/signup_event.dart';
   static const String blocSignupState =
       'lib/features/auth/bloc/signup_state.dart';
+  static const String checkboxCardCheckboxCard =
+      'lib/shared/checkbox_card/checkbox_card.dart';
+  static const String checkboxCardCheckboxListTile =
+      'lib/shared/checkbox_card/checkbox_list_tile.dart';
+  static const String checkboxCardCustomCheckboxIcon =
+      'lib/shared/checkbox_card/custom_checkbox_icon.dart';
+  static const String checkboxCardOptions =
+      'lib/shared/checkbox_card/options.dart';
   static const String constantsAssetsPath =
       'lib/core/constants/assets_path.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
@@ -37,10 +45,6 @@ class Assets {
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';
   static const String themesAppTypography =
       'lib/core/themes/app_typography.dart';
-  static const String uiCheckboxListTile =
-      'lib/features/user-profile/ui/checkbox_list_tile.dart';
-  static const String uiCustomCheckbox =
-      'lib/features/user-profile/ui/custom_checkbox.dart';
   static const String uiIngredientManagementUi =
       'lib/features/ingredients/ui/ingredient_management_ui.dart';
   static const String uiLoginUi = 'lib/features/auth/ui/login_ui.dart';
