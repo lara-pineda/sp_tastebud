@@ -1,12 +1,17 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+// Handling signup logic and state transitions based on user actions.
+
+import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../data/user_repository.dart';
+
 part 'signup_event.dart';
 part 'signup_state.dart';
 
 class SignupBloc extends Bloc<SignupEvent, SignupState> {
-  final FirebaseAuth _firebaseAuth;
+  final UserRepository _userRepository;
 
-  SignupBloc(this._firebaseAuth) : super(SignupInitial()) {
+  SignupBloc(this._userRepository) : super(SignupInitial()) {
     on<SignUpRequested>(_onSignUpRequested);
   }
 
@@ -14,13 +19,9 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       SignUpRequested event, Emitter<SignupState> emit) async {
     emit(SignupLoading());
     try {
-      UserCredential userCredential =
-          await _firebaseAuth.createUserWithEmailAndPassword(
-        email: event.email.trim(),
-        password: event.password.trim(),
-      );
-
-      emit(SignupSuccess(userCredential.user!));
+      User user = await _userRepository.createUser(
+          event.email, event.password); // CreateUser now returns User
+      emit(SignupSuccess(user)); // Pass the user to the success state
     } on FirebaseAuthException catch (e) {
       emit(SignupFailure(e.message ?? "An unknown error occurred"));
     } catch (e) {

@@ -306,6 +306,7 @@ class _SignupState extends State<SignupPage> {
                       .showSnackBar(SnackBar(content: Text(state.error)));
                 }
               },
+              // placeholder, typically replaced by the whole signup_ui widget
               child: Container(),
             ),
           ],

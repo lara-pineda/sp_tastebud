@@ -2,6 +2,8 @@
 class Assets {
   Assets._();
 
+  static const String apiDietaryPreferencesApi =
+      'lib/api/dietary_preferences_api.dart';
   static const String apiFirebaseAuthApi = 'lib/api/firebase_auth_api.dart';
   static const String blocAppNavigationBloc =
       'lib/features/navigation/bloc/app_navigation_bloc.dart';
@@ -28,8 +30,11 @@ class Assets {
       'lib/shared/checkbox_card/custom_checkbox_icon.dart';
   static const String checkboxCardOptions =
       'lib/shared/checkbox_card/options.dart';
-  static const String constantsAssetsPath =
-      'lib/core/constants/assets_path.dart';
+  static const String constantsAssetsPath = 'lib/core/config/assets_path.dart';
+  static const String dataAuthService =
+      'lib/features/auth/data/auth_service.dart';
+  static const String dataUserRepository =
+      'lib/features/auth/data/user_repository.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesBackground = 'assets/images/Background.png';
   static const String imagesDefaultProfile = 'assets/images/DefaultProfile.jpg';
