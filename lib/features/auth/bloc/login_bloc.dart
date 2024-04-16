@@ -1,12 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sp_tastebud/features/auth/data/user_repository.dart';
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final FirebaseAuth _firebaseAuth;
+  final UserRepository _userRepository;
 
-  LoginBloc(this._firebaseAuth) : super(LoginInitial()) {
+  LoginBloc(this._userRepository) : super(LoginInitial()) {
     on<LoginRequested>(_onLoginRequested);
   }
 
@@ -14,13 +15,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       LoginRequested event, Emitter<LoginState> emit) async {
     emit(LoginLoading());
     try {
-      UserCredential userCredential =
-          await _firebaseAuth.signInWithEmailAndPassword(
-        email: event.email.trim(),
-        password: event.password.trim(),
+      User user = await _userRepository.signIn(
+        event.email,
+        event.password,
       );
 
-      emit(LoginSuccess(userCredential.user!));
+      emit(LoginSuccess(user));
     } on FirebaseAuthException catch (e) {
       emit(LoginFailure(e.message ?? "An unknown error occurred"));
     } catch (e) {

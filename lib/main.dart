@@ -25,7 +25,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       title: 'TasteBud',
-
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black87),
         scaffoldBackgroundColor: Colors.white,
@@ -33,11 +32,6 @@ class MyApp extends StatelessWidget {
       ),
 
       routerConfig: AppRoutes.router,
-
-      /// components
-      // home: const CustomSearchBar(),
-      // home: const RecipeCard(),
-      // home: const UserCard(),
     );
   }
 }

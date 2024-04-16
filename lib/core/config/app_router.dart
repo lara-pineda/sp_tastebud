@@ -46,8 +46,8 @@ class AppRoutes {
             name: "login",
             path: "/login",
             builder: (context, state) {
-              return BlocProvider<SignupBloc>(
-                create: (context) => SignupBloc(_userRepository),
+              return BlocProvider<LoginBloc>(
+                create: (context) => LoginBloc(_userRepository),
                 child: LoginPage(),
               );
             },
