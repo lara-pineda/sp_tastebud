@@ -27,6 +27,7 @@ class AuthService {
     String photoURL = user.photoURL ?? '';
 
     DocumentReference userDocRef = _firestore.collection('users').doc(user.uid);
+    print(userDocRef);
 
     // Firestore user data initialization
     await userDocRef.set({

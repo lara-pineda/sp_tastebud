@@ -297,7 +297,7 @@ class _SignupState extends State<SignupPage> {
                 if (state is SignupSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Signup successful!")));
-                  context.go('/');
+                  context.go('/search');
 
                   // Signup failed
                 } else if (state is SignupFailure) {

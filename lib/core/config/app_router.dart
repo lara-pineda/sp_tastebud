@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_provider/go_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// UI widgets
 import 'package:sp_tastebud/features/auth/ui/login_ui.dart';
 import 'package:sp_tastebud/features/auth/ui/main_menu_ui.dart';
 import 'package:sp_tastebud/features/auth/ui/signup_ui.dart';
@@ -13,11 +15,15 @@ import 'package:sp_tastebud/features/recipe-collection/ui/recipe_collection_ui.d
 import 'package:sp_tastebud/features/recipe/search-recipe/ui/search_recipe_ui.dart';
 import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
 
-import 'package:sp_tastebud/features/auth/data/user_repository.dart';
-import 'package:sp_tastebud/features/auth/data/auth_service.dart';
+//BLoCs
 import 'package:sp_tastebud/features/auth/bloc/signup_bloc.dart';
 import 'package:sp_tastebud/features/auth/bloc/login_bloc.dart';
+import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import 'package:sp_tastebud/features/navigation/bloc/app_navigation_bloc.dart';
+
+// services
+import 'package:sp_tastebud/features/auth/data/auth_service.dart';
+import 'package:sp_tastebud/features/auth/data/user_repository.dart';
 
 class AppRoutes {
   static final _authService = AuthService(
@@ -62,8 +68,13 @@ class AppRoutes {
               );
             },
           ),
-          ShellRoute(
+          ShellProviderRoute(
             navigatorKey: _shellNavigatorKey,
+            providers: [
+              BlocProvider(
+                  create: (context) =>
+                      UserProfileBloc(FirebaseFirestore.instance))
+            ],
             builder: (context, state, child) {
               return BlocProvider<AppNavigationBloc>(
                 create: (context) => AppNavigationBloc(),
@@ -112,7 +123,16 @@ class AppRoutes {
                 name: "userProfile",
                 path: "/profile",
                 parentNavigatorKey: _shellNavigatorKey,
-                builder: (context, state) => const UserProfile(),
+                builder: (context, state) => UserProfile(),
+                // child: BlocBuilder<UserProfileBloc, UserProfileState>(
+                //   builder: (context, state) {
+                //     if (state is UserProfileLoaded) {
+                //       return UserProfile();
+                //     } else {
+                //       return CircularProgressIndicator();
+                //     }
+                //   },
+                // ),
               ),
             ],
           ),

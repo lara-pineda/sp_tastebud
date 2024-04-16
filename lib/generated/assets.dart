@@ -19,6 +19,12 @@ class Assets {
       'lib/features/auth/bloc/signup_event.dart';
   static const String blocSignupState =
       'lib/features/auth/bloc/signup_state.dart';
+  static const String blocUserProfileBloc =
+      'lib/features/user-profile/bloc/user_profile_bloc.dart';
+  static const String blocUserProfileEvent =
+      'lib/features/user-profile/bloc/user_profile_event.dart';
+  static const String blocUserProfileState =
+      'lib/features/user-profile/bloc/user_profile_state.dart';
   static const String checkboxCardCheckboxCard =
       'lib/shared/checkbox_card/checkbox_card.dart';
   static const String checkboxCardCheckboxListTile =
@@ -45,6 +51,7 @@ class Assets {
   static const String imagesStarIcon = 'assets/images/StarIcon.svg';
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
+  static const String libScratch = 'lib/scratch.dart';
   static const String recipeCardRecipeCard =
       'lib/shared/recipe_card/recipe_card.dart';
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';
