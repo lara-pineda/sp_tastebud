@@ -25,6 +25,9 @@ import 'package:sp_tastebud/features/navigation/bloc/app_navigation_bloc.dart';
 import 'package:sp_tastebud/features/auth/data/auth_service.dart';
 import 'package:sp_tastebud/features/auth/data/user_repository.dart';
 
+import '../../features/user-profile/data/user_profile_repository.dart';
+import '../../features/user-profile/data/user_profile_services.dart';
+
 class AppRoutes {
   static final _authService = AuthService(
     FirebaseAuth.instance,
@@ -72,8 +75,10 @@ class AppRoutes {
             navigatorKey: _shellNavigatorKey,
             providers: [
               BlocProvider(
-                  create: (context) =>
-                      UserProfileBloc(FirebaseFirestore.instance))
+                create: (context) => UserProfileBloc(UserProfileRepository(
+                    UserProfileService(
+                        FirebaseAuth.instance, FirebaseFirestore.instance))),
+              ),
             ],
             builder: (context, state, child) {
               return BlocProvider<AppNavigationBloc>(

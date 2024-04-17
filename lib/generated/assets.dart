@@ -37,8 +37,10 @@ class Assets {
   static const String configAssetsPath = 'lib/core/config/assets_path.dart';
   static const String dataAuthService =
       'lib/features/auth/data/auth_service.dart';
-  static const String dataDietaryPreferencesApi =
-      'lib/features/user-profile/data/dietary_preferences_api.dart';
+  static const String dataUserProfileRepository =
+      'lib/features/user-profile/data/user_profile_repository.dart';
+  static const String dataUserProfileServices =
+      'lib/features/user-profile/data/user_profile_services.dart';
   static const String dataUserRepository =
       'lib/features/auth/data/user_repository.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
