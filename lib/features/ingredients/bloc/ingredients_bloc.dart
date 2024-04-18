@@ -25,15 +25,25 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
     try {
       var data = await _IngredientsRepository.fetchIngredients(userId);
       if (data != null) {
-        var fetchPantryEssentials =
-            List<bool>.from(data['pantryEssentials'] as List<dynamic>);
-        var fetchMeat = List<bool>.from(data['meat'] as List<dynamic>);
-        var fetchVegetables =
-            List<bool>.from(data['vegetables'] as List<dynamic>);
+        var fetchPantryEssentials = Options.pantryEssentials.map((option) {
+          var pantryList = data['pantryEssentials'] as List<dynamic>?;
+          return pantryList?.contains(option) ?? false;
+        }).toList();
+
+        var fetchMeat = Options.meat.map((option) {
+          var meatList = data['meat'] as List<dynamic>?;
+          return meatList?.contains(option) ?? false;
+        }).toList();
+
+        var fetchVegetables = Options.vegetables.map((option) {
+          var vegList = data['vegetables'] as List<dynamic>?;
+          return vegList?.contains(option) ?? false;
+        }).toList();
 
         emit(IngredientsLoaded(
             fetchPantryEssentials, fetchMeat, fetchVegetables));
       } else {
+        // No user data found, defaulting to all unchecked.
         emit(IngredientsLoaded(
           List<bool>.filled(Options.pantryEssentials.length, false),
           List<bool>.filled(Options.meat.length, false),
