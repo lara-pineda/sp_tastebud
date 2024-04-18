@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dimension/dimension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
@@ -13,31 +14,50 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  List<bool> selectedValues = [];
+  List<bool> selectedDietaryPreferences = [];
+  List<bool> selectedAllergies = [];
+  List<bool> selectedMacronutrients = [];
+  List<bool> selectedMicronutrients = [];
 
   @override
   void initState() {
     super.initState();
     // Initialize all selections to false, assuming none are selected by default.
-    selectedValues =
+    selectedDietaryPreferences =
         List.generate(Options.dietaryPreferences.length, (_) => false);
+    selectedAllergies = List.generate(Options.allergies.length, (_) => false);
+    selectedMacronutrients =
+        List.generate(Options.macronutrients.length, (_) => false);
+    selectedMicronutrients =
+        List.generate(Options.micronutrients.length, (_) => false);
   }
 
   // This function will be called whenever a checkbox state changes.
-  void _onSelectionChanged(List<bool> newSelections) {
+  void _onDietPrefSelectionChanged(List<bool> newSelections) {
     setState(() {
-      selectedValues = newSelections;
+      selectedDietaryPreferences = newSelections;
     });
-    // Perform any additional actions with the updated selection states if needed
   }
 
-  void checkContext(BuildContext context) {
-    print(context.widget.runtimeType); // Should give you the widget class
-    print(context
-        .findAncestorWidgetOfExactType<BlocProvider<UserProfileBloc>>()
-        ?.runtimeType);
+  void _onAllergiesSelectionChanged(List<bool> newSelections) {
+    setState(() {
+      selectedAllergies = newSelections;
+    });
   }
 
+  void _onMacronutrientSelectionChanged(List<bool> newSelections) {
+    setState(() {
+      selectedMacronutrients = newSelections;
+    });
+  }
+
+  void _onMicronutrientSelectionChanged(List<bool> newSelections) {
+    setState(() {
+      selectedMicronutrients = newSelections;
+    });
+  }
+
+  // maps checked indices to option label in list
   List<String> getSelectedOptions(List<bool> selections, List<String> options) {
     List<String> selectedOptions = [];
 
@@ -50,58 +70,132 @@ class _UserProfileState extends State<UserProfile> {
     return selectedOptions;
   }
 
+  // handler for save button
   void _onSaveButtonPressed(BuildContext context) {
-    final selectedNames = getSelectedOptions(
-      selectedValues,
+    final updatedDietPref = getSelectedOptions(
+      selectedDietaryPreferences,
       Options.dietaryPreferences,
     );
-    print(selectedNames);
-    context.read<UserProfileBloc>().add(UpdateUserProfile(selectedNames));
+
+    final updatedAllergies = getSelectedOptions(
+      selectedAllergies,
+      Options.allergies,
+    );
+
+    final updatedMacronutrients = getSelectedOptions(
+      selectedMacronutrients,
+      Options.macronutrients,
+    );
+
+    final updatedMicronutrients = getSelectedOptions(
+      selectedMicronutrients,
+      Options.micronutrients,
+    );
+    print(updatedDietPref);
+    print(updatedAllergies);
+    print(updatedMacronutrients);
+    print(updatedMicronutrients);
+
+    context.read<UserProfileBloc>().add(UpdateUserProfile(updatedDietPref,
+        updatedAllergies, updatedMacronutrients, updatedMicronutrients));
   }
 
   @override
   Widget build(BuildContext context) {
-    checkContext(context);
-
     final userProfileBloc = BlocProvider.of<UserProfileBloc>(context);
 
-    return Center(
-        child: Column(children: [
-      CheckboxCard(
-        allChoices: Options.dietaryPreferences,
-        onSelectionChanged: _onSelectionChanged,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              children: [
+                Text(
+                  'Dietary Preferences',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(height: (20.toVHLength).toPX()),
+                CheckboxCard(
+                  allChoices: Options.dietaryPreferences,
+                  onSelectionChanged: _onDietPrefSelectionChanged,
+                ),
+                SizedBox(height: (40.toVHLength).toPX()),
+                Text(
+                  'Allergies',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(height: (20.toVHLength).toPX()),
+                CheckboxCard(
+                  allChoices: Options.allergies,
+                  onSelectionChanged: _onAllergiesSelectionChanged,
+                ),
+                SizedBox(height: (40.toVHLength).toPX()),
+                Text(
+                  'Macronutrients',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(height: (20.toVHLength).toPX()),
+                CheckboxCard(
+                  allChoices: Options.macronutrients,
+                  onSelectionChanged: _onMacronutrientSelectionChanged,
+                ),
+                SizedBox(height: (40.toVHLength).toPX()),
+                Text(
+                  'Micronutrients',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(height: (20.toVHLength).toPX()),
+                CheckboxCard(
+                  allChoices: Options.micronutrients,
+                  onSelectionChanged: _onMicronutrientSelectionChanged,
+                ),
+              ],
+            ),
+          ),
+          BlocListener<UserProfileBloc, UserProfileState>(
+            listener: (context, state) {
+              if (state is UserProfileUpdated) {
+                print("Update successful!");
+              } else if (state is UserProfileError) {
+                print(state.error);
+              }
+            },
+            child: Container(
+                height: 0), // Placeholder or optional additional UI element
+          ),
+          ElevatedButton(
+            onPressed: () => _onSaveButtonPressed(context),
+            child: Text('Save Changes'),
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            ),
+          ),
+        ],
       ),
-      ElevatedButton(
-        onPressed: () {
-          _onSaveButtonPressed(context);
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //     SnackBar(content: Text("Update successful!")));
-        },
-        child: Text('Save Changes'),
-      ),
-      Expanded(
-        child: ListView.builder(itemBuilder: (context, index) {
-          return ListTile(
-            title: const Text('User Profile details'),
-            subtitle: Text('$index'),
-          );
-        }),
-      ),
-      // Listen to state changes
-      BlocListener<UserProfileBloc, UserProfileState>(
-        listener: (context, state) {
-          if (state is UserProfileUpdated) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text("Update successful!")));
-          } else if (state is UserProfileError) {
-            // Show error message
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.error)));
-          }
-        },
-        // placeholder, typically replaced by the whole widget
-        child: Container(),
-      )
-    ]));
+    );
   }
 }

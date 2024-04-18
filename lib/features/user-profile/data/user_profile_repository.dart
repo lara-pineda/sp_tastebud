@@ -10,7 +10,16 @@ class UserProfileRepository {
   }
 
   Future<void> saveUserProfile(
-      String userId, List<String> selectedOptions) async {
-    await _userProfileService.updateUserProfile(userId, selectedOptions);
+      String userId,
+      List<String> dietPref,
+      List<String> allergies,
+      List<String> macronutrients,
+      List<String> micronutrients) async {
+    print("UserID 2:");
+    print(userId);
+    await _userProfileService.updateDietPref(userId, dietPref);
+    await _userProfileService.updateAllergies(userId, allergies);
+    await _userProfileService.updateMacronutrients(userId, macronutrients);
+    await _userProfileService.updateDietPref(userId, micronutrients);
   }
 }

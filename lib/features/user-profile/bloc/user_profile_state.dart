@@ -6,7 +6,12 @@ class UserProfileInitial extends UserProfileState {}
 
 class UserProfileLoaded extends UserProfileState {
   final List<bool> dietaryPreferences;
-  UserProfileLoaded(this.dietaryPreferences);
+  final List<bool> allergies;
+  final List<bool> macronutrients;
+  final List<bool> micronutrients;
+
+  UserProfileLoaded(this.dietaryPreferences, this.allergies,
+      this.macronutrients, this.micronutrients);
 }
 
 class UserProfileUpdated extends UserProfileState {}

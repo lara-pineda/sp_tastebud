@@ -16,7 +16,24 @@ class CheckboxCard extends StatefulWidget {
 }
 
 class _CheckboxCardState extends State<CheckboxCard> {
-  List<bool> selectedValues = List.generate(10, (_) => false);
+  List<bool> selectedValues = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with current number of choices, all set to false
+    selectedValues = List.generate(widget.allChoices.length, (_) => false);
+  }
+
+  @override
+  void didUpdateWidget(covariant CheckboxCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Check if the list of choices has changed
+    if (oldWidget.allChoices != widget.allChoices) {
+      // Update selectedValues to match new list length
+      selectedValues = List.generate(widget.allChoices.length, (_) => false);
+    }
+  }
 
   void _showFullList(BuildContext context, List<String> allChoices) {
     showDialog(
@@ -46,8 +63,12 @@ class _CheckboxCardState extends State<CheckboxCard> {
   }
 
   Widget expansionCard(BuildContext context) {
+    int itemCount = widget.allChoices.length > 10
+        ? 10
+        : widget.allChoices.length; // Display up to 10 options
+
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 50),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       height: 200,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -63,7 +84,6 @@ class _CheckboxCardState extends State<CheckboxCard> {
       ),
       child: Row(
         children: [
-          // Contents with left margin and vertically centered
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center, // Center vertically
@@ -80,12 +100,14 @@ class _CheckboxCardState extends State<CheckboxCard> {
                     childAspectRatio: MediaQuery.of(context).size.width /
                         (MediaQuery.of(context).size.height / 9),
                     children: List.generate(
-                      10, // # of options to display by default
+                      widget.allChoices.length > 10
+                          ? 10
+                          : widget
+                              .allChoices.length, // Limit display to up to 10
                       (index) => CustomCheckboxListTile(
                         title: widget.allChoices[index], // choices to display
                         initialValue: selectedValues[index],
                         onChanged: (bool value) {
-                          // Handle checkbox change
                           setState(() {
                             selectedValues[index] = value;
                             widget.onSelectionChanged(selectedValues);
@@ -98,8 +120,6 @@ class _CheckboxCardState extends State<CheckboxCard> {
               ],
             ),
           ),
-
-          // Arrow to expand
           Container(
             width: 30,
             height: double.infinity,

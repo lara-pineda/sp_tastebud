@@ -38,7 +38,7 @@ class AuthService {
       'macronutrients': [],
       'micronutrients': [],
       'pantryEssentials': [],
-      'meats': [],
+      'meat': [],
       'vegetables': []
     });
 

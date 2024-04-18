@@ -24,13 +24,25 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
 
     try {
       var data = await _userProfileRepository.fetchUserProfile(userId);
-      if (data != null && data.containsKey('dietaryPreferences')) {
-        var preferences =
+      if (data != null) {
+        var fetchDietPref =
             List<bool>.from(data['dietaryPreferences'] as List<dynamic>);
-        emit(UserProfileLoaded(preferences));
+        var fetchAllergies =
+            List<bool>.from(data['allergies'] as List<dynamic>);
+        var fetchMacro =
+            List<bool>.from(data['macronutrients'] as List<dynamic>);
+        var fetchMicro =
+            List<bool>.from(data['micronutrients'] as List<dynamic>);
+
+        emit(UserProfileLoaded(
+            fetchDietPref, fetchAllergies, fetchMacro, fetchMicro));
       } else {
         emit(UserProfileLoaded(
-            List<bool>.filled(Options.dietaryPreferences.length, false)));
+          List<bool>.filled(Options.dietaryPreferences.length, false),
+          List<bool>.filled(Options.allergies.length, false),
+          List<bool>.filled(Options.macronutrients.length, false),
+          List<bool>.filled(Options.micronutrients.length, false),
+        ));
       }
     } catch (e) {
       emit(UserProfileError(e.toString()));
@@ -40,13 +52,20 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
   void _onUpdateUserProfile(
       UpdateUserProfile event, Emitter<UserProfileState> emit) async {
     var userId = FirebaseAuth.instance.currentUser?.uid;
+    print("UserID 1:");
+    print(userId);
+
     if (userId == null) {
       emit(UserProfileError("User not logged in"));
       return;
     }
     try {
       await _userProfileRepository.saveUserProfile(
-          userId, event.selectedOptions);
+          userId,
+          event.selectedDietPref,
+          event.selectedAllergies,
+          event.selectedMacro,
+          event.selectedMicro);
       emit(UserProfileUpdated());
     } catch (e) {
       emit(UserProfileError(e.toString()));

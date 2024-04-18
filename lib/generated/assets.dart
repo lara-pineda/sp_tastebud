@@ -8,6 +8,12 @@ class Assets {
       'lib/features/navigation/bloc/app_navigation_event.dart';
   static const String blocAppNavigationState =
       'lib/features/navigation/bloc/app_navigation_state.dart';
+  static const String blocIngredientsBloc =
+      'lib/features/ingredients/bloc/ingredients_bloc.dart';
+  static const String blocIngredientsEvent =
+      'lib/features/ingredients/bloc/ingredients_event.dart';
+  static const String blocIngredientsState =
+      'lib/features/ingredients/bloc/ingredients_state.dart';
   static const String blocLoginBloc = 'lib/features/auth/bloc/login_bloc.dart';
   static const String blocLoginEvent =
       'lib/features/auth/bloc/login_event.dart';
@@ -37,6 +43,10 @@ class Assets {
   static const String configAssetsPath = 'lib/core/config/assets_path.dart';
   static const String dataAuthService =
       'lib/features/auth/data/auth_service.dart';
+  static const String dataIngredientsRepository =
+      'lib/features/ingredients/data/ingredients_repository.dart';
+  static const String dataIngredientsServices =
+      'lib/features/ingredients/data/ingredients_services.dart';
   static const String dataUserProfileRepository =
       'lib/features/user-profile/data/user_profile_repository.dart';
   static const String dataUserProfileServices =

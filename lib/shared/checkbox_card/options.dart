@@ -106,7 +106,14 @@ class Options {
 
   static const List<String> vegetables = [
     'Carrot',
-    'Potato',
-    'Tomato',
+    'Veggie 2',
+    'Veggie 3',
+    'Veggie 4',
+    'Veggie 5',
+    'Veggie 6',
+    'Veggie 7',
+    'Veggie 8',
+    'Veggie 9',
+    'Veggie 10',
   ];
 }

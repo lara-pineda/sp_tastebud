@@ -17,14 +17,49 @@ class UserProfileService {
     }
   }
 
-  Future<void> updateUserProfile(
+  Future<void> updateDietPref(
       String userId, List<String> selectedOptions) async {
     try {
+      print("UserID 3:");
+      print(userId);
       await _firestore.collection('users').doc(userId).update({
         'dietaryPreferences': selectedOptions,
       });
     } catch (e) {
-      throw Exception('Failed to update user profile: $e');
+      throw Exception('Failed to update diet preferences: $e');
+    }
+  }
+
+  Future<void> updateAllergies(
+      String userId, List<String> selectedOptions) async {
+    try {
+      await _firestore.collection('users').doc(userId).update({
+        'allergies': selectedOptions,
+      });
+    } catch (e) {
+      throw Exception('Failed to update allergies: $e');
+    }
+  }
+
+  Future<void> updateMacronutrients(
+      String userId, List<String> selectedOptions) async {
+    try {
+      await _firestore.collection('users').doc(userId).update({
+        'macronutrients': selectedOptions,
+      });
+    } catch (e) {
+      throw Exception('Failed to update macronutrients: $e');
+    }
+  }
+
+  Future<void> updateMicronutrients(
+      String userId, List<String> selectedOptions) async {
+    try {
+      await _firestore.collection('users').doc(userId).update({
+        'micronutrients': selectedOptions,
+      });
+    } catch (e) {
+      throw Exception('Failed to update micronutrients: $e');
     }
   }
 }

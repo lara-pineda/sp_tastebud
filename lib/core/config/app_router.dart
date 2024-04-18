@@ -9,6 +9,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sp_tastebud/features/auth/ui/login_ui.dart';
 import 'package:sp_tastebud/features/auth/ui/main_menu_ui.dart';
 import 'package:sp_tastebud/features/auth/ui/signup_ui.dart';
+import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
+import 'package:sp_tastebud/features/ingredients/data/ingredients_repository.dart';
+import 'package:sp_tastebud/features/ingredients/data/ingredients_services.dart';
 import 'package:sp_tastebud/features/ingredients/ui/ingredient_management_ui.dart';
 import 'package:sp_tastebud/features/navigation/ui/navigation_bar_ui.dart';
 import 'package:sp_tastebud/features/recipe-collection/ui/recipe_collection_ui.dart';
@@ -77,6 +80,11 @@ class AppRoutes {
               BlocProvider(
                 create: (context) => UserProfileBloc(UserProfileRepository(
                     UserProfileService(
+                        FirebaseAuth.instance, FirebaseFirestore.instance))),
+              ),
+              BlocProvider(
+                create: (context) => IngredientsBloc(IngredientsRepository(
+                    IngredientsService(
                         FirebaseAuth.instance, FirebaseFirestore.instance))),
               ),
             ],
