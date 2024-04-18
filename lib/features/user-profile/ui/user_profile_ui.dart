@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import '../bloc/user_profile_bloc.dart';
+import 'package:sp_tastebud/core/config/assets_path.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -19,6 +20,8 @@ class _UserProfileState extends State<UserProfile> {
   List<bool> selectedMacronutrients = [];
   List<bool> selectedMicronutrients = [];
 
+  final TextEditingController _emailController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +33,16 @@ class _UserProfileState extends State<UserProfile> {
         List.generate(Options.macronutrients.length, (_) => false);
     selectedMicronutrients =
         List.generate(Options.micronutrients.length, (_) => false);
+
+    // Load the initial value for the email controller here, if needed.
+    _emailController.text = 'user@gmail.com'; // Placeholder email
+  }
+
+  @override
+  void dispose() {
+    // Dispose the controller when the widget is removed
+    _emailController.dispose();
+    super.dispose();
   }
 
   // This function will be called whenever a checkbox state changes.
@@ -111,12 +124,40 @@ class _UserProfileState extends State<UserProfile> {
           Expanded(
             child: ListView(
               children: [
+                SizedBox(height: (30.toVHLength).toPX()),
+                // Adding a section for the user profile icon and editable email
+                Image.asset(
+                  Assets.imagesDefaultProfile,
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.contain,
+                ),
+
+                SizedBox(height: (20.toVHLength).toPX()),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  child: TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email Address',
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.edit),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    onSaved: (value) {
+                      // Implement logic to save the email when form is saved
+                    },
+                  ),
+                ),
+
+                SizedBox(height: (30.toVHLength).toPX()),
+
                 Text(
                   'Dietary Preferences',
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 17,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.left,
                 ),
@@ -131,7 +172,7 @@ class _UserProfileState extends State<UserProfile> {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 17,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.left,
                 ),
@@ -146,7 +187,7 @@ class _UserProfileState extends State<UserProfile> {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 17,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.left,
                 ),
@@ -161,7 +202,7 @@ class _UserProfileState extends State<UserProfile> {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 17,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.left,
                 ),

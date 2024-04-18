@@ -95,12 +95,23 @@ class _IngredientsState extends State<IngredientManagement> {
           Expanded(
             child: ListView(
               children: [
+                SizedBox(height: (50.toVHLength).toPX()),
+                Text(
+                  'Ingredients',
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black45),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(height: (20.toVHLength).toPX()),
                 Text(
                   'Pantry Essentials',
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 17,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.left,
                 ),
@@ -115,7 +126,7 @@ class _IngredientsState extends State<IngredientManagement> {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 17,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.left,
                 ),
@@ -130,7 +141,7 @@ class _IngredientsState extends State<IngredientManagement> {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 17,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.left,
                 ),
