@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:dimension/dimension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:sp_tastebud/features/auth/bloc/login_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import '../bloc/ingredients_bloc.dart';
@@ -21,34 +23,26 @@ class _IngredientsState extends State<IngredientManagement> {
   @override
   void initState() {
     super.initState();
-    // Initialize all selections to false, assuming none are selected by default.
-    selectedPantryEssentials =
-        List.generate(Options.pantryEssentials.length, (_) => false);
-    selectedMeat = List.generate(Options.meat.length, (_) => false);
-    selectedVegetables = List.generate(Options.vegetables.length, (_) => false);
+
+    // Load the user profile data when the widget is initialized
+    BlocProvider.of<IngredientsBloc>(context).add(LoadIngredients());
   }
 
   // This function will be called whenever a checkbox state changes.
   void _onPantryEssentialsSelectionChanged(List<bool> newSelections) {
-    setState(() {
-      selectedPantryEssentials = newSelections;
-    });
+    selectedPantryEssentials = newSelections;
   }
 
   void _onMeatSelectionChanged(List<bool> newSelections) {
-    setState(() {
-      selectedMeat = newSelections;
-    });
+    selectedMeat = newSelections;
   }
 
   void _onVegetablesSelectionChanged(List<bool> newSelections) {
-    setState(() {
-      selectedVegetables = newSelections;
-    });
+    selectedVegetables = newSelections;
   }
 
   // maps checked indices to option label in list
-  List<String> getSelectedOptions(List<bool> selections, List<String> options) {
+  List<String> getSelectedOptions(List selections, List<String> options) {
     List<String> selectedOptions = [];
 
     for (int i = 0; i < selections.length; i++) {
@@ -77,13 +71,56 @@ class _IngredientsState extends State<IngredientManagement> {
       Options.vegetables,
     );
 
+    // dependency injection
     context.read<IngredientsBloc>().add(UpdateIngredients(
         updatedPantryEssentials, updatedMeat, updatedVegetables));
   }
 
+  // Helper method to map selected options to boolean values
+  List<bool> mapOptionsToBoolean(
+      List<dynamic> selectedOptions, List<String> allOptions) {
+    return allOptions
+        .map((option) => selectedOptions.contains(option))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ingredientsBloc = BlocProvider.of<IngredientsBloc>(context);
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, loginState) {
+        if (loginState is LoginFailure) {
+          context.go('/');
+          // Return error text if login fails
+          return Text("User not logged in.");
+        } else {
+          // If login is successful, proceed with UserProfileBloc
+          return BlocBuilder<IngredientsBloc, IngredientsState>(
+            builder: (context, ingredientsState) {
+              print(ingredientsState);
+
+              if (ingredientsState is IngredientsLoaded) {
+                // Use the state values to build your UI
+                return buildIngredientManagementUI(ingredientsState);
+              } else if (ingredientsState is IngredientsError) {
+                // Show error message if loading fails
+                return Text(ingredientsState.error);
+              }
+              // Show loading indicator while loading
+              return CircularProgressIndicator();
+            },
+          );
+        }
+      },
+    );
+  }
+
+  Widget buildIngredientManagementUI(IngredientsLoaded state) {
+    // Map the selected options to boolean values
+    selectedPantryEssentials =
+        mapOptionsToBoolean(state.pantryEssentials, Options.pantryEssentials);
+    selectedMeat = mapOptionsToBoolean(state.meat, Options.meat);
+    selectedVegetables =
+        mapOptionsToBoolean(state.vegetables, Options.vegetables);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
@@ -115,6 +152,7 @@ class _IngredientsState extends State<IngredientManagement> {
                 SizedBox(height: (20.toVHLength).toPX()),
                 CheckboxCard(
                   allChoices: Options.pantryEssentials,
+                  initialSelections: selectedPantryEssentials,
                   onSelectionChanged: _onPantryEssentialsSelectionChanged,
                 ),
                 SizedBox(height: (40.toVHLength).toPX()),
@@ -130,6 +168,7 @@ class _IngredientsState extends State<IngredientManagement> {
                 SizedBox(height: (20.toVHLength).toPX()),
                 CheckboxCard(
                   allChoices: Options.meat,
+                  initialSelections: selectedMeat,
                   onSelectionChanged: _onMeatSelectionChanged,
                 ),
                 SizedBox(height: (40.toVHLength).toPX()),
@@ -145,22 +184,12 @@ class _IngredientsState extends State<IngredientManagement> {
                 SizedBox(height: (20.toVHLength).toPX()),
                 CheckboxCard(
                   allChoices: Options.vegetables,
+                  initialSelections: selectedVegetables,
                   onSelectionChanged: _onVegetablesSelectionChanged,
                 ),
                 SizedBox(height: (40.toVHLength).toPX()),
               ],
             ),
-          ),
-          BlocListener<IngredientsBloc, IngredientsState>(
-            listener: (context, state) {
-              if (state is IngredientsUpdated) {
-                print("Update successful!");
-              } else if (state is IngredientsError) {
-                print(state.error);
-              }
-            },
-            child: Container(
-                height: 0), // Placeholder or optional additional UI element
           ),
           ElevatedButton(
             onPressed: () => _onSaveButtonPressed(context),

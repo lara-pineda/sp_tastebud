@@ -3,11 +3,13 @@ import 'checkbox_list_tile.dart';
 
 class CheckboxCard extends StatefulWidget {
   final List<String> allChoices;
+  final List<bool> initialSelections;
   final ValueChanged<List<bool>> onSelectionChanged;
 
   const CheckboxCard({
     super.key,
     required this.allChoices,
+    required this.initialSelections,
     required this.onSelectionChanged,
   });
 
@@ -16,22 +18,35 @@ class CheckboxCard extends StatefulWidget {
 }
 
 class _CheckboxCardState extends State<CheckboxCard> {
-  List<bool> selectedValues = [];
+  late List<bool> selectedValues;
 
   @override
   void initState() {
     super.initState();
-    // Initialize with current number of choices, all set to false
-    selectedValues = List.generate(widget.allChoices.length, (_) => false);
+
+    selectedValues = widget.initialSelections;
   }
 
+  // @override
+  // void didUpdateWidget(covariant CheckboxCard oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   // Check if the list of choices has changed
+  //   if (oldWidget.allChoices != widget.allChoices) {
+  //     // Update selectedValues to match new list length and preserve current selections
+  //     selectedValues = List.generate(
+  //       widget.allChoices.length,
+  //       (index) =>
+  //           index < selectedValues.length ? selectedValues[index] : false,
+  //     );
+  //   }
+  // }
   @override
   void didUpdateWidget(covariant CheckboxCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Check if the list of choices has changed
-    if (oldWidget.allChoices != widget.allChoices) {
-      // Update selectedValues to match new list length
-      selectedValues = List.generate(widget.allChoices.length, (_) => false);
+    if (oldWidget.initialSelections != widget.initialSelections) {
+      setState(() {
+        selectedValues = widget.initialSelections;
+      });
     }
   }
 

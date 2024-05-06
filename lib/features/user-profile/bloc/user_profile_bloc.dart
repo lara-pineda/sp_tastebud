@@ -30,10 +30,10 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
         var fetchMacro = data['macronutrients'] as List<dynamic>;
         var fetchMicro = data['micronutrients'] as List<dynamic>;
 
-        // print("fetchDietPref: $fetchDietPref");
-        // print("fetchAllergies: $fetchAllergies");
-        // print("fetchMacro: $fetchMacro");
-        // print("fetchMicro: $fetchMicro");
+        print("fetchDietPref: $fetchDietPref");
+        print("fetchAllergies: $fetchAllergies");
+        print("fetchMacro: $fetchMacro");
+        print("fetchMicro: $fetchMicro");
 
         // Update state with the loaded profile data
         emit(UserProfileLoaded(
@@ -69,7 +69,10 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
           event.selectedAllergies,
           event.selectedMacro,
           event.selectedMicro);
-      emit(UserProfileUpdated());
+
+      // load again after updating to firestore
+      emit(UserProfileLoaded(event.selectedDietPref, event.selectedAllergies,
+          event.selectedMacro, event.selectedMicro));
     } catch (e) {
       emit(UserProfileError(e.toString()));
     }

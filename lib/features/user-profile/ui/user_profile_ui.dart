@@ -3,11 +3,11 @@ import 'package:dimension/dimension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:sp_tastebud/core/config/assets_path.dart';
+import 'package:sp_tastebud/features/auth/bloc/login_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import '../bloc/user_profile_bloc.dart';
-import 'package:sp_tastebud/features/auth/bloc/login_bloc.dart';
-import 'package:sp_tastebud/core/config/assets_path.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -18,10 +18,10 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   // used for updating user details
-  List selectedDietaryPreferences = [];
-  List selectedAllergies = [];
-  List selectedMacronutrients = [];
-  List selectedMicronutrients = [];
+  List<bool> selectedDietaryPreferences = [];
+  List<bool> selectedAllergies = [];
+  List<bool> selectedMacronutrients = [];
+  List<bool> selectedMicronutrients = [];
 
   final TextEditingController _emailController = TextEditingController();
 
@@ -44,46 +44,21 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   // This function will be called whenever a checkbox state changes.
-  void _onDietPrefSelectionChanged(List newSelections) {
+  void _onDietPrefSelectionChanged(List<bool> newSelections) {
     selectedDietaryPreferences = newSelections;
   }
 
-  void _onAllergiesSelectionChanged(List newSelections) {
+  void _onAllergiesSelectionChanged(List<bool> newSelections) {
     selectedAllergies = newSelections;
   }
 
-  void _onMacronutrientSelectionChanged(List newSelections) {
+  void _onMacronutrientSelectionChanged(List<bool> newSelections) {
     selectedMacronutrients = newSelections;
   }
 
-  void _onMicronutrientSelectionChanged(List newSelections) {
+  void _onMicronutrientSelectionChanged(List<bool> newSelections) {
     selectedMicronutrients = newSelections;
   }
-
-  // // This function will be called whenever a checkbox state changes.
-  // void _onDietPrefSelectionChanged(List newSelections) {
-  //   setState(() {
-  //     selectedDietaryPreferences = newSelections;
-  //   });
-  // }
-  //
-  // void _onAllergiesSelectionChanged(List newSelections) {
-  //   setState(() {
-  //     selectedAllergies = newSelections;
-  //   });
-  // }
-  //
-  // void _onMacronutrientSelectionChanged(List newSelections) {
-  //   setState(() {
-  //     selectedMacronutrients = newSelections;
-  //   });
-  // }
-  //
-  // void _onMicronutrientSelectionChanged(List newSelections) {
-  //   setState(() {
-  //     selectedMicronutrients = newSelections;
-  //   });
-  // }
 
   // maps checked indices to option label in list
   List<String> getSelectedOptions(List selections, List<String> options) {
@@ -127,6 +102,14 @@ class _UserProfileState extends State<UserProfile> {
         updatedMacronutrients, updatedMicronutrients));
   }
 
+  // Helper method to map selected options to boolean values
+  List<bool> mapOptionsToBoolean(
+      List<dynamic> selectedOptions, List<String> allOptions) {
+    return allOptions
+        .map((option) => selectedOptions.contains(option))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
@@ -147,7 +130,7 @@ class _UserProfileState extends State<UserProfile> {
                 return Text(userProfileState.error);
               }
               // Show loading indicator while loading
-              return CircularProgressIndicator();
+              return Text("Page not found");
             },
           );
         }
@@ -156,10 +139,14 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   Widget buildUserProfileUI(UserProfileLoaded state) {
-    print(state.dietaryPreferences);
-    print(state.allergies);
-    print(state.macronutrients);
-    print(state.micronutrients);
+    // Map the selected options to boolean values
+    selectedDietaryPreferences = mapOptionsToBoolean(
+        state.dietaryPreferences, Options.dietaryPreferences);
+    selectedAllergies = mapOptionsToBoolean(state.allergies, Options.allergies);
+    selectedMacronutrients =
+        mapOptionsToBoolean(state.macronutrients, Options.macronutrients);
+    selectedMicronutrients =
+        mapOptionsToBoolean(state.micronutrients, Options.micronutrients);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
@@ -208,6 +195,7 @@ class _UserProfileState extends State<UserProfile> {
                 SizedBox(height: (20.toVHLength).toPX()),
                 CheckboxCard(
                   allChoices: Options.dietaryPreferences,
+                  initialSelections: selectedDietaryPreferences,
                   onSelectionChanged: _onDietPrefSelectionChanged,
                 ),
                 SizedBox(height: (40.toVHLength).toPX()),
@@ -223,6 +211,7 @@ class _UserProfileState extends State<UserProfile> {
                 SizedBox(height: (20.toVHLength).toPX()),
                 CheckboxCard(
                   allChoices: Options.allergies,
+                  initialSelections: selectedAllergies,
                   onSelectionChanged: _onAllergiesSelectionChanged,
                 ),
                 SizedBox(height: (40.toVHLength).toPX()),
@@ -238,6 +227,7 @@ class _UserProfileState extends State<UserProfile> {
                 SizedBox(height: (20.toVHLength).toPX()),
                 CheckboxCard(
                   allChoices: Options.macronutrients,
+                  initialSelections: selectedMacronutrients,
                   onSelectionChanged: _onMacronutrientSelectionChanged,
                 ),
                 SizedBox(height: (40.toVHLength).toPX()),
@@ -253,6 +243,7 @@ class _UserProfileState extends State<UserProfile> {
                 SizedBox(height: (20.toVHLength).toPX()),
                 CheckboxCard(
                   allChoices: Options.micronutrients,
+                  initialSelections: selectedMicronutrients,
                   onSelectionChanged: _onMicronutrientSelectionChanged,
                 ),
               ],

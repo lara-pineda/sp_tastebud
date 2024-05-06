@@ -7,9 +7,9 @@ part 'ingredients_event.dart';
 part 'ingredients_state.dart';
 
 class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
-  final IngredientsRepository _IngredientsRepository;
+  final IngredientsRepository _ingredientsRepository;
 
-  IngredientsBloc(this._IngredientsRepository) : super(IngredientsInitial()) {
+  IngredientsBloc(this._ingredientsRepository) : super(IngredientsInitial()) {
     on<LoadIngredients>(_onLoadIngredients);
     on<UpdateIngredients>(_onUpdateIngredients);
   }
@@ -23,31 +23,30 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
     }
 
     try {
-      var data = await _IngredientsRepository.fetchIngredients(userId);
+      var data = await _ingredientsRepository.fetchIngredients(userId);
       if (data != null) {
-        var fetchPantryEssentials = Options.pantryEssentials.map((option) {
-          var pantryList = data['pantryEssentials'] as List<dynamic>?;
-          return pantryList?.contains(option) ?? false;
-        }).toList();
+        var fetchPantryEssentials = data['pantryEssentials'] as List<dynamic>;
+        var fetchMeat = data['meat'] as List<dynamic>;
+        var fetchVegetables = data['vegetables'] as List<dynamic>;
 
-        var fetchMeat = Options.meat.map((option) {
-          var meatList = data['meat'] as List<dynamic>?;
-          return meatList?.contains(option) ?? false;
-        }).toList();
-
-        var fetchVegetables = Options.vegetables.map((option) {
-          var vegList = data['vegetables'] as List<dynamic>?;
-          return vegList?.contains(option) ?? false;
-        }).toList();
+        print("fetchPantryEssentials: $fetchPantryEssentials");
+        print("fetchMeat: $fetchMeat");
+        print("fetchVegetables: $fetchVegetables");
 
         emit(IngredientsLoaded(
             fetchPantryEssentials, fetchMeat, fetchVegetables));
       } else {
-        // No user data found, defaulting to all unchecked.
+        // // No user data found, defaulting to all unchecked.
+        // emit(IngredientsLoaded(
+        //   List<bool>.filled(Options.pantryEssentials.length, false),
+        //   List<bool>.filled(Options.meat.length, false),
+        //   List<bool>.filled(Options.vegetables.length, false),
+
+        // Return empty lists
         emit(IngredientsLoaded(
-          List<bool>.filled(Options.pantryEssentials.length, false),
-          List<bool>.filled(Options.meat.length, false),
-          List<bool>.filled(Options.vegetables.length, false),
+          [],
+          [],
+          [],
         ));
       }
     } catch (e) {
@@ -66,9 +65,13 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
       return;
     }
     try {
-      await _IngredientsRepository.saveIngredients(
+      await _ingredientsRepository.saveIngredients(
           userId, event.pantryEssentials, event.meat, event.vegetables);
-      emit(IngredientsUpdated());
+
+      // load again after updating to firestore
+      emit(IngredientsLoaded(
+          event.pantryEssentials, event.meat, event.vegetables));
+      // emit(IngredientsUpdated());
     } catch (e) {
       emit(IngredientsError(e.toString()));
     }

@@ -5,9 +5,9 @@ abstract class IngredientsState {}
 class IngredientsInitial extends IngredientsState {}
 
 class IngredientsLoaded extends IngredientsState {
-  final List<bool> pantryEssentials;
-  final List<bool> meat;
-  final List<bool> vegetables;
+  final List pantryEssentials;
+  final List meat;
+  final List vegetables;
 
   IngredientsLoaded(this.pantryEssentials, this.meat, this.vegetables);
 }
