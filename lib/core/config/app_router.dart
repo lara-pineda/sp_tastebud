@@ -37,6 +37,16 @@ class AppRoutes {
     FirebaseFirestore.instance,
   );
 
+  static final _userProfileService = UserProfileService(
+    FirebaseAuth.instance,
+    FirebaseFirestore.instance,
+  );
+
+  static final _ingredientsService = IngredientsService(
+    FirebaseAuth.instance,
+    FirebaseFirestore.instance,
+  );
+
   static final UserRepository _userRepository = UserRepository(_authService);
 
   // for the parent navigation stack
@@ -78,14 +88,15 @@ class AppRoutes {
             navigatorKey: _shellNavigatorKey,
             providers: [
               BlocProvider(
-                create: (context) => UserProfileBloc(UserProfileRepository(
-                    UserProfileService(
-                        FirebaseAuth.instance, FirebaseFirestore.instance))),
+                create: (context) => LoginBloc(_userRepository),
               ),
               BlocProvider(
-                create: (context) => IngredientsBloc(IngredientsRepository(
-                    IngredientsService(
-                        FirebaseAuth.instance, FirebaseFirestore.instance))),
+                create: (context) =>
+                    UserProfileBloc(UserProfileRepository(_userProfileService)),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    IngredientsBloc(IngredientsRepository(_ingredientsService)),
               ),
             ],
             builder: (context, state, child) {

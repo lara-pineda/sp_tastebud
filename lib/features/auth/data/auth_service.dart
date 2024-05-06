@@ -9,6 +9,11 @@ class AuthService {
 
   AuthService(this._firebaseAuth, this._firestore);
 
+  // get the current user
+  User? currentUser() {
+    return _firebaseAuth.currentUser;
+  }
+
   // create user with firebase_auth
   Future<UserCredential> createUserWithEmailAndPassword(
       String email, String password) async {

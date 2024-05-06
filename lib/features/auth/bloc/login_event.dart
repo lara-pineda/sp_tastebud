@@ -1,6 +1,9 @@
 part of 'login_bloc.dart';
 
-abstract class LoginEvent {}
+abstract class LoginEvent extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
 
 class LoginRequested extends LoginEvent {
   final String email;
@@ -8,3 +11,5 @@ class LoginRequested extends LoginEvent {
 
   LoginRequested({required this.email, required this.password});
 }
+
+class CheckLoginStatus extends LoginEvent {}

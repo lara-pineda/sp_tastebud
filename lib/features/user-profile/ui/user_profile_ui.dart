@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:dimension/dimension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import '../bloc/user_profile_bloc.dart';
+import 'package:sp_tastebud/features/auth/bloc/login_bloc.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
 
 class UserProfile extends StatefulWidget {
@@ -15,27 +17,23 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  List<bool> selectedDietaryPreferences = [];
-  List<bool> selectedAllergies = [];
-  List<bool> selectedMacronutrients = [];
-  List<bool> selectedMicronutrients = [];
+  // used for updating user details
+  List selectedDietaryPreferences = [];
+  List selectedAllergies = [];
+  List selectedMacronutrients = [];
+  List selectedMicronutrients = [];
 
   final TextEditingController _emailController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // Initialize all selections to false, assuming none are selected by default.
-    selectedDietaryPreferences =
-        List.generate(Options.dietaryPreferences.length, (_) => false);
-    selectedAllergies = List.generate(Options.allergies.length, (_) => false);
-    selectedMacronutrients =
-        List.generate(Options.macronutrients.length, (_) => false);
-    selectedMicronutrients =
-        List.generate(Options.micronutrients.length, (_) => false);
 
     // Load the initial value for the email controller here, if needed.
     _emailController.text = 'user@gmail.com'; // Placeholder email
+
+    // Load the user profile data when the widget is initialized
+    BlocProvider.of<UserProfileBloc>(context).add(LoadUserProfile());
   }
 
   @override
@@ -46,32 +44,49 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   // This function will be called whenever a checkbox state changes.
-  void _onDietPrefSelectionChanged(List<bool> newSelections) {
-    setState(() {
-      selectedDietaryPreferences = newSelections;
-    });
+  void _onDietPrefSelectionChanged(List newSelections) {
+    selectedDietaryPreferences = newSelections;
   }
 
-  void _onAllergiesSelectionChanged(List<bool> newSelections) {
-    setState(() {
-      selectedAllergies = newSelections;
-    });
+  void _onAllergiesSelectionChanged(List newSelections) {
+    selectedAllergies = newSelections;
   }
 
-  void _onMacronutrientSelectionChanged(List<bool> newSelections) {
-    setState(() {
-      selectedMacronutrients = newSelections;
-    });
+  void _onMacronutrientSelectionChanged(List newSelections) {
+    selectedMacronutrients = newSelections;
   }
 
-  void _onMicronutrientSelectionChanged(List<bool> newSelections) {
-    setState(() {
-      selectedMicronutrients = newSelections;
-    });
+  void _onMicronutrientSelectionChanged(List newSelections) {
+    selectedMicronutrients = newSelections;
   }
+
+  // // This function will be called whenever a checkbox state changes.
+  // void _onDietPrefSelectionChanged(List newSelections) {
+  //   setState(() {
+  //     selectedDietaryPreferences = newSelections;
+  //   });
+  // }
+  //
+  // void _onAllergiesSelectionChanged(List newSelections) {
+  //   setState(() {
+  //     selectedAllergies = newSelections;
+  //   });
+  // }
+  //
+  // void _onMacronutrientSelectionChanged(List newSelections) {
+  //   setState(() {
+  //     selectedMacronutrients = newSelections;
+  //   });
+  // }
+  //
+  // void _onMicronutrientSelectionChanged(List newSelections) {
+  //   setState(() {
+  //     selectedMicronutrients = newSelections;
+  //   });
+  // }
 
   // maps checked indices to option label in list
-  List<String> getSelectedOptions(List<bool> selections, List<String> options) {
+  List<String> getSelectedOptions(List selections, List<String> options) {
     List<String> selectedOptions = [];
 
     for (int i = 0; i < selections.length; i++) {
@@ -85,6 +100,8 @@ class _UserProfileState extends State<UserProfile> {
 
   // handler for save button
   void _onSaveButtonPressed(BuildContext context) {
+    final userProfileBloc = BlocProvider.of<UserProfileBloc>(context);
+
     final updatedDietPref = getSelectedOptions(
       selectedDietaryPreferences,
       Options.dietaryPreferences,
@@ -105,13 +122,44 @@ class _UserProfileState extends State<UserProfile> {
       Options.micronutrients,
     );
 
-    context.read<UserProfileBloc>().add(UpdateUserProfile(updatedDietPref,
-        updatedAllergies, updatedMacronutrients, updatedMicronutrients));
+    // dependency injection
+    userProfileBloc.add(UpdateUserProfile(updatedDietPref, updatedAllergies,
+        updatedMacronutrients, updatedMicronutrients));
   }
 
   @override
   Widget build(BuildContext context) {
-    final userProfileBloc = BlocProvider.of<UserProfileBloc>(context);
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, loginState) {
+        if (loginState is LoginFailure) {
+          context.go('/');
+          // Return error text if login fails
+          return Text("User not logged in.");
+        } else {
+          // If login is successful, proceed with UserProfileBloc
+          return BlocBuilder<UserProfileBloc, UserProfileState>(
+            builder: (context, userProfileState) {
+              if (userProfileState is UserProfileLoaded) {
+                // Use the state values to build your UI
+                return buildUserProfileUI(userProfileState);
+              } else if (userProfileState is UserProfileError) {
+                // Show error message if loading fails
+                return Text(userProfileState.error);
+              }
+              // Show loading indicator while loading
+              return CircularProgressIndicator();
+            },
+          );
+        }
+      },
+    );
+  }
+
+  Widget buildUserProfileUI(UserProfileLoaded state) {
+    print(state.dietaryPreferences);
+    print(state.allergies);
+    print(state.macronutrients);
+    print(state.micronutrients);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
@@ -209,17 +257,6 @@ class _UserProfileState extends State<UserProfile> {
                 ),
               ],
             ),
-          ),
-          BlocListener<UserProfileBloc, UserProfileState>(
-            listener: (context, state) {
-              if (state is UserProfileUpdated) {
-                print("Update successful!");
-              } else if (state is UserProfileError) {
-                print(state.error);
-              }
-            },
-            child: Container(
-                height: 0), // Placeholder or optional additional UI element
           ),
           ElevatedButton(
             onPressed: () => _onSaveButtonPressed(context),

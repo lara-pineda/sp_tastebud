@@ -33,6 +33,16 @@ class UserRepository {
     await _authService.sendPasswordResetEmail(email);
   }
 
+  // Method to fetch user data upon logging in
+  Future<void> fetchUserDetails(String email) async {
+    await _authService.sendPasswordResetEmail(email);
+  }
+
+  // Method to fetch the current user
+  User? getCurrentUser() {
+    return _authService.currentUser();
+  }
+
   // Stream to listen to user authentication state changes
   Stream<User?> get user => _authService.authStateChanges;
 }

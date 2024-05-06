@@ -25,28 +25,26 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     try {
       var data = await _userProfileRepository.fetchUserProfile(userId);
       if (data != null) {
-        var fetchDietPref =
-            List<bool>.from(data['dietaryPreferences'] as List<dynamic>);
-        var fetchAllergies =
-            List<bool>.from(data['allergies'] as List<dynamic>);
-        var fetchMacro =
-            List<bool>.from(data['macronutrients'] as List<dynamic>);
-        var fetchMicro =
-            List<bool>.from(data['micronutrients'] as List<dynamic>);
+        var fetchDietPref = data['dietaryPreferences'] as List<dynamic>;
+        var fetchAllergies = data['allergies'] as List<dynamic>;
+        var fetchMacro = data['macronutrients'] as List<dynamic>;
+        var fetchMicro = data['micronutrients'] as List<dynamic>;
 
-        print("fetchDietPref: $fetchDietPref");
-        print("fetchAllergies: $fetchAllergies");
-        print("fetchMacro: $fetchMacro");
-        print("fetchMicro: $fetchMicro");
+        // print("fetchDietPref: $fetchDietPref");
+        // print("fetchAllergies: $fetchAllergies");
+        // print("fetchMacro: $fetchMacro");
+        // print("fetchMicro: $fetchMicro");
 
+        // Update state with the loaded profile data
         emit(UserProfileLoaded(
             fetchDietPref, fetchAllergies, fetchMacro, fetchMicro));
       } else {
+        // Return empty lists
         emit(UserProfileLoaded(
-          List<bool>.filled(Options.dietaryPreferences.length, false),
-          List<bool>.filled(Options.allergies.length, false),
-          List<bool>.filled(Options.macronutrients.length, false),
-          List<bool>.filled(Options.micronutrients.length, false),
+          [],
+          [],
+          [],
+          [],
         ));
       }
     } catch (e) {
