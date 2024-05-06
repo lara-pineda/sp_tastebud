@@ -19,6 +19,18 @@ class Assets {
       'lib/features/auth/bloc/login_event.dart';
   static const String blocLoginState =
       'lib/features/auth/bloc/login_state.dart';
+  static const String blocRecipeCollectionBloc =
+      'lib/features/recipe-collection/bloc/recipe_collection_bloc.dart';
+  static const String blocRecipeCollectionEvent =
+      'lib/features/recipe-collection/bloc/recipe_collection_event.dart';
+  static const String blocRecipeCollectionState =
+      'lib/features/recipe-collection/bloc/recipe_collection_state.dart';
+  static const String blocSearchRecipeBloc =
+      'lib/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
+  static const String blocSearchRecipeEvent =
+      'lib/features/recipe/search-recipe/bloc/search_recipe_event.dart';
+  static const String blocSearchRecipeState =
+      'lib/features/recipe/search-recipe/bloc/search_recipe_state.dart';
   static const String blocSignupBloc =
       'lib/features/auth/bloc/signup_bloc.dart';
   static const String blocSignupEvent =
@@ -31,6 +43,12 @@ class Assets {
       'lib/features/user-profile/bloc/user_profile_event.dart';
   static const String blocUserProfileState =
       'lib/features/user-profile/bloc/user_profile_state.dart';
+  static const String blocViewRecipeBloc =
+      'lib/features/recipe/view-recipe/bloc/view_recipe_bloc.dart';
+  static const String blocViewRecipeEvent =
+      'lib/features/recipe/view-recipe/bloc/view_recipe_event.dart';
+  static const String blocViewRecipeState =
+      'lib/features/recipe/view-recipe/bloc/view_recipe_state.dart';
   static const String checkboxCardCheckboxCard =
       'lib/shared/checkbox_card/checkbox_card.dart';
   static const String checkboxCardCheckboxListTile =
@@ -47,12 +65,24 @@ class Assets {
       'lib/features/ingredients/data/ingredients_repository.dart';
   static const String dataIngredientsServices =
       'lib/features/ingredients/data/ingredients_services.dart';
+  static const String dataRecipeCollectionRepository =
+      'lib/features/recipe-collection/data/recipe_collection_repository.dart';
+  static const String dataRecipeCollectionServices =
+      'lib/features/recipe-collection/data/recipe_collection_services.dart';
+  static const String dataSearchRepository =
+      'lib/features/recipe/search-recipe/data/search_repository.dart';
+  static const String dataSearchServices =
+      'lib/features/recipe/search-recipe/data/search_services.dart';
   static const String dataUserProfileRepository =
       'lib/features/user-profile/data/user_profile_repository.dart';
   static const String dataUserProfileServices =
       'lib/features/user-profile/data/user_profile_services.dart';
   static const String dataUserRepository =
       'lib/features/auth/data/user_repository.dart';
+  static const String dataViewRecipeRepository =
+      'lib/features/recipe/view-recipe/data/view_recipe_repository.dart';
+  static const String dataViewRecipeServices =
+      'lib/features/recipe/view-recipe/data/view_recipe_services.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesBackground = 'assets/images/Background.png';
   static const String imagesDefaultProfile = 'assets/images/DefaultProfile.jpg';
@@ -84,6 +114,8 @@ class Assets {
   static const String uiSignupUi = 'lib/features/auth/ui/signup_ui.dart';
   static const String uiUserProfileUi =
       'lib/features/user-profile/ui/user_profile_ui.dart';
+  static const String uiViewRecipeUi =
+      'lib/features/recipe/view-recipe/ui/view_recipe_ui.dart';
   static const String utilsHexToColor = 'lib/core/utils/hex_to_color.dart';
   static const String widgetsCustomDialog =
       'lib/core/widgets/custom_dialog.dart';
