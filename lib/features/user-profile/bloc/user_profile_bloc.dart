@@ -34,6 +34,11 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
         var fetchMicro =
             List<bool>.from(data['micronutrients'] as List<dynamic>);
 
+        print("fetchDietPref: $fetchDietPref");
+        print("fetchAllergies: $fetchAllergies");
+        print("fetchMacro: $fetchMacro");
+        print("fetchMicro: $fetchMicro");
+
         emit(UserProfileLoaded(
             fetchDietPref, fetchAllergies, fetchMacro, fetchMicro));
       } else {

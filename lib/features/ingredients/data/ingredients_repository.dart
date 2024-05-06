@@ -13,6 +13,7 @@ class IngredientsRepository {
       List<String> meat, List<String> vegetables) async {
     print("UserID 2:");
     print(userId);
+
     await _ingredientsService.updatePantryEssentials(userId, pantryEssentials);
     await _ingredientsService.updateMeat(userId, meat);
     await _ingredientsService.updateVegetables(userId, vegetables);

@@ -104,10 +104,6 @@ class _UserProfileState extends State<UserProfile> {
       selectedMicronutrients,
       Options.micronutrients,
     );
-    print(updatedDietPref);
-    print(updatedAllergies);
-    print(updatedMacronutrients);
-    print(updatedMicronutrients);
 
     context.read<UserProfileBloc>().add(UpdateUserProfile(updatedDietPref,
         updatedAllergies, updatedMacronutrients, updatedMicronutrients));

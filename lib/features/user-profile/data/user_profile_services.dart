@@ -20,7 +20,6 @@ class UserProfileService {
   Future<void> updateDietPref(
       String userId, List<String> selectedOptions) async {
     try {
-      print("UserID 3:");
       print(userId);
       await _firestore.collection('users').doc(userId).update({
         'dietaryPreferences': selectedOptions,

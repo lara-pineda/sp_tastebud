@@ -46,11 +46,11 @@ class AuthService {
     // // This example adds a placeholder or an example recipe if you need the subcollection to be initialized
     // // immediately upon user creation. If you don't need to initialize it with data, this step can be skipped
     // // and the subcollection will be created as recipes are added by the user.
-    // await userDocRef.collection('savedRecipes').doc('initialRecipe').set({
-    //   'title': 'Example Recipe',
-    //   'ingredients': ['Ingredient 1', 'Ingredient 2'],
-    //   'instructions': 'Here are the cooking instructions.'
-    // });
+    await userDocRef.collection('savedRecipes').doc('initialRecipe').set({
+      'title': 'Example Recipe',
+      'ingredients': ['Ingredient 1', 'Ingredient 2'],
+      'instructions': 'Here are the cooking instructions.'
+    });
   }
 
   // Sign in with email and password

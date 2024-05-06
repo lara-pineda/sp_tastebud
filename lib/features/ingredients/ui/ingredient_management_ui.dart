@@ -76,9 +76,6 @@ class _IngredientsState extends State<IngredientManagement> {
       selectedVegetables,
       Options.vegetables,
     );
-    print(updatedPantryEssentials);
-    print(updatedMeat);
-    print(updatedVegetables);
 
     context.read<IngredientsBloc>().add(UpdateIngredients(
         updatedPantryEssentials, updatedMeat, updatedVegetables));
