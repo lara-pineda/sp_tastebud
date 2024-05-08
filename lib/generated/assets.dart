@@ -96,6 +96,10 @@ class Assets {
   static const String libScratch = 'lib/scratch.dart';
   static const String recipeCardRecipeCard =
       'lib/shared/recipe_card/recipe_card.dart';
+  static const String searchBarCustomSearchBar =
+      'lib/shared/search_bar/custom_search_bar.dart';
+  static const String searchRecipeRecipeApi =
+      'lib/features/recipe/search-recipe/recipe_search_api.dart';
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';
   static const String themesAppTypography =
       'lib/core/themes/app_typography.dart';
@@ -119,6 +123,4 @@ class Assets {
   static const String utilsHexToColor = 'lib/core/utils/hex_to_color.dart';
   static const String widgetsCustomDialog =
       'lib/core/widgets/custom_dialog.dart';
-  static const String widgetsCustomSearchBar =
-      'lib/core/widgets/custom_search_bar.dart';
 }

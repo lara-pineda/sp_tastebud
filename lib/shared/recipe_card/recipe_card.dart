@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class RecipeCard extends StatefulWidget {
-  const RecipeCard({super.key});
+  final String imageUrl;
+  final String recipeName;
+  final String sourceWebsite;
+
+  const RecipeCard({
+    super.key,
+    required this.imageUrl,
+    required this.recipeName,
+    required this.sourceWebsite,
+  });
 
   @override
   State<RecipeCard> createState() => _RecipeCardState();
@@ -13,8 +22,6 @@ class _RecipeCardState extends State<RecipeCard> {
   Widget build(BuildContext context) {
     // Card Container
     return Container(
-      width: 160,
-      height: 275,
       margin: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -29,86 +36,74 @@ class _RecipeCardState extends State<RecipeCard> {
         ],
       ),
 
-      // Card Contents
+      // Actual Recipe Contents
       child: Stack(
         children: [
-          // Recipe Image
-          Container(
-            height: 180,
-            decoration: const BoxDecoration(
-              color: Colors.transparent,
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage(
-                  'assets/images/ImagePlaceholder.png',
-                ),
-              ),
-            ),
-          ),
-
-          // Add to favorites Icon
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Icon(
-                  Icons.favorite_border,
-                  color: Colors.red,
-                  size: 28,
-                ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.network(widget.imageUrl, fit: BoxFit.cover),
               ),
-            ],
-          ),
-
-          // Contents below the recipe image
-          Positioned(
-              child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                  ),
+              Flexible(
+                child: Padding(
+                  padding: EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 190),
-
-                      // Recipe Name
-                      const Text('Recipe Name',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                          )),
-
-                      const SizedBox(height: 4),
-
-                      // Source Website
-                      const Text('Source Website:',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                            color: Colors.grey,
-                          )),
-
-                      const SizedBox(height: 6),
-
-                      // Rating
-                      RatingBar.builder(
-                          initialRating: 4,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          itemCount: 5,
-                          itemSize: 16,
-                          itemPadding:
-                              const EdgeInsets.symmetric(horizontal: 4),
-                          itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: Colors.red,
+                      const SizedBox(height: 8),
+                      Text(
+                        widget.recipeName,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Source: ',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
                               ),
-                          onRatingUpdate: (index) {}),
+                            ),
+                            TextSpan(
+                              text: widget.sourceWebsite,
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
-                  )))
+                  ),
+                ),
+              )
+            ],
+          ),
+
+          // Add to favorites Icon
+          Positioned(
+            bottom: 8,
+            right: 8,
+            child: GestureDetector(
+              onTap: () {
+                // Handle click action for adding to favorites
+              },
+              child: Icon(
+                Icons.favorite_border,
+                color: Colors.red,
+                size: 24,
+              ),
+            ),
+          ),
         ],
       ),
     );
