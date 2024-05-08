@@ -19,15 +19,13 @@ import 'package:sp_tastebud/features/recipe/search-recipe/ui/search_recipe_ui.da
 import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
 
 //BLoCs
-import 'package:sp_tastebud/features/auth/bloc/signup_bloc.dart';
-import 'package:sp_tastebud/features/auth/bloc/login_bloc.dart';
+import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import 'package:sp_tastebud/features/navigation/bloc/app_navigation_bloc.dart';
 
 // services
 import 'package:sp_tastebud/features/auth/data/auth_service.dart';
 import 'package:sp_tastebud/features/auth/data/user_repository.dart';
-
 import '../../features/user-profile/data/user_profile_repository.dart';
 import '../../features/user-profile/data/user_profile_services.dart';
 
@@ -68,8 +66,8 @@ class AppRoutes {
             name: "login",
             path: "/login",
             builder: (context, state) {
-              return BlocProvider<LoginBloc>(
-                create: (context) => LoginBloc(_userRepository),
+              return BlocProvider<AuthBloc>(
+                create: (context) => AuthBloc(_userRepository),
                 child: LoginPage(),
               );
             },
@@ -78,8 +76,8 @@ class AppRoutes {
             name: "signup",
             path: "/signup",
             builder: (context, state) {
-              return BlocProvider<SignupBloc>(
-                create: (context) => SignupBloc(_userRepository),
+              return BlocProvider<AuthBloc>(
+                create: (context) => AuthBloc(_userRepository),
                 child: SignupPage(),
               );
             },
@@ -88,7 +86,7 @@ class AppRoutes {
             navigatorKey: _shellNavigatorKey,
             providers: [
               BlocProvider(
-                create: (context) => LoginBloc(_userRepository),
+                create: (context) => AuthBloc(_userRepository),
               ),
               BlocProvider(
                 create: (context) =>
@@ -148,15 +146,6 @@ class AppRoutes {
                 path: "/profile",
                 parentNavigatorKey: _shellNavigatorKey,
                 builder: (context, state) => UserProfile(),
-                // child: BlocBuilder<UserProfileBloc, UserProfileState>(
-                //   builder: (context, state) {
-                //     if (state is UserProfileLoaded) {
-                //       return UserProfile();
-                //     } else {
-                //       return CircularProgressIndicator();
-                //     }
-                //   },
-                // ),
               ),
             ],
           ),

@@ -1,44 +1,44 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:equatable/equatable.dart';
-import 'package:sp_tastebud/features/auth/data/user_repository.dart';
-part 'login_event.dart';
-part 'login_state.dart';
+import '../data/user_repository.dart';
 
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
+part 'auth_event.dart';
+part 'auth_state.dart';
+
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserRepository _userRepository;
 
-  LoginBloc(this._userRepository) : super(LoginInitial()) {
-    // Event handlers
+  AuthBloc(this._userRepository) : super(AuthInitial()) {
     on<LoginRequested>(_onLoginRequested);
+    on<SignUpRequested>(_onSignUpRequested);
     on<CheckLoginStatus>(_onCheckLoginStatus);
   }
 
-  Future<void> _onLoginRequested(
-      LoginRequested event, Emitter<LoginState> emit) async {
-    emit(LoginLoading());
+  Future<void> _onSignUpRequested(
+      SignUpRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
     try {
-      User user = await _userRepository.signIn(
-        event.email,
-        event.password,
-      );
-
-      emit(LoginSuccess(user));
+      User user = await _userRepository.createUser(event.email, event.password);
+      emit(AuthSuccess(user));
     } on FirebaseAuthException catch (e) {
-      emit(LoginFailure(e.message ?? "An unknown error occurred"));
+      emit(AuthFailure(e.message ?? "An unknown error occurred"));
     } catch (e) {
-      emit(LoginFailure("An unknown error occurred"));
+      emit(AuthFailure("An unknown error occurred"));
     }
   }
 
-  void _onCheckLoginStatus(CheckLoginStatus event, Emitter<LoginState> emit) {
-    var user = _userRepository.getCurrentUser();
-    if (user != null) {
-      emit(LoginSuccess(user));
-    } else {
-      emit(LoginFailure("User not logged in"));
+  Future<void> _onLoginRequested(
+      LoginRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      User user = await _userRepository.signIn(event.email, event.password);
+      emit(AuthSuccess(user));
+    } on FirebaseAuthException catch (e) {
+      emit(AuthFailure(e.message ?? "An unknown error occurred"));
+    } catch (e) {
+      emit(AuthFailure("An unknown error occurred"));
     }
-
     // USAGE
     // context.read<LoginBloc>().add(CheckLoginStatus());
 
@@ -54,6 +54,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     // );
   }
 
+  void _onCheckLoginStatus(CheckLoginStatus event, Emitter<AuthState> emit) {
+    var user = _userRepository.getCurrentUser();
+    if (user != null) {
+      emit(AuthSuccess(user));
+    } else {
+      emit(AuthFailure("User not logged in"));
+    }
+  }
 // USAGE
 // // Trigger another bloc with dependency injection for fetching user data
 // context.read<AuthWrapperBloc>().add(CheckLoginStatus());

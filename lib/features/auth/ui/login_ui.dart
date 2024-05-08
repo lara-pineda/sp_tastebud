@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/utils/hex_to_color.dart';
 
-import '../bloc/login_bloc.dart';
+import '../bloc/auth_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -45,7 +45,7 @@ class _LoginState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final loginBloc = BlocProvider.of<LoginBloc>(context);
+    final loginBloc = BlocProvider.of<AuthBloc>(context);
 
     return Scaffold(
       // make widgets fixed even when keyboard appears
@@ -274,16 +274,16 @@ class _LoginState extends State<LoginPage> {
             SizedBox(height: (40.toVHLength).toPX()),
 
             // Listen to state changes
-            BlocListener<LoginBloc, LoginState>(
+            BlocListener<AuthBloc, AuthState>(
               listener: (context, state) {
                 // If login is successful, navigate to search recipe
-                if (state is LoginSuccess) {
+                if (state is AuthSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Login successful!")));
                   context.go('/search');
 
                   // Login failed
-                } else if (state is LoginFailure) {
+                } else if (state is AuthFailure) {
                   // Show error message
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text(state.error)));

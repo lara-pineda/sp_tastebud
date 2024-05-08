@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:sp_tastebud/core/config/assets_path.dart';
-import 'package:sp_tastebud/features/auth/bloc/login_bloc.dart';
+import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import '../bloc/user_profile_bloc.dart';
@@ -112,9 +112,9 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
+    return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, loginState) {
-        if (loginState is LoginFailure) {
+        if (loginState is AuthFailure) {
           context.go('/');
           // Return error text if login fails
           return Text("User not logged in.");

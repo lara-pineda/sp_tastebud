@@ -4,8 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/utils/hex_to_color.dart';
+import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 
-import '../bloc/signup_bloc.dart';
+import '../bloc/auth_bloc.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -44,7 +45,7 @@ class _SignupState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    final signupBloc = BlocProvider.of<SignupBloc>(context);
+    final signupBloc = BlocProvider.of<AuthBloc>(context);
 
     return Scaffold(
       // make widgets fixed even when keyboard appears
@@ -291,16 +292,16 @@ class _SignupState extends State<SignupPage> {
             SizedBox(height: (40.toVHLength).toPX()),
 
             // Listen to state changes
-            BlocListener<SignupBloc, SignupState>(
+            BlocListener<AuthBloc, AuthState>(
               listener: (context, state) {
                 // If signup is successful, navigate to main menu
-                if (state is SignupSuccess) {
+                if (state is AuthSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Signup successful!")));
                   context.go('/search');
 
                   // Signup failed
-                } else if (state is SignupFailure) {
+                } else if (state is AuthFailure) {
                   // Show error message
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text(state.error)));
