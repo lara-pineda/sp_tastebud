@@ -54,11 +54,24 @@ sp_tastebud/
 
 ## Features TODO
 
--   search recipe
+-   view recipe details
+-   manage saved recipes
 -   sort recipe
 -   substitute recipe
--   manage saved recipes
--
--   manage equipments
+-   heart button shaded if in user's collection
+-   dialog styling
+
+POLISHING
+-   signup/login back button to main menu
+-   remember me functionality??
+-   password creation validation
+-   empty initial search page
+-   logout button
+-   make user email not editable
+-   move save changes button for ingredient mgmt and user profile
+-   finalize options for ingredients
+-   add more filters
+
 -   manage rejected recipes
+-   manage equipments
 -   leave a review
