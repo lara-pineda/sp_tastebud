@@ -8,10 +8,14 @@ abstract class SearchRecipeEvent extends Equatable {
 }
 
 class AddToFavorites extends SearchRecipeEvent {
+  final String recipeName;
+  final String image;
+  final String sourceWebsite;
   final String recipeId;
 
-  const AddToFavorites(this.recipeId);
+  AddToFavorites(
+      this.recipeName, this.image, this.sourceWebsite, this.recipeId);
 
   @override
-  List<Object?> get props => [recipeId];
+  List<Object> get props => [recipeName, image, recipeId];
 }

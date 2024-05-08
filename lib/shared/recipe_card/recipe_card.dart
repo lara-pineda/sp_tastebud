@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
+import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
 
 class RecipeCard extends StatefulWidget {
-  final String imageUrl;
   final String recipeName;
+  final String imageUrl;
   final String sourceWebsite;
-  final String recipeId;
+  final String recipeUri;
   final SearchRecipeBloc bloc;
 
   const RecipeCard({
     super.key,
-    required this.imageUrl,
     required this.recipeName,
+    required this.imageUrl,
     required this.sourceWebsite,
-    required this.recipeId,
+    required this.recipeUri,
     required this.bloc,
   });
 
@@ -25,7 +27,12 @@ class RecipeCard extends StatefulWidget {
 class _RecipeCardState extends State<RecipeCard> {
   @override
   Widget build(BuildContext context) {
-    // Card Container
+    // print("in recipe card");
+    // print(widget.recipeName);
+    // print(widget.imageUrl);
+    // print(widget.sourceWebsite);
+    // print(widget.recipeUri);
+
     return Container(
       margin: const EdgeInsets.all(15),
       decoration: BoxDecoration(
@@ -101,7 +108,11 @@ class _RecipeCardState extends State<RecipeCard> {
             child: GestureDetector(
               // Handle click action for adding to favorites
               onTap: () {
-                // widget.bloc.add(AddToFavorites(widget.recipeId));
+                context.read<SearchRecipeBloc>().add(AddToFavorites(
+                    widget.recipeName,
+                    widget.imageUrl,
+                    widget.sourceWebsite,
+                    extractRecipeIdUsingRegExp(widget.recipeUri)));
               },
               child: Icon(
                 Icons.favorite_border,

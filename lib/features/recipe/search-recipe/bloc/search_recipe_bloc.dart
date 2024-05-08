@@ -1,51 +1,39 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../data/search_repository.dart';
 
 part 'search_recipe_event.dart';
 part 'search_recipe_state.dart';
 
 class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final SearchRecipeRepository _recipeRepository;
 
-  SearchRecipeBloc() : super(FavoritesInitial());
-
-  Stream<SearchRecipeState> mapEventToState(SearchRecipeEvent event) async* {
-    if (event is AddToFavorites) {
-      yield* _mapAddToFavoritesToState(event);
-    }
+  SearchRecipeBloc(this._recipeRepository) : super(FavoritesInitial()) {
+    on<AddToFavorites>(_onAddToFavorites);
   }
 
-  Stream<SearchRecipeState> _mapAddToFavoritesToState(
-      AddToFavorites event) async* {
+  Future<void> _onAddToFavorites(
+      AddToFavorites event, Emitter<SearchRecipeState> emit) async {
+    // Emit loading state before the process starts
+    emit(FavoritesLoading());
     try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        yield FavoritesError('No user logged in!');
-        return;
-      }
+      await _recipeRepository.addToFavorites(
+          event.recipeName, event.image, event.sourceWebsite, event.recipeId);
 
-      DocumentReference recipeRef = _firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('savedRecipes')
-          .doc(event.recipeId);
+      // print("in bloc");
+      // print(event.recipeName);
+      // print(event.image);
+      // print(event.sourceWebsite);
+      // print(event.recipeId);
 
-      DocumentSnapshot snapshot = await recipeRef.get();
-      if (!snapshot.exists) {
-        await recipeRef.set({
-          'recipeId': event.recipeId,
-          'timestamp': FieldValue.serverTimestamp(),
-        });
-        yield FavoritesAdded(event.recipeId);
-      } else {
-        yield FavoritesError('Recipe already in favorites.');
-      }
-    } catch (e) {
-      yield FavoritesError('Error adding to favorites: $e');
+      emit(FavoritesAdded(event.recipeId));
+    } catch (e, stacktrace) {
+      // This will print more detailed error information
+      print('Failed to add to favorites: $e');
+      print('Stacktrace: $stacktrace');
+      emit(FavoritesError(e.toString()));
     }
   }
 }

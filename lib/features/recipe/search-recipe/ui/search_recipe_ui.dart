@@ -84,10 +84,10 @@ class _SearchRecipeState extends State<SearchRecipe> {
                 itemBuilder: (context, index) {
                   final recipe = _recipes[index];
                   return RecipeCard(
-                    imageUrl: recipe['recipe']['images']['THUMBNAIL']['url'],
-                    recipeName: recipe['recipe']['label'],
-                    sourceWebsite: recipe['recipe']['source'],
-                    recipeId: recipe['_links']['self']['href'],
+                    recipeName: recipe['label'],
+                    imageUrl: recipe['images']['THUMBNAIL']['url'],
+                    sourceWebsite: recipe['source'],
+                    recipeUri: recipe['uri'],
                     bloc: BlocProvider.of<SearchRecipeBloc>(context),
                   );
                 },

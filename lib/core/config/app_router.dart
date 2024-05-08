@@ -29,6 +29,7 @@ import 'package:sp_tastebud/features/auth/data/auth_service.dart';
 import 'package:sp_tastebud/features/auth/data/user_repository.dart';
 import '../../features/user-profile/data/user_profile_repository.dart';
 import '../../features/user-profile/data/user_profile_services.dart';
+import '../../features/recipe/search-recipe/data/search_repository.dart';
 
 class AppRoutes {
   static final _authService = AuthService(
@@ -98,7 +99,10 @@ class AppRoutes {
                     IngredientsBloc(IngredientsRepository(_ingredientsService)),
               ),
               BlocProvider(
-                create: (context) => SearchRecipeBloc(),
+                create: (context) => SearchRecipeBloc(
+                  SearchRecipeRepository(
+                      FirebaseFirestore.instance, FirebaseAuth.instance),
+                ),
               ),
             ],
             builder: (context, state, child) {

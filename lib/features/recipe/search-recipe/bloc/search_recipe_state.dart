@@ -9,13 +9,17 @@ abstract class SearchRecipeState extends Equatable {
 
 class FavoritesInitial extends SearchRecipeState {}
 
-class FavoritesAdded extends SearchRecipeState {
-  final String recipeId;
+class FavoritesLoading extends SearchRecipeState {
+  const FavoritesLoading();
+}
 
-  const FavoritesAdded(this.recipeId);
+class FavoritesAdded extends SearchRecipeState {
+  final String uri;
+
+  const FavoritesAdded(this.uri);
 
   @override
-  List<Object?> get props => [recipeId];
+  List<Object?> get props => [uri];
 }
 
 class FavoritesError extends SearchRecipeState {
