@@ -34,40 +34,14 @@ sp_tastebud/
     │       └── hex_to_color.dart           # Converts hex to dart color
     │
     ├── features/                           # App features
-    │   ├── auth
-    │   │   ├── bloc/
-    │   │   ├── data/
-    │   │   └── ui/
-    │   │
-    │   ├── ingredients
-    │   │   ├── bloc/
-    │   │   ├── data/
-    │   │   └── ui/
-    │   │
-    │   ├── navigation
-    │   │   ├── bloc/
-    │   │   └── ui/
-    │   │
-    │   ├── recipe
+    │   ├── auth/
+    │   ├── ingredients/
+    │   ├── navigation/
+    │   ├── recipe/
     │   │   ├── search-recipe/
-    │   │   │   ├── bloc/
-    │   │   │   ├── data/
-    │   │   │   └── ui/
-    │   │   │
     │   │   └── view-recipe/
-    │   │       ├── bloc/
-    │   │       ├── data/
-    │   │       └── ui/
-    │   │
-    │   ├── recipe-collection
-    │   │   ├── bloc/
-    │   │   ├── data/
-    │   │   └── ui/
-    │   │
-    │   └── user-profile
-    │       ├── bloc/
-    │       ├── data/
-    │       └── ui/
+    │   ├── recipe-collection/
+    │   └── user-profile/
     │
     ├── shared/                             # Reusable small, custom widgets used in the pages
     │   ├── checkbox_card/
