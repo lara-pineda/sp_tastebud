@@ -72,6 +72,7 @@ POLISHING
 -   finalize options for ingredients
 -   add more filters
 
+SUGGESTIONS
 -   manage rejected recipes
 -   manage equipments
 -   leave a review
