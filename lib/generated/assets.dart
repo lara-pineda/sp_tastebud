@@ -51,6 +51,8 @@ class Assets {
       'lib/shared/checkbox_card/options.dart';
   static const String configAppRouter = 'lib/core/config/app_router.dart';
   static const String configAssetsPath = 'lib/core/config/assets_path.dart';
+  static const String configServiceLocator =
+      'lib/core/config/service_locator.dart';
   static const String dataAuthService =
       'lib/features/auth/data/auth_service.dart';
   static const String dataIngredientsRepository =
@@ -65,8 +67,6 @@ class Assets {
       'lib/features/recipe-collection/data/recipe_collection_services.dart';
   static const String dataSearchRepository =
       'lib/features/recipe/search-recipe/data/search_repository.dart';
-  static const String dataSearchServices =
-      'lib/features/recipe/search-recipe/data/search_services.dart';
   static const String dataUserProfileRepository =
       'lib/features/user-profile/data/user_profile_repository.dart';
   static const String dataUserProfileServices =
@@ -114,6 +114,8 @@ class Assets {
       'lib/features/user-profile/ui/user_profile_ui.dart';
   static const String uiViewRecipeUi =
       'lib/features/recipe/view-recipe/ui/view_recipe_ui.dart';
+  static const String utilsExtractRecipeId =
+      'lib/core/utils/extract_recipe_id.dart';
   static const String utilsHexToColor = 'lib/core/utils/hex_to_color.dart';
   static const String viewRecipeIngredientSubstitutionApi =
       'lib/features/recipe/view-recipe/ingredient_substitution_api.dart';

@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_provider/go_provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sp_tastebud/core/config/service_locator.dart';
 
 // UI widgets
 import 'package:sp_tastebud/features/auth/ui/login_ui.dart';
 import 'package:sp_tastebud/features/auth/ui/main_menu_ui.dart';
 import 'package:sp_tastebud/features/auth/ui/signup_ui.dart';
-import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
-import 'package:sp_tastebud/features/ingredients/data/ingredients_repository.dart';
-import 'package:sp_tastebud/features/ingredients/data/ingredients_services.dart';
 import 'package:sp_tastebud/features/ingredients/ui/ingredient_management_ui.dart';
 import 'package:sp_tastebud/features/navigation/ui/navigation_bar_ui.dart';
 import 'package:sp_tastebud/features/recipe-collection/ui/recipe_collection_ui.dart';
@@ -23,32 +19,9 @@ import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import 'package:sp_tastebud/features/navigation/bloc/app_navigation_bloc.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
-
-// services
-import 'package:sp_tastebud/features/auth/data/auth_service.dart';
-import 'package:sp_tastebud/features/auth/data/user_repository.dart';
-import '../../features/user-profile/data/user_profile_repository.dart';
-import '../../features/user-profile/data/user_profile_services.dart';
-import '../../features/recipe/search-recipe/data/search_repository.dart';
+import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
 
 class AppRoutes {
-  static final _authService = AuthService(
-    FirebaseAuth.instance,
-    FirebaseFirestore.instance,
-  );
-
-  static final _userProfileService = UserProfileService(
-    FirebaseAuth.instance,
-    FirebaseFirestore.instance,
-  );
-
-  static final _ingredientsService = IngredientsService(
-    FirebaseAuth.instance,
-    FirebaseFirestore.instance,
-  );
-
-  static final UserRepository _userRepository = UserRepository(_authService);
-
   // for the parent navigation stack
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
   // for nested navigation with ShellRoute
@@ -69,7 +42,7 @@ class AppRoutes {
             path: "/login",
             builder: (context, state) {
               return BlocProvider<AuthBloc>(
-                create: (context) => AuthBloc(_userRepository),
+                create: (context) => getIt<AuthBloc>(),
                 child: LoginPage(),
               );
             },
@@ -79,7 +52,7 @@ class AppRoutes {
             path: "/signup",
             builder: (context, state) {
               return BlocProvider<AuthBloc>(
-                create: (context) => AuthBloc(_userRepository),
+                create: (context) => getIt<AuthBloc>(),
                 child: SignupPage(),
               );
             },
@@ -87,22 +60,17 @@ class AppRoutes {
           ShellProviderRoute(
             navigatorKey: _shellNavigatorKey,
             providers: [
-              BlocProvider(
-                create: (context) => AuthBloc(_userRepository),
+              BlocProvider<AuthBloc>(
+                create: (context) => getIt<AuthBloc>(),
               ),
-              BlocProvider(
-                create: (context) =>
-                    UserProfileBloc(UserProfileRepository(_userProfileService)),
+              BlocProvider<UserProfileBloc>(
+                create: (context) => getIt<UserProfileBloc>(),
               ),
-              BlocProvider(
-                create: (context) =>
-                    IngredientsBloc(IngredientsRepository(_ingredientsService)),
+              BlocProvider<IngredientsBloc>(
+                create: (context) => getIt<IngredientsBloc>(),
               ),
-              BlocProvider(
-                create: (context) => SearchRecipeBloc(
-                  SearchRecipeRepository(
-                      FirebaseFirestore.instance, FirebaseAuth.instance),
-                ),
+              BlocProvider<SearchRecipeBloc>(
+                create: (context) => getIt<SearchRecipeBloc>(),
               ),
             ],
             builder: (context, state, child) {

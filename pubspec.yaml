@@ -64,6 +64,7 @@ dependencies:
   cloud_firestore: ^4.16.1
   go_provider: ^1.4.0
   shared_preferences: ^2.2.3
+  get_it: ^7.7.0
 
 
 dev_dependencies:
