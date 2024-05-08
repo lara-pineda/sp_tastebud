@@ -18,7 +18,7 @@ class RecipeSearchAPI {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
-        return data['hits'].map((hit) => hit['recipe']).toList();
+        return data['hits'].toList();
       } else {
         print('Error: ${response.statusCode}');
         throw Exception('Failed to load recipes');

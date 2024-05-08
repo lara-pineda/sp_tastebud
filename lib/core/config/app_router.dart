@@ -22,6 +22,7 @@ import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import 'package:sp_tastebud/features/navigation/bloc/app_navigation_bloc.dart';
+import 'package:sp_tastebud/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
 
 // services
 import 'package:sp_tastebud/features/auth/data/auth_service.dart';
@@ -95,6 +96,9 @@ class AppRoutes {
               BlocProvider(
                 create: (context) =>
                     IngredientsBloc(IngredientsRepository(_ingredientsService)),
+              ),
+              BlocProvider(
+                create: (context) => SearchRecipeBloc(),
               ),
             ],
             builder: (context, state, child) {

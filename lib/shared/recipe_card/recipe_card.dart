@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:sp_tastebud/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
 
 class RecipeCard extends StatefulWidget {
   final String imageUrl;
   final String recipeName;
   final String sourceWebsite;
+  final String recipeId;
+  final SearchRecipeBloc bloc;
 
   const RecipeCard({
     super.key,
     required this.imageUrl,
     required this.recipeName,
     required this.sourceWebsite,
+    required this.recipeId,
+    required this.bloc,
   });
 
   @override
@@ -94,8 +99,9 @@ class _RecipeCardState extends State<RecipeCard> {
             bottom: 8,
             right: 8,
             child: GestureDetector(
+              // Handle click action for adding to favorites
               onTap: () {
-                // Handle click action for adding to favorites
+                // widget.bloc.add(AddToFavorites(widget.recipeId));
               },
               child: Icon(
                 Icons.favorite_border,

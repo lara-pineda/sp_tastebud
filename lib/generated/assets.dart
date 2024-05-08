@@ -8,17 +8,15 @@ class Assets {
       'lib/features/navigation/bloc/app_navigation_event.dart';
   static const String blocAppNavigationState =
       'lib/features/navigation/bloc/app_navigation_state.dart';
+  static const String blocAuthBloc = 'lib/features/auth/bloc/auth_bloc.dart';
+  static const String blocAuthEvent = 'lib/features/auth/bloc/auth_event.dart';
+  static const String blocAuthState = 'lib/features/auth/bloc/auth_state.dart';
   static const String blocIngredientsBloc =
       'lib/features/ingredients/bloc/ingredients_bloc.dart';
   static const String blocIngredientsEvent =
       'lib/features/ingredients/bloc/ingredients_event.dart';
   static const String blocIngredientsState =
       'lib/features/ingredients/bloc/ingredients_state.dart';
-  static const String blocLoginBloc = 'lib/features/auth/bloc/login_bloc.dart';
-  static const String blocLoginEvent =
-      'lib/features/auth/bloc/login_event.dart';
-  static const String blocLoginState =
-      'lib/features/auth/bloc/login_state.dart';
   static const String blocRecipeCollectionBloc =
       'lib/features/recipe-collection/bloc/recipe_collection_bloc.dart';
   static const String blocRecipeCollectionEvent =
@@ -31,12 +29,6 @@ class Assets {
       'lib/features/recipe/search-recipe/bloc/search_recipe_event.dart';
   static const String blocSearchRecipeState =
       'lib/features/recipe/search-recipe/bloc/search_recipe_state.dart';
-  static const String blocSignupBloc =
-      'lib/features/auth/bloc/signup_bloc.dart';
-  static const String blocSignupEvent =
-      'lib/features/auth/bloc/signup_event.dart';
-  static const String blocSignupState =
-      'lib/features/auth/bloc/signup_state.dart';
   static const String blocUserProfileBloc =
       'lib/features/user-profile/bloc/user_profile_bloc.dart';
   static const String blocUserProfileEvent =
@@ -65,6 +57,8 @@ class Assets {
       'lib/features/ingredients/data/ingredients_repository.dart';
   static const String dataIngredientsServices =
       'lib/features/ingredients/data/ingredients_services.dart';
+  static const String dataPreferencesService =
+      'lib/features/auth/data/preferences_service.dart';
   static const String dataRecipeCollectionRepository =
       'lib/features/recipe-collection/data/recipe_collection_repository.dart';
   static const String dataRecipeCollectionServices =
@@ -98,7 +92,7 @@ class Assets {
       'lib/shared/recipe_card/recipe_card.dart';
   static const String searchBarCustomSearchBar =
       'lib/shared/search_bar/custom_search_bar.dart';
-  static const String searchRecipeRecipeApi =
+  static const String searchRecipeRecipeSearchApi =
       'lib/features/recipe/search-recipe/recipe_search_api.dart';
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';
   static const String themesAppTypography =
@@ -121,6 +115,8 @@ class Assets {
   static const String uiViewRecipeUi =
       'lib/features/recipe/view-recipe/ui/view_recipe_ui.dart';
   static const String utilsHexToColor = 'lib/core/utils/hex_to_color.dart';
+  static const String viewRecipeIngredientSubstitutionApi =
+      'lib/features/recipe/view-recipe/ingredient_substitution_api.dart';
   static const String widgetsCustomDialog =
       'lib/core/widgets/custom_dialog.dart';
 }
