@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sp_tastebud/core/utils/get_current_route.dart';
 import 'package:sp_tastebud/core/utils/hex_to_color.dart';
 import 'package:sp_tastebud/core/widgets/custom_dialog.dart';
 import 'package:sp_tastebud/shared/search_bar/custom_search_bar.dart';
@@ -39,6 +41,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
   @override
   Widget build(BuildContext context) {
+    GoRouter router;
+
     return BlocListener<SearchRecipeBloc, SearchRecipeState>(
         listener: (context, state) {
           if (state is FavoritesError) {
@@ -83,12 +87,20 @@ class _SearchRecipeState extends State<SearchRecipe> {
                 itemCount: _recipes.length,
                 itemBuilder: (context, index) {
                   final recipe = _recipes[index];
-                  return RecipeCard(
-                    recipeName: recipe['label'],
-                    imageUrl: recipe['images']['THUMBNAIL']['url'],
-                    sourceWebsite: recipe['source'],
-                    recipeUri: recipe['uri'],
-                    bloc: BlocProvider.of<SearchRecipeBloc>(context),
+                  return GestureDetector(
+                    onTap: () {
+                      // BlocProvider.of<SearchRecipeBloc>(context).add(RecipeSelected(recipe));
+                      // context.go('/search/view', extra: recipe);
+                      context.go('/search/view');
+                      // GoRouter.of(context).push('/search/view', extra: recipe);
+                    },
+                    child: RecipeCard(
+                      recipeName: recipe['label'],
+                      imageUrl: recipe['images']['THUMBNAIL']['url'],
+                      sourceWebsite: recipe['source'],
+                      recipeUri: recipe['uri'],
+                      bloc: BlocProvider.of<SearchRecipeBloc>(context),
+                    ),
                   );
                 },
               ),

@@ -39,15 +39,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
 
-  # firebase dependencies
-
   # app architecture
   equatable: ^2.0.5
   bloc: ^8.1.4
   flutter_bloc: ^8.1.5
-
-  # routing
-  go_router: ^13.2.2
+  get_it: ^7.7.0        # dependency injection
+  go_router: ^13.2.2    # routing
 
   # for svg icons
   flutter_svg: ^2.0.10+1
@@ -58,13 +55,13 @@ dependencies:
   # for rating star component
   flutter_rating_bar: ^4.0.1
 
+  # for remember me functionality
+  shared_preferences: ^2.2.3
+
   # firebase
   firebase_core: ^2.29.0
   firebase_auth: ^4.19.1
   cloud_firestore: ^4.16.1
-  go_provider: ^1.4.0
-  shared_preferences: ^2.2.3
-  get_it: ^7.7.0
 
 
 dev_dependencies:
@@ -110,6 +107,7 @@ flutter:
     - assets/images/StarIcon.svg
     - assets/images/MiniStarIcon.svg
     - assets/images/ImagePlaceholder.png
+    - assets/images/Edamam_Badge.svg
     - lib/features/navigation/ui/
 
   # An image asset can refer to one or more resolution-specific "variants", see

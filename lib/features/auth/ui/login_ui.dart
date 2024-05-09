@@ -281,6 +281,7 @@ class _LoginState extends State<LoginPage> {
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Login successful!")));
                   context.go('/search');
+                  // GoRouter.of(context).push('/search');
 
                   // Login failed
                 } else if (state is AuthFailure) {

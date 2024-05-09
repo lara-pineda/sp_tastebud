@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dimension/dimension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
@@ -19,6 +20,9 @@ class _IngredientsState extends State<IngredientManagement> {
   List<bool> selectedPantryEssentials = [];
   List<bool> selectedMeat = [];
   List<bool> selectedVegetables = [];
+
+  // Retrieve AuthBloc using GetIt
+  final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
 
   @override
   void initState() {
@@ -87,7 +91,8 @@ class _IngredientsState extends State<IngredientManagement> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, loginState) {
+      bloc: _authBloc,
+      builder: (context, AuthState loginState) {
         if (loginState is AuthFailure) {
           context.go('/');
           // Return error text if login fails

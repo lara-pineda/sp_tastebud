@@ -123,6 +123,8 @@ class _RecipeCardState extends State<RecipeCard> {
           ),
         ],
       ),
+      // navigate to /my-path, pass 2 arguments to context.state.extra
+      // context.push("/view", extra: {"recipeJson": recipe});
     );
   }
 }

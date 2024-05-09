@@ -10,6 +10,8 @@ class Assets {
       'assets/images/ImagePlaceholder.png';
   static const String imagesLandingFruits = 'assets/images/LandingFruits.jpg';
   static const String imagesMiniStarIcon = 'assets/images/MiniStarIcon.svg';
+  static const String imagesEdamamAttribution =
+      'assets/images/Edamam_Badge.svg';
   static const String imagesStarIcon = 'assets/images/StarIcon.svg';
 }
 

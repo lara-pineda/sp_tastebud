@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_provider/go_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/config/service_locator.dart';
 
@@ -13,19 +12,24 @@ import 'package:sp_tastebud/features/navigation/ui/navigation_bar_ui.dart';
 import 'package:sp_tastebud/features/recipe-collection/ui/recipe_collection_ui.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/ui/search_recipe_ui.dart';
 import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
+import 'package:sp_tastebud/features/recipe/view-recipe/ui/view_recipe_ui.dart';
 
 //BLoCs
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
-import 'package:sp_tastebud/features/navigation/bloc/app_navigation_bloc.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
 
 class AppRoutes {
-  // for the parent navigation stack
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
-  // for nested navigation with ShellRoute
-  static final _shellNavigatorKey = GlobalKey<NavigatorState>();
+  static final _shellNavigatorSearchKey =
+      GlobalKey<NavigatorState>(debugLabel: 'shellSearch');
+  static final _shellNavigatorIngredientsKey =
+      GlobalKey<NavigatorState>(debugLabel: 'shellIngredients');
+  static final _shellNavigatorCollectionKey =
+      GlobalKey<NavigatorState>(debugLabel: 'shellCollection');
+  static final _shellNavigatorProfileKey =
+      GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
 
   static GoRouter get router => GoRouter(
         initialLocation: "/",
@@ -57,74 +61,81 @@ class AppRoutes {
               );
             },
           ),
-          ShellProviderRoute(
-            navigatorKey: _shellNavigatorKey,
-            providers: [
-              BlocProvider<AuthBloc>(
-                create: (context) => getIt<AuthBloc>(),
-              ),
-              BlocProvider<UserProfileBloc>(
-                create: (context) => getIt<UserProfileBloc>(),
-              ),
-              BlocProvider<IngredientsBloc>(
-                create: (context) => getIt<IngredientsBloc>(),
-              ),
-              BlocProvider<SearchRecipeBloc>(
-                create: (context) => getIt<SearchRecipeBloc>(),
-              ),
-            ],
-            builder: (context, state, child) {
-              return BlocProvider<AppNavigationBloc>(
-                create: (context) => AppNavigationBloc(),
-                child: AppBottomNavBar(appName1: 'Taste', appName2: 'Bud'),
-              );
-            },
-            routes: [
-              GoRoute(
-                name: "search",
-                path: "/search",
-                parentNavigatorKey: _shellNavigatorKey,
-                builder: (context, state) => const SearchRecipe(),
-                // child route
-                // routes:[
-                //   GoRoute(
-                //     name: "viewRecipe",
-                //     path: "view-recipe",
-                //     parentNavigatorKey: _rootNavigatorKey,
-                //     builder: (context, state) => const ViewRecipe(),
-                //     path: ":id",
-                //     builder: (context, state) {
-                //       final id = state.params['id'] // Get "id" param from URL
-                //       return FruitsPage(id: id);
-                //     },
-                //    example path: /fruits?search=antonio
-                //    builder: (context, state) {
-                //      final search = state.queryParams['search'];
-                //      return FruitsPage(search: search);
-                //    },
-                //   )
-                // ]
-              ),
-              GoRoute(
-                name: "ingredientManagement",
-                path: "/ingredients",
-                parentNavigatorKey: _shellNavigatorKey,
-                builder: (context, state) => const IngredientManagement(),
-              ),
-              GoRoute(
-                name: "recipeCollection",
-                path: "/recipe-collection",
-                parentNavigatorKey: _shellNavigatorKey,
-                builder: (context, state) => const RecipeCollection(),
-              ),
-              GoRoute(
-                name: "userProfile",
-                path: "/profile",
-                parentNavigatorKey: _shellNavigatorKey,
-                builder: (context, state) => UserProfile(),
-              ),
-            ],
-          ),
+          StatefulShellRoute.indexedStack(
+              builder: (context, state, navigationShell) {
+                return AppBottomNavBar(
+                    appName1: 'Taste',
+                    appName2: 'Bud',
+                    navigationShell: navigationShell);
+              },
+              branches: [
+                StatefulShellBranch(
+                    navigatorKey: _shellNavigatorSearchKey,
+                    routes: [
+                      GoRoute(
+                        name: "search",
+                        path: "/search",
+                        builder: (context, state) =>
+                            BlocProvider<SearchRecipeBloc>(
+                          create: (context) => getIt<SearchRecipeBloc>(),
+                          child: const SearchRecipe(),
+                        ),
+                        routes: [
+                          GoRoute(
+                            name: "viewRecipe",
+                            path: "view",
+                            builder: (context, state) =>
+                                BlocProvider<SearchRecipeBloc>(
+                              create: (context) => getIt<SearchRecipeBloc>(),
+                              child: const ViewRecipe(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ]),
+                // Ingredients branch
+                StatefulShellBranch(
+                  navigatorKey: _shellNavigatorIngredientsKey,
+                  routes: [
+                    GoRoute(
+                      path: '/ingredients',
+                      builder: (context, state) =>
+                          BlocProvider<IngredientsBloc>(
+                        create: (context) => getIt<IngredientsBloc>(),
+                        child: const IngredientManagement(),
+                      ),
+                    ),
+                  ],
+                ),
+                // Recipe Collection branch
+                StatefulShellBranch(
+                  navigatorKey: _shellNavigatorCollectionKey,
+                  routes: [
+                    GoRoute(
+                      path: '/recipe-collection',
+                      builder: (context, state) =>
+                          BlocProvider<SearchRecipeBloc>(
+                        create: (context) => getIt<SearchRecipeBloc>(),
+                        child: const RecipeCollection(),
+                      ),
+                    ),
+                  ],
+                ),
+                // User Profile branch
+                StatefulShellBranch(
+                  navigatorKey: _shellNavigatorProfileKey,
+                  routes: [
+                    GoRoute(
+                      path: '/profile',
+                      builder: (context, state) =>
+                          BlocProvider<UserProfileBloc>(
+                        create: (context) => getIt<UserProfileBloc>(),
+                        child: UserProfile(),
+                      ),
+                    ),
+                  ],
+                ),
+              ])
         ],
       );
 }

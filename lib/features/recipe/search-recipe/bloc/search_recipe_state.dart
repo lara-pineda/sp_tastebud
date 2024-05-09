@@ -30,3 +30,11 @@ class FavoritesError extends SearchRecipeState {
   @override
   List<Object?> get props => [message];
 }
+
+class RecipeDetailState extends SearchRecipeState {
+  final Map<String, dynamic> recipe;
+  RecipeDetailState(this.recipe);
+
+  @override
+  List<Object> get props => [recipe];
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dimension/dimension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:sp_tastebud/core/config/assets_path.dart';
@@ -22,6 +23,9 @@ class _UserProfileState extends State<UserProfile> {
   List<bool> selectedAllergies = [];
   List<bool> selectedMacronutrients = [];
   List<bool> selectedMicronutrients = [];
+
+  // Retrieve AuthBloc using GetIt
+  final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
 
   final TextEditingController _emailController = TextEditingController();
 
@@ -113,7 +117,8 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, loginState) {
+      bloc: _authBloc,
+      builder: (context, AuthState loginState) {
         if (loginState is AuthFailure) {
           context.go('/');
           // Return error text if login fails

@@ -1,41 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:sp_tastebud/features/ingredients/ui/ingredient_management_ui.dart';
-import 'package:sp_tastebud/features/recipe-collection/ui/recipe_collection_ui.dart';
-import 'package:sp_tastebud/features/recipe/search-recipe/ui/search_recipe_ui.dart';
-import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
 
-List<BottomNavigationBarItem> bottomNavItems = const <BottomNavigationBarItem>[
-  BottomNavigationBarItem(
+List<NavigationDestination> bottomNavItems = const <NavigationDestination>[
+  NavigationDestination(
     icon: Icon(Icons.explore_outlined),
-    activeIcon: Icon(Icons.explore),
+    selectedIcon: Icon(Icons.explore),
     label: 'Explore',
   ),
 
   // ingredients management page
-  BottomNavigationBarItem(
+  NavigationDestination(
     icon: Icon(Icons.dashboard_outlined),
-    activeIcon: Icon(Icons.dashboard),
+    selectedIcon: Icon(Icons.dashboard),
     label: 'Ingredients',
   ),
 
   // recipe collection
-  BottomNavigationBarItem(
+  NavigationDestination(
     icon: Icon(Icons.favorite_border),
-    activeIcon: Icon(Icons.favorite),
+    selectedIcon: Icon(Icons.favorite),
     label: 'Collection',
   ),
 
   // user profile
-  BottomNavigationBarItem(
+  NavigationDestination(
     icon: Icon(Icons.account_circle_outlined),
-    activeIcon: Icon(Icons.account_circle),
+    selectedIcon: Icon(Icons.account_circle),
     label: 'Profile',
   ),
-];
-
-List<Widget> bottomNavScreen = <Widget>[
-  const SearchRecipe(),
-  const IngredientManagement(),
-  const RecipeCollection(),
-  const UserProfile(),
 ];

@@ -12,6 +12,7 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
 
   SearchRecipeBloc(this._recipeRepository) : super(FavoritesInitial()) {
     on<AddToFavorites>(_onAddToFavorites);
+    on<RecipeSelected>((event, emit) => emit(RecipeDetailState(event.recipe)));
   }
 
   Future<void> _onAddToFavorites(
