@@ -7,6 +7,7 @@ import 'package:sp_tastebud/core/widgets/custom_dialog.dart';
 import 'package:sp_tastebud/shared/search_bar/custom_search_bar.dart';
 import 'package:sp_tastebud/shared/recipe_card/recipe_card.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/recipe_search_api.dart';
+import '../../../../core/utils/extract_recipe_id.dart';
 import '../bloc/search_recipe_bloc.dart';
 
 class SearchRecipe extends StatefulWidget {
@@ -27,14 +28,13 @@ class _SearchRecipeState extends State<SearchRecipe> {
   }
 
   // Call the recipe search api
-  Future<void> _searchRecipes(String query) async {
+  Future<void> _searchRecipes(String recipeId) async {
     try {
-      final recipes = await RecipeSearchAPI.searchRecipes(query);
+      final recipes = await RecipeSearchAPI.searchRecipes(recipeId);
       setState(() {
         _recipes = recipes;
       });
     } catch (e) {
-      // Handle error
       print('Error: $e');
     }
   }
@@ -89,10 +89,11 @@ class _SearchRecipeState extends State<SearchRecipe> {
                   final recipe = _recipes[index];
                   return GestureDetector(
                     onTap: () {
-                      // BlocProvider.of<SearchRecipeBloc>(context).add(RecipeSelected(recipe));
-                      // context.go('/search/view', extra: recipe);
-                      context.go('/search/view');
-                      // GoRouter.of(context).push('/search/view', extra: recipe);
+                      // Get the recipe data as a Map or directly pass the Recipe object if serialized
+                      final recipeId =
+                          extractRecipeIdUsingRegExp(recipe['uri']);
+                      context.goNamed('viewRecipe',
+                          pathParameters: {'recipeId': recipeId});
                     },
                     child: RecipeCard(
                       recipeName: recipe['label'],

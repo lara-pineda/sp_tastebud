@@ -11,6 +11,7 @@ import 'package:sp_tastebud/features/ingredients/ui/ingredient_management_ui.dar
 import 'package:sp_tastebud/features/navigation/ui/navigation_bar_ui.dart';
 import 'package:sp_tastebud/features/recipe-collection/ui/recipe_collection_ui.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/ui/search_recipe_ui.dart';
+import 'package:sp_tastebud/features/recipe/view-recipe/bloc/view_recipe_bloc.dart';
 import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
 import 'package:sp_tastebud/features/recipe/view-recipe/ui/view_recipe_ui.dart';
 
@@ -83,11 +84,15 @@ class AppRoutes {
                         routes: [
                           GoRoute(
                             name: "viewRecipe",
-                            path: "view",
+                            path: "view/:recipeId",
                             builder: (context, state) =>
-                                BlocProvider<SearchRecipeBloc>(
-                              create: (context) => getIt<SearchRecipeBloc>(),
-                              child: const ViewRecipe(),
+                                // Retrieve the recipe ID from path parameters
+                                BlocProvider<ViewRecipeBloc>(
+                              create: (context) => getIt<ViewRecipeBloc>(),
+                              child: ViewRecipe(
+                                // Assert that recipeId is non-null
+                                recipeId: state.pathParameters['recipeId']!,
+                              ),
                             ),
                           ),
                         ],

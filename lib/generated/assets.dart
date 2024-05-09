@@ -2,12 +2,6 @@
 class Assets {
   Assets._();
 
-  static const String blocAppNavigationBloc =
-      'lib/features/navigation/bloc/app_navigation_bloc.dart';
-  static const String blocAppNavigationEvent =
-      'lib/features/navigation/bloc/app_navigation_event.dart';
-  static const String blocAppNavigationState =
-      'lib/features/navigation/bloc/app_navigation_state.dart';
   static const String blocAuthBloc = 'lib/features/auth/bloc/auth_bloc.dart';
   static const String blocAuthEvent = 'lib/features/auth/bloc/auth_event.dart';
   static const String blocAuthState = 'lib/features/auth/bloc/auth_state.dart';
@@ -80,6 +74,7 @@ class Assets {
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesBackground = 'assets/images/Background.png';
   static const String imagesDefaultProfile = 'assets/images/DefaultProfile.jpg';
+  static const String imagesEdamamBadge = 'assets/images/Edamam_Badge.svg';
   static const String imagesImagePlaceholder =
       'assets/images/ImagePlaceholder.png';
   static const String imagesLandingFruits = 'assets/images/LandingFruits.jpg';
@@ -88,6 +83,10 @@ class Assets {
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
   static const String libScratch = 'lib/scratch.dart';
+  static const String modelNutrientModel =
+      'lib/features/recipe/view-recipe/model/nutrient_model.dart';
+  static const String modelRecipeModel =
+      'lib/features/recipe/view-recipe/model/recipe_model.dart';
   static const String recipeCardRecipeCard =
       'lib/shared/recipe_card/recipe_card.dart';
   static const String searchBarCustomSearchBar =
@@ -116,6 +115,8 @@ class Assets {
       'lib/features/recipe/view-recipe/ui/view_recipe_ui.dart';
   static const String utilsExtractRecipeId =
       'lib/core/utils/extract_recipe_id.dart';
+  static const String utilsGetCurrentRoute =
+      'lib/core/utils/get_current_route.dart';
   static const String utilsHexToColor = 'lib/core/utils/hex_to_color.dart';
   static const String viewRecipeIngredientSubstitutionApi =
       'lib/features/recipe/view-recipe/ingredient_substitution_api.dart';
