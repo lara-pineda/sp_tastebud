@@ -24,13 +24,16 @@ sp_tastebud/
     ├── core/
     │   ├── config/                         # Essential for the app
     │   │   ├── app_router.dart             # Defines routes for navigation
-    │   │   └── assets_path.dart            # Resource path for assets
+    │   │   ├── assets_path.dart            # Resource path for assets
+    │   │   └── service_locator.dart        # Dependency injection
     │   │
     │   ├── themes/                         # Custom app theme
     │   │   ├── app_palette.dart
     │   │   └── app_typography.dart
     │   │
     │   └── utils/                          # Holds utility/helper functions shared across the app
+    │       ├── extract_recipe_id.dart      # Extracts the recipe id from a string
+    │       ├── get_current_route.dart      # Gets route path of a widget
     │       └── hex_to_color.dart           # Converts hex to dart color
     │
     ├── features/                           # App features
@@ -62,6 +65,7 @@ sp_tastebud/
 -   dialog styling
 
 POLISHING
+-   bottom nav bar styling
 -   signup/login back button to main menu
 -   remember me functionality??
 -   password creation validation
