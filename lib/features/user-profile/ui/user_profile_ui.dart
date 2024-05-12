@@ -134,7 +134,7 @@ class _UserProfileState extends State<UserProfile> {
                 // Show error message if loading fails
                 return Text(userProfileState.error);
               }
-              // Show loading indicator while loading
+              // Fallback widget
               return Text("Page not found");
             },
           );

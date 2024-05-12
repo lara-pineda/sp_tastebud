@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sp_tastebud/core/config/app_router.dart';
+import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
 import 'core/config/service_locator.dart';
+import 'features/auth/bloc/auth_bloc.dart';
+import 'features/user-profile/bloc/user_profile_bloc.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -24,21 +28,36 @@ class MyApp extends StatelessWidget {
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      // removes debug tag when running app test
-      debugShowCheckedModeBanner: false,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(
+          create: (context) => getIt<AuthBloc>(),
+          lazy: false,
+        ),
+        BlocProvider<UserProfileBloc>(
+          create: (context) => getIt<UserProfileBloc>(),
+          lazy: false,
+        ),
+        BlocProvider<IngredientsBloc>(
+          create: (context) => getIt<IngredientsBloc>(),
+          lazy: false,
+        ),
+      ],
+      child: MaterialApp.router(
+        // removes debug tag when running app test
+        debugShowCheckedModeBanner: false,
 
-      title: 'TasteBud',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black87),
-        scaffoldBackgroundColor: Colors.white,
-        useMaterial3: true,
+        title: 'TasteBud',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.black87),
+          scaffoldBackgroundColor: Colors.white,
+          useMaterial3: true,
+        ),
+
+        routerConfig: AppRoutes.router,
+        // routerDelegate: AppRoutes.router.routerDelegate,
+        // routeInformationParser: AppRoutes.router.routeInformationParser,
       ),
-
-      routerConfig: AppRoutes.router,
-
-      // routerDelegate: AppRoutes.router.routerDelegate,
-      // routeInformationParser: AppRoutes.router.routeInformationParser,
     );
   }
 }

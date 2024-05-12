@@ -7,6 +7,32 @@ abstract class SearchRecipeState extends Equatable {
   List<Object?> get props => [];
 }
 
+class SearchRecipeInitial extends SearchRecipeState {}
+
+class SearchRecipeLoading extends SearchRecipeState {
+  const SearchRecipeLoading();
+}
+
+class SearchRecipeLoaded extends UserProfileState {
+  SearchRecipeLoaded();
+  // final List dietaryPreferences;
+  // final List allergies;
+  // final List macronutrients;
+  // final List micronutrients;
+  //
+  // UserProfileLoaded(this.dietaryPreferences, this.allergies,
+  //     this.macronutrients, this.micronutrients);
+}
+
+class SearchRecipeError extends SearchRecipeState {
+  final String message;
+
+  const SearchRecipeError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
 class FavoritesInitial extends SearchRecipeState {}
 
 class FavoritesLoading extends SearchRecipeState {

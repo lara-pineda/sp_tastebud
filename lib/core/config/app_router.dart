@@ -45,22 +45,12 @@ class AppRoutes {
           GoRoute(
             name: "login",
             path: "/login",
-            builder: (context, state) {
-              return BlocProvider<AuthBloc>(
-                create: (context) => getIt<AuthBloc>(),
-                child: LoginPage(),
-              );
-            },
+            builder: (context, state) => LoginPage(),
           ),
           GoRoute(
             name: "signup",
             path: "/signup",
-            builder: (context, state) {
-              return BlocProvider<AuthBloc>(
-                create: (context) => getIt<AuthBloc>(),
-                child: SignupPage(),
-              );
-            },
+            builder: (context, state) => SignupPage(),
           ),
           StatefulShellRoute.indexedStack(
               builder: (context, state, navigationShell) {
@@ -86,10 +76,10 @@ class AppRoutes {
                             name: "viewRecipe",
                             path: "view/:recipeId",
                             builder: (context, state) =>
-                                // Retrieve the recipe ID from path parameters
                                 BlocProvider<ViewRecipeBloc>(
                               create: (context) => getIt<ViewRecipeBloc>(),
                               child: ViewRecipe(
+                                // Retrieve the recipe ID from path parameters
                                 // Assert that recipeId is non-null
                                 recipeId: state.pathParameters['recipeId']!,
                               ),
@@ -104,11 +94,7 @@ class AppRoutes {
                   routes: [
                     GoRoute(
                       path: '/ingredients',
-                      builder: (context, state) =>
-                          BlocProvider<IngredientsBloc>(
-                        create: (context) => getIt<IngredientsBloc>(),
-                        child: const IngredientManagement(),
-                      ),
+                      builder: (context, state) => IngredientManagement(),
                     ),
                   ],
                 ),
@@ -132,11 +118,7 @@ class AppRoutes {
                   routes: [
                     GoRoute(
                       path: '/profile',
-                      builder: (context, state) =>
-                          BlocProvider<UserProfileBloc>(
-                        create: (context) => getIt<UserProfileBloc>(),
-                        child: UserProfile(),
-                      ),
+                      builder: (context, state) => UserProfile(),
                     ),
                   ],
                 ),

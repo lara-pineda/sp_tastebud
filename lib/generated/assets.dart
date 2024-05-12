@@ -91,6 +91,7 @@ class Assets {
       'lib/shared/search_bar/custom_search_bar.dart';
   static const String searchRecipeRecipeSearchApi =
       'lib/features/recipe/search-recipe/recipe_search_api.dart';
+  static const String sharedCustomDialog = 'lib/shared/custom_dialog.dart';
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';
   static const String themesAppTypography =
       'lib/core/themes/app_typography.dart';
@@ -118,6 +119,4 @@ class Assets {
   static const String utilsHexToColor = 'lib/core/utils/hex_to_color.dart';
   static const String viewRecipeIngredientSubstitutionApi =
       'lib/features/recipe/view-recipe/ingredient_substitution_api.dart';
-  static const String widgetsCustomDialog =
-      'lib/core/widgets/custom_dialog.dart';
 }
