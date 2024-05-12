@@ -54,7 +54,7 @@ sp_tastebud/
 
 ## Features TODO
 
--   view recipe details
+-   view recipe details polish styling
 -   manage saved recipes
 -   sort recipe
 -   substitute recipe

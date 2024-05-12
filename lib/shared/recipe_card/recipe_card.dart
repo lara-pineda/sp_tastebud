@@ -25,6 +25,9 @@ class RecipeCard extends StatefulWidget {
 }
 
 class _RecipeCardState extends State<RecipeCard> {
+  // State to track if recipe is in recipe collection
+  bool isInFavorites = false;
+
   @override
   Widget build(BuildContext context) {
     // print("in recipe card");
@@ -108,14 +111,20 @@ class _RecipeCardState extends State<RecipeCard> {
             child: GestureDetector(
               // Handle click action for adding to favorites
               onTap: () {
-                context.read<SearchRecipeBloc>().add(AddToFavorites(
-                    widget.recipeName,
-                    widget.imageUrl,
-                    widget.sourceWebsite,
-                    extractRecipeIdUsingRegExp(widget.recipeUri)));
+                setState(() {
+                  isInFavorites = !isInFavorites; // Toggle favorite state
+                });
+                if (isInFavorites) {
+                  context.read<SearchRecipeBloc>().add(AddToFavorites(
+                      widget.recipeName,
+                      widget.imageUrl,
+                      widget.sourceWebsite,
+                      extractRecipeIdUsingRegExp(widget.recipeUri)));
+                }
+                // Optionally handle removing from favorites
               },
               child: Icon(
-                Icons.favorite_border,
+                isInFavorites ? Icons.favorite : Icons.favorite_border,
                 color: Colors.red,
                 size: 24,
               ),
