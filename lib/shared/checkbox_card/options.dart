@@ -1,48 +1,86 @@
 // options to display inside checkbox cards
 
 class Options {
+  static const List<String> dietTags = [
+    'balanced',
+    'high-fiber',
+    'high-protein',
+    'low-carb',
+    'low-fat',
+    'low-sodium',
+  ];
+
+  // static const List<String> healthTags = [
+  //   'alcohol-free',
+  //   'celery-free',
+  //   'crustacean-free',
+  //   'dairy-free',
+  //   'egg-free',
+  //   'fish-free',
+  //   'gluten-free',
+  //   'keto-friendly',
+  //   'kosher',
+  //   'low-potassium',
+  //   'low-sugar',
+  //   'mollusk-free',
+  //   'mustard-free',
+  //   'no-oil-added',
+  //   'paleo',
+  //   'peanut-free',
+  //   'pescatarian',
+  //   'pork-free',
+  //   'red-meat-free',
+  //   'soy-free',
+  //   'sugar-conscious',
+  //   'vegan',
+  //   'vegetarian',
+  //   'wheat-free',
+  // ];
+
   static const List<String> kitchenEquipments = [
     // Choices for another card
   ];
 
   static const List<String> dietaryPreferences = [
-    'Alcohol-free',
-    'Balanced',
-    'High-Fiber',
-    'High-Protein',
-    'Keto',
-    'Kidney friendly',
+    'Keto-friendly',
     'Kosher',
-    'Low-Carb',
-    'Low-Fat',
-    'Low potassium',
-    'Low-Sodium',
-    'No oil added',
-    'No-sugar',
+    'Low-Potassium',
+    'Low-sugar',
+    'No-oil-added',
     'Paleo',
-    'Pescatrian',
-    'Pork-free',
-    'Red meat-free',
+    'Pescatarian',
     'Sugar-conscious',
     'Vegan',
     'Vegetarian',
   ];
 
   static const List<String> allergies = [
+    'Alcohol-free',
     'Celery-free',
     'Crustacean-free',
     'Dairy-free',
     'Egg-free',
     'Fish-free',
     'Gluten-free',
-    'Lupine-free',
+    'Mollusk-free',
     'Mustard-free',
     'Peanut-free',
-    'Sesame-free',
-    'Shellfish-free',
+    'Pork-free',
+    'Red-meat-free',
     'Soy-free',
-    'Tree-Nut-free',
     'Wheat-free',
+  ];
+
+  static const List<String> nutrientTag1 = [
+    'FAT', // total lipid (fat)
+    'FASAT', // saturated
+    'FATRN',
+    'FAMS', // Fats, monounsaturated
+    'FAPU',
+    'CHOCDF', // carbohydrates
+    'FIBTG', // fiber
+    'SUGAR',
+    'PROCNT',
   ];
 
   static const List<String> macronutrients = [
@@ -55,6 +93,27 @@ class Options {
     'Fiber',
     'Sugars',
     'Protein',
+  ];
+
+  static const List<String> nutrientTag2 = [
+    'CHOLE',
+    'CA',
+    'FE',
+    'FOLDFE',
+    'MG',
+    'NIA',
+    'P',
+    'K',
+    'RIBF',
+    'THIA',
+    'NA',
+    'VITA_RAE',
+    'VITB6A',
+    'VITB12',
+    'VITC',
+    'VITD',
+    'TOPCHA',
+    'VITK1'
   ];
 
   static const List<String> micronutrients = [

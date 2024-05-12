@@ -10,15 +10,17 @@ class RecipeSearchAPI {
   RecipeSearchAPI(this._firestore, this._firebaseAuth);
 
   // Construct the URL for the Edamam Recipe Search API
-  static Future<List<dynamic>> searchRecipes(String query) async {
+  static Future<List<dynamic>> searchRecipes(
+      String searchKey, String queryParams) async {
     // 3scale credentials
     const String appId = '944184b7';
     const String appKey = '32a51da0f5bf093de7b4cd19e2f55112';
     const String baseUrl = 'https://api.edamam.com';
 
     final String url =
-        '$baseUrl/api/recipes/v2?q=$query&app_id=$appId&app_key=$appKey&type=public';
+        '$baseUrl/api/recipes/v2?q=$searchKey&app_id=$appId&app_key=$appKey&type=public$queryParams';
 
+    print(url);
     try {
       // Make the HTTP request
       final response = await http.get(Uri.parse(url));

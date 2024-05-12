@@ -35,24 +35,24 @@ class _SearchRecipeState extends State<SearchRecipe> {
   }
 
   // Call the recipe search api
-  Future<void> _searchRecipes(String recipeId) async {
+  Future<void> _searchRecipes(String recipeId, String healthQuery,
+      String macroQuery, String microQuery) async {
     try {
-      final recipes = await RecipeSearchAPI.searchRecipes(recipeId);
-      setState(() {
-        _recipes = recipes;
-      });
+      // print(healthQuery + macroQuery + microQuery);
+      var query = healthQuery + macroQuery + microQuery;
+
+      final recipes = await RecipeSearchAPI.searchRecipes(recipeId, query);
+      if (recipes.isNotEmpty) {
+        setState(() {
+          _recipes = recipes;
+        });
+      } else {
+        print("SEARCH RESULTS LIST EMPTY!");
+      }
     } catch (e) {
       print('Error: $e');
     }
   }
-
-  // // Helper method to map selected options to boolean values
-  // List<bool> mapOptionsToBoolean(
-  //     List<dynamic> selectedOptions, List<String> allOptions) {
-  //   return allOptions
-  //       .map((option) => selectedOptions.contains(option))
-  //       .toList();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -87,27 +87,42 @@ class _SearchRecipeState extends State<SearchRecipe> {
     );
   }
 
-  Widget _buildSearchRecipeUI(UserProfileLoaded state) {
-    // Map the selected options to boolean values
-    // selectedDietaryPreferences = mapOptionsToBoolean(
-    //     state.dietaryPreferences, Options.dietaryPreferences);
-    // selectedAllergies = mapOptionsToBoolean(state.allergies, Options.allergies);
-    // selectedMacronutrients =
-    //     mapOptionsToBoolean(state.macronutrients, Options.macronutrients);
-    // selectedMicronutrients =
-    //     mapOptionsToBoolean(state.micronutrients, Options.micronutrients);
+  String buildHealthTags(List<dynamic> tags) {
+    return tags
+        .map((tag) =>
+            '&health=${tag.toString().toLowerCase().replaceAll(" ", "-")}')
+        .join('');
+  }
 
-    print("FETCHED USER PROFILE:");
-    print(state.dietaryPreferences);
-    print(state.allergies);
-    print(state.macronutrients);
-    print(state.micronutrients);
+  String mapNutrients(List<dynamic> nutrients, List<String> optionToMap,
+      List<String> tagToMap) {
+    Map<String, String> tagMapMacro = Map.fromIterables(optionToMap, tagToMap);
+    return nutrients
+        .map((nutrient) =>
+            '&nutrients%5B${tagMapMacro[nutrient.toString()]}%5D=0%2B')
+        .join('');
+  }
+
+  Widget _buildSearchRecipeUI(UserProfileLoaded state) {
+    // print("FETCHED USER PROFILE:");
+    // print(state.dietaryPreferences);
+    // print(state.allergies);
+    // print(state.macronutrients);
+    // print(state.micronutrients);
+
+    String healthQuery = buildHealthTags(state.dietaryPreferences) +
+        buildHealthTags(state.allergies);
+    String macroQuery = mapNutrients(
+        state.macronutrients, Options.macronutrients, Options.nutrientTag1);
+    String microQuery = mapNutrients(
+        state.micronutrients, Options.micronutrients, Options.nutrientTag2);
 
     return Center(
       child: Column(children: <Widget>[
         // search bar
         CustomSearchBar(
-          onSubmitted: (query) => _searchRecipes(query),
+          onSubmitted: (query) =>
+              _searchRecipes(query, healthQuery, macroQuery, microQuery),
         ),
 
         // sample button for dialog
