@@ -83,8 +83,6 @@ class Assets {
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
   static const String libScratch = 'lib/scratch.dart';
-  static const String modelNutrientModel =
-      'lib/features/recipe/view-recipe/model/nutrient_model.dart';
   static const String modelRecipeModel =
       'lib/features/recipe/view-recipe/model/recipe_model.dart';
   static const String recipeCardRecipeCard =
