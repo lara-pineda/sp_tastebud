@@ -57,48 +57,42 @@ class Recipe {
     required this.digest,
   });
 
-  factory Recipe.fromJson(Map<String, dynamic> json) {
-    return Recipe(
-      uri: json['uri'],
-      label: json['label'],
-      image: json['image'],
-      images: Map.from(json['images'])
-          .map((k, v) => MapEntry(k, ImageDetails.fromJson(v))),
-      source: json['source'],
-      url: json['url'],
-      shareAs: json['shareAs'],
-      yield: json['yield'].toInt(),
-      dietLabels: List<String>.from(json['dietLabels']),
-      healthLabels: List<String>.from(json['healthLabels']),
-      cautions: List<String>.from(json['cautions']),
-      ingredientLines: List<String>.from(json['ingredientLines']),
-      ingredients: List.from(json['ingredients'])
-          .map((i) => Ingredient.fromJson(i))
-          .toList(),
-      calories: (json['calories'] is int)
-          ? json['calories']
-          : json['calories'].toInt(),
-      totalCO2Emissions: (json['totalCO2Emissions'] is int)
-          ? json['totalCO2Emissions']
-          : json['totalCO2Emissions'].toInt(),
-      co2EmissionsClass: json['co2EmissionsClass'],
-      totalWeight: (json['totalWeight'] is int)
-          ? json['totalWeight']
-          : json['totalWeight'].toInt(),
-      totalTime: (json['totalTime'] is int)
-          ? json['totalTime']
-          : json['totalTime'].toInt(),
-      cuisineType: List<String>.from(json['cuisineType']),
-      mealType: List<String>.from(json['mealType']),
-      // dishType: List<String>.from(json['dishType']),
-      // instructions: List<String>.from(json['instructions']),
-      tags: List<String>.from(json['tags']),
-      // externalId: json['externalId'],
-      totalNutrients: NutrientInfo.fromJson(json['totalNutrients']),
-      totalDaily: NutrientInfo.fromJson(json['totalDaily']),
-      digest: List.from(json['digest']).map((d) => Digest.fromJson(d)).toList(),
-    );
-  }
+  factory Recipe.fromJson(Map<String, dynamic> json) => Recipe(
+        uri: json['uri'] ?? '',
+        label: json['label'] ?? '',
+        image: json['image'] ?? '',
+        images: (json['images'] as Map<String, dynamic>?)?.map((k, v) =>
+                MapEntry(
+                    k, ImageDetails.fromJson(v as Map<String, dynamic>))) ??
+            {},
+        source: json['source'] ?? '',
+        url: json['url'] ?? '',
+        shareAs: json['shareAs'] ?? '',
+        yield: (json['yield'] as num?)?.toInt() ?? 0,
+        dietLabels: List<String>.from(json['dietLabels'] ?? []),
+        healthLabels: List<String>.from(json['healthLabels'] ?? []),
+        cautions: List<String>.from(json['cautions'] ?? []),
+        ingredientLines: List<String>.from(json['ingredientLines'] ?? []),
+        ingredients: (json['ingredients'] as List<dynamic> ?? [])
+            .map((i) => Ingredient.fromJson(i))
+            .toList(),
+        calories: (json['calories'] as num?)?.toInt() ?? 0,
+        totalCO2Emissions: (json['totalCO2Emissions'] as num?)?.toInt() ?? 0,
+        co2EmissionsClass: json['co2EmissionsClass'] ?? '',
+        totalWeight: (json['totalWeight'] as num?)?.toInt() ?? 0,
+        totalTime: (json['totalTime'] as num?)?.toInt() ?? 0,
+        cuisineType: List<String>.from(json['cuisineType'] ?? []),
+        mealType: List<String>.from(json['mealType'] ?? []),
+        // dishType: List<String>.from(json['dishType']),
+        // instructions: List<String>.from(json['instructions']),
+        tags: List<String>.from(json['tags'] ?? []),
+        // externalId: json['externalId'],
+        totalNutrients: NutrientInfo.fromJson(json['totalNutrients'] ?? {}),
+        totalDaily: NutrientInfo.fromJson(json['totalDaily'] ?? {}),
+        digest: (json['digest'] as List<dynamic> ?? [])
+            .map((d) => Digest.fromJson(d))
+            .toList(),
+      );
 }
 
 class ImageDetails {
@@ -110,9 +104,9 @@ class ImageDetails {
 
   factory ImageDetails.fromJson(Map<String, dynamic> json) {
     return ImageDetails(
-      url: json['url'],
-      width: json['width'],
-      height: json['height'],
+      url: json['url'] ?? '',
+      width: (json['width'] as num?)?.toInt() ?? 0,
+      height: (json['height'] as num?)?.toInt() ?? 0,
     );
   }
 }
@@ -136,14 +130,12 @@ class Ingredient {
 
   factory Ingredient.fromJson(Map<String, dynamic> json) {
     return Ingredient(
-      text: json['text'],
-      quantity: (json['quantity'] is int)
-          ? json['quantity']
-          : json['quantity'].toInt(),
-      measure: json['measure'],
-      food: json['food'],
-      weight: (json['weight'] is int) ? json['weight'] : json['weight'].toInt(),
-      foodId: json['foodId'],
+      text: json['text'] ?? '',
+      quantity: (json['quantity'] as num?)?.toInt() ?? 0,
+      measure: json['measure'] ?? '',
+      food: json['food'] ?? '',
+      weight: (json['weight'] as num?)?.toInt() ?? 0,
+      foodId: json['foodId'] ?? '',
     );
   }
 }
@@ -163,22 +155,16 @@ class NutrientInfo {
 
 class Nutrient {
   final String label;
-  final int quantity;
+  final double quantity;
   final String unit;
 
-  Nutrient({
-    required this.label,
-    required this.quantity,
-    required this.unit,
-  });
+  Nutrient({required this.label, required this.quantity, required this.unit});
 
   factory Nutrient.fromJson(Map<String, dynamic> json) {
     return Nutrient(
-      label: json['label'],
-      quantity: (json['quantity'] is int)
-          ? json['quantity']
-          : json['quantity'].toInt(),
-      unit: json['unit'],
+      label: json['label'] ?? '',
+      quantity: (json['quantity'] as num?)?.toDouble() ?? 0.0,
+      unit: json['unit'] ?? '',
     );
   }
 }
@@ -206,16 +192,17 @@ class Digest {
 
   factory Digest.fromJson(Map<String, dynamic> json) {
     return Digest(
-      label: json['label'],
-      tag: json['tag'],
+      label: json['label'] ?? '',
+      tag: json['tag'] ?? '',
       schemaOrgTag: json['schemaOrgTag'],
-      total: (json['total'] is int) ? json['total'] : json['total'].toInt(),
-      hasRDI: json['hasRDI'],
-      daily: (json['daily'] is int) ? json['daily'] : json['daily'].toInt(),
-      unit: json['unit'],
-      sub: json['sub'] != null
-          ? List<Sub>.from(json['sub'].map((s) => Sub.fromJson(s)))
-          : [],
+      total: (json['total'] as num?)?.toInt() ?? 0,
+      hasRDI: json['hasRDI'] ?? false,
+      daily: (json['daily'] as num?)?.toInt() ?? 0,
+      unit: json['unit'] ?? '',
+      sub: (json['sub'] as List<dynamic>?)
+              ?.map((s) => Sub.fromJson(s))
+              .toList() ??
+          [],
     );
   }
 }
@@ -243,13 +230,13 @@ class Sub {
 
   factory Sub.fromJson(Map<String, dynamic> json) {
     return Sub(
-      label: json['label'],
-      tag: json['tag'],
+      label: json['label'] ?? '',
+      tag: json['tag'] ?? '',
       schemaOrgTag: json['schemaOrgTag'],
-      total: (json['total'] is int) ? json['total'] : json['total'].toInt(),
-      hasRDI: json['hasRDI'],
-      daily: (json['daily'] is int) ? json['daily'] : json['daily'].toInt(),
-      unit: json['unit'],
+      total: (json['total'] as num?)?.toInt() ?? 0,
+      hasRDI: json['hasRDI'] ?? false,
+      daily: (json['daily'] as num?)?.toInt() ?? 0,
+      unit: json['unit'] ?? '',
       sub: json['sub'] as Map<String, dynamic>?,
     );
   }
