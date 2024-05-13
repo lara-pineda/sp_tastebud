@@ -21,6 +21,8 @@ import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
 
+import '../../features/navigation/bloc/app_navigation_bloc.dart';
+
 class AppRoutes {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
   static final _shellNavigatorSearchKey =
@@ -54,10 +56,12 @@ class AppRoutes {
           ),
           StatefulShellRoute.indexedStack(
               builder: (context, state, navigationShell) {
-                return AppBottomNavBar(
-                    appName1: 'Taste',
-                    appName2: 'Bud',
-                    navigationShell: navigationShell);
+                return BlocProvider<AppNavigationBloc>(
+                    create: (context) => AppNavigationBloc(),
+                    child: AppBottomNavBar(
+                        appName1: 'Taste',
+                        appName2: 'Bud',
+                        navigationShell: navigationShell));
               },
               branches: [
                 StatefulShellBranch(

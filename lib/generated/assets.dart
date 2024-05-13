@@ -2,6 +2,12 @@
 class Assets {
   Assets._();
 
+  static const String blocAppNavigationBloc =
+      'lib/features/navigation/bloc/app_navigation_bloc.dart';
+  static const String blocAppNavigationEvent =
+      'lib/features/navigation/bloc/app_navigation_event.dart';
+  static const String blocAppNavigationState =
+      'lib/features/navigation/bloc/app_navigation_state.dart';
   static const String blocAuthBloc = 'lib/features/auth/bloc/auth_bloc.dart';
   static const String blocAuthEvent = 'lib/features/auth/bloc/auth_event.dart';
   static const String blocAuthState = 'lib/features/auth/bloc/auth_state.dart';

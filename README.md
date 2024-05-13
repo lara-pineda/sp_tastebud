@@ -61,7 +61,6 @@ sp_tastebud/
 -   manage saved recipes
 -   sort recipe
 -   substitute recipe
--   heart button shaded if in user's collection
 -   dialog styling
 
 POLISHING

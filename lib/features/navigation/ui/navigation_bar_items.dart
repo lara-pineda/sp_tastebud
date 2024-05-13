@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 
-List<NavigationDestination> bottomNavItems = const <NavigationDestination>[
-  NavigationDestination(
+List<BottomNavigationBarItem> bottomNavItems = const <BottomNavigationBarItem>[
+  BottomNavigationBarItem(
     icon: Icon(Icons.explore_outlined),
-    selectedIcon: Icon(Icons.explore),
+    activeIcon: Icon(Icons.explore),
     label: 'Explore',
   ),
 
   // ingredients management page
-  NavigationDestination(
+  BottomNavigationBarItem(
     icon: Icon(Icons.dashboard_outlined),
-    selectedIcon: Icon(Icons.dashboard),
+    activeIcon: Icon(Icons.dashboard),
     label: 'Ingredients',
   ),
 
   // recipe collection
-  NavigationDestination(
+  BottomNavigationBarItem(
     icon: Icon(Icons.favorite_border),
-    selectedIcon: Icon(Icons.favorite),
+    activeIcon: Icon(Icons.favorite),
     label: 'Collection',
   ),
 
   // user profile
-  NavigationDestination(
+  BottomNavigationBarItem(
     icon: Icon(Icons.account_circle_outlined),
-    selectedIcon: Icon(Icons.account_circle),
+    activeIcon: Icon(Icons.account_circle),
     label: 'Profile',
   ),
 ];
