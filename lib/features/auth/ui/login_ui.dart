@@ -1,11 +1,13 @@
 import 'package:dimension/dimension.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/utils/hex_to_color.dart';
-
+import 'package:sp_tastebud/core/config/service_locator.dart';
 import '../bloc/auth_bloc.dart';
+import '../data/preferences_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,15 +17,42 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginPage> {
-  // for toggling show password option
-  bool _obscurePassword = true;
-
-  // for remember me functionality
-  bool _isChecked = false;
+  String?
+      _errorMessage; // error message variable to display authentication errors
+  bool _obscurePassword = true; // for toggling show password option
 
   // getting text field values
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Reset Error Message on Retyping
+    _emailController.addListener(() {
+      if (_errorMessage != null && _emailController.text.isNotEmpty) {
+        setState(() {
+          // Clear the error message when user starts editing email.
+          _errorMessage = null;
+        });
+      }
+    });
+    _passwordController.addListener(() {
+      if (_errorMessage != null && _passwordController.text.isNotEmpty) {
+        setState(() {
+          // Clear the error message when user starts editing password.
+          _errorMessage = null;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   // toggles the password show status
   void _togglePassword() {
@@ -32,269 +61,284 @@ class _LoginState extends State<LoginPage> {
     });
   }
 
-  // toggle remember me functionality
-  void _toggleRememberMe(bool? value) {
-    setState(() {
-      _isChecked = value!;
-    });
-  }
-
-  Color getColor() {
-    return Colors.black87;
+  // Define a method to get the appropriate border color
+  InputBorder _getInputBorder(bool isFocused, [String? errorMessage]) {
+    // If there's an error message and the field is focused, show red border
+    if (errorMessage != null) {
+      return OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+      );
+    } else if (isFocused) {
+      return OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.green),
+      );
+    }
+    // Default border when not focused
+    return const OutlineInputBorder();
   }
 
   @override
   Widget build(BuildContext context) {
+    // final loginBloc = getIt<AuthBloc>();
     final loginBloc = BlocProvider.of<AuthBloc>(context);
 
     return Scaffold(
-      // make widgets fixed even when keyboard appears
-      resizeToAvoidBottomInset: false,
+        // make widgets fixed even when keyboard appears
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
 
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
+          // arrow back icon
+          leadingWidth: 75,
+          leading: GestureDetector(
+            child: Container(
+              margin: const EdgeInsets.only(
+                left: 25,
+                top: 5,
+                bottom: 5,
+              ),
+              padding: const EdgeInsets.only(
+                left: 10,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(7),
+                border: Border.all(color: Colors.black12),
+              ),
+              width: MediaQuery.of(context).size.width,
+              child: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black,
+              ),
+            ),
 
-        // arrow back icon
-        leadingWidth: 75,
-        leading: GestureDetector(
-          child: Container(
-            margin: const EdgeInsets.only(
-              left: 25,
-              top: 5,
-              bottom: 5,
-            ),
-            padding: const EdgeInsets.only(
-              left: 10,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(7),
-              border: Border.all(color: Colors.black12),
-            ),
-            width: MediaQuery.of(context).size.width,
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
+            // on click for arrow back icon
+            onTap: () {
+              context.go('/');
+            },
           ),
-
-          // on click for arrow back icon
-          onTap: () {
-            // Navigator.pop(context);
-          },
-        ),
-        actions: [
-          SvgPicture.asset(
-            'assets/images/MiniStarIcon.svg',
-            semanticsLabel: 'Mini Star Icon',
-            width: (50.toVHLength).toPX(),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-        ],
-      ),
-
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 25,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: (40.toVHLength).toPX()),
-
-            Row(
-              children: [
-                Text(
-                  'Hi, Welcome back!',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 28,
-                    color: '#ECAC70'.toColor(),
-                  ),
-                ),
-
-                // hand wave emoji here
-              ],
+          actions: [
+            SvgPicture.asset(
+              'assets/images/MiniStarIcon.svg',
+              semanticsLabel: 'Mini Star Icon',
+              width: (50.toVHLength).toPX(),
             ),
-
-            SizedBox(height: (40.toVHLength).toPX()),
-
-            // email address
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 5,
-              ),
-              child: Text(
-                'Email Address',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                ),
-                textAlign: TextAlign.start,
-              ),
-            ),
-
-            // email address text field
-            TextField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white60,
-                  hintText: 'Email Address',
-                  contentPadding: EdgeInsets.all(15),
-                  border: OutlineInputBorder(),
-                )),
-
-            SizedBox(height: (20.toVHLength).toPX()),
-
-            // password
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 5,
-              ),
-              child: Text(
-                'Password',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                ),
-                textAlign: TextAlign.start,
-              ),
-            ),
-
-            // password text field
-            TextField(
-              // obscureText: _isObscure,
-              controller: _passwordController,
-              obscureText: _obscurePassword,
-              // keyboardType: TextInputType.visiblePassword,
-              // textInputAction: TextInputAction.done,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white60,
-                hintText: 'Password',
-                contentPadding: const EdgeInsets.all(15),
-                // helperText:"Password must contain special character",
-                // helperStyle:TextStyle(color:Colors.green),
-                border: const OutlineInputBorder(),
-
-                // show password icon
-                suffixIcon: IconButton(
-                  icon: Icon(_obscurePassword
-                      ? Icons.visibility_off
-                      : Icons.visibility),
-                  onPressed: _togglePassword,
-                ),
-              ),
-
-              // validator: (val) => val.length < 6 ? 'Password too short.' : null,
-              // onSaved: (val) => _password = val,
-            ),
-
-            // remember me
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Checkbox(
-                      value: _isChecked,
-                      activeColor: Colors.black87,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100)),
-                      visualDensity: const VisualDensity(horizontal: -3),
-                      onChanged: _toggleRememberMe,
-                    ),
-                    const Text(
-                      'Remember me',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                      ),
-                    ),
-                  ],
-                ),
-                const Text(
-                  'Forgot Password?',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                  ),
-                ),
-              ],
-            ),
-
-            const Spacer(),
-
-            // widgets at the bottom of the screen
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                children: [
-                  // login button
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        loginBloc.add(LoginRequested(
-                            email: _emailController.text,
-                            password: _passwordController.text));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: '#F06F6F'.toColor(),
-                        foregroundColor: const Color(0xFFF7EBE8),
-                      ),
-                      child: const Text("Log In"),
-                    ),
-                  ),
-
-                  SizedBox(height: (15.toVHLength).toPX()),
-
-                  // sign up helper text
-                  const Text.rich(TextSpan(children: [
-                    TextSpan(
-                      text: "Don't have an account? ",
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    TextSpan(
-                      text: "Sign Up",
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ]))
-                ],
-              ),
-            ),
-
-            SizedBox(height: (40.toVHLength).toPX()),
-
-            // Listen to state changes
-            BlocListener<AuthBloc, AuthState>(
-              listener: (context, state) {
-                // If login is successful, navigate to search recipe
-                if (state is AuthSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Login successful!")));
-                  context.go('/search');
-                  // GoRouter.of(context).push('/search');
-
-                  // Login failed
-                } else if (state is AuthFailure) {
-                  // Show error message
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(state.error)));
-                }
-              },
-              child: Container(),
+            const SizedBox(
+              width: 20,
             ),
           ],
         ),
-      ),
-    );
+        body: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 25,
+          ),
+          // Listen to state changes
+          child: BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) {
+              // If login is successful, navigate to search recipe
+              if (state is AuthSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Login successful!")),
+                );
+                context.go('/search');
+                // GoRouter.of(context).push('/search');
+                // Login failed
+              } else if (state is AuthFailure) {
+                // ScaffoldMessenger.of(context)
+                //     .showSnackBar(SnackBar(content: Text(state.error)));
+                setState(() {
+                  _errorMessage =
+                      state.error; // Set the error message to be displayed
+                });
+              }
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: (40.toVHLength).toPX()),
+
+                Row(
+                  children: [
+                    Text(
+                      'Hi, Welcome back!',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 28,
+                        color: '#ECAC70'.toColor(),
+                      ),
+                    ),
+
+                    // hand wave emoji here
+                  ],
+                ),
+
+                SizedBox(height: (40.toVHLength).toPX()),
+
+                // email address
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 5,
+                  ),
+                  child: Text(
+                    'Email Address',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+
+                // email address text field
+                TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white60,
+                      errorText: _errorMessage,
+                      enabledBorder: _getInputBorder(false, _errorMessage),
+                      focusedBorder: _getInputBorder(true, _errorMessage),
+                      hintText: 'example@gmail.com',
+                      contentPadding: EdgeInsets.all(15),
+                      border: OutlineInputBorder(),
+                    )),
+
+                SizedBox(height: (20.toVHLength).toPX()),
+
+                // password
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 5,
+                  ),
+                  child: Text(
+                    'Password',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+
+                // password text field
+                TextField(
+                  controller: _passwordController,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white60,
+                    hintText: 'Password',
+                    contentPadding: const EdgeInsets.all(15),
+                    border: const OutlineInputBorder(),
+                    enabledBorder: _getInputBorder(false, _errorMessage),
+                    focusedBorder: _getInputBorder(true, _errorMessage),
+
+                    // show password icon
+                    suffixIcon: IconButton(
+                      icon: Icon(_obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility),
+                      onPressed: _togglePassword,
+                    ),
+                  ),
+                ),
+
+                // remember me
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+
+                const Spacer(),
+
+                // widgets at the bottom of the screen
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Column(
+                    children: [
+                      // login button
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          onPressed: _emailController.text.isNotEmpty &
+                                  _passwordController.text.isNotEmpty
+                              ? () {
+                                  // Set remember me regardless of the toggle value
+                                  PreferencesService().setRememberMe(true);
+                                  // Dispatch login event
+                                  loginBloc.add(LoginRequested(
+                                      email: _emailController.text,
+                                      password: _passwordController.text));
+                                }
+                              : null,
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                // Light red when disabled
+                                if (states.contains(MaterialState.disabled)) {
+                                  return Colors.red.shade100;
+                                }
+                                return '#F06F6F'.toColor();
+                              },
+                            ),
+                            // text color for button
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.disabled)) {
+                                  return Color(0xFFF7EBE8);
+                                }
+                                return Color(0xFFF7EBE8);
+                              },
+                            ),
+                          ),
+                          child: const Text("Log In"),
+                        ),
+                      ),
+
+                      SizedBox(height: (15.toVHLength).toPX()),
+
+                      // sign up helper text
+                      Text.rich(TextSpan(children: [
+                        TextSpan(
+                          text: "Don't have an account? ",
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "Sign Up",
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w700,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            // Navigate when tapped
+                            ..onTap = () {
+                              context.go('/signup');
+                            },
+                        ),
+                      ]))
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: (40.toVHLength).toPX()),
+              ],
+            ),
+          ),
+        ));
   }
 }

@@ -11,16 +11,24 @@ class UserRepository {
 
   // Method to create a user
   Future<User> createUser(String email, String password) async {
-    UserCredential userCredential =
-        await _authService.createUserWithEmailAndPassword(email, password);
-    return userCredential.user!;
+    try {
+      UserCredential userCredential =
+          await _authService.createUserWithEmailAndPassword(email, password);
+      return userCredential.user!;
+    } catch (e) {
+      rethrow; // Rethrow the exception to be handled by BLoC
+    }
   }
 
   // Method to sign in a user
   Future<User> signIn(String email, String password) async {
-    UserCredential userCredential =
-        await _authService.signInWithEmailAndPassword(email, password);
-    return userCredential.user!;
+    try {
+      UserCredential userCredential =
+          await _authService.signInWithEmailAndPassword(email, password);
+      return userCredential.user!;
+    } catch (e) {
+      rethrow; // Rethrow the exception to be handled by BLoC
+    }
   }
 
   // Method to sign out a user

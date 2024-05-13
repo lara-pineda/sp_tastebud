@@ -17,11 +17,16 @@ class AuthService {
   // create user with firebase_auth
   Future<UserCredential> createUserWithEmailAndPassword(
       String email, String password) async {
-    UserCredential userCredential =
-        await _firebaseAuth.createUserWithEmailAndPassword(
-            email: email.trim(), password: password.trim());
-    await _initializeUserData(userCredential.user);
-    return userCredential;
+    try {
+      UserCredential userCredential =
+          await _firebaseAuth.createUserWithEmailAndPassword(
+              email: email.trim(), password: password.trim());
+      // Initialize user data in Firestore
+      await _initializeUserData(userCredential.user);
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseAuthException(code: e.code, message: e.message);
+    }
   }
 
   // initialize user collection in firestore
@@ -57,7 +62,7 @@ class AuthService {
               email: email.trim(), password: password.trim());
       return userCredential;
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.message);
+      throw FirebaseAuthException(code: e.code, message: e.message);
     }
   }
 

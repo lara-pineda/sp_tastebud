@@ -57,21 +57,18 @@ sp_tastebud/
 
 ## Features TODO
 
+
 -   view recipe details polish styling
+-   dialog styling
 -   manage saved recipes
 -   sort recipe
 -   substitute recipe
--   dialog styling
 
 POLISHING
--   bottom nav bar styling
--   signup/login back button to main menu
--   remember me functionality??
--   password creation validation
+-   move save changes button for ingredient mgmt and user profile
 -   empty initial search page
 -   logout button
 -   make user email not editable
--   move save changes button for ingredient mgmt and user profile
 -   finalize options for ingredients
 -   add more filters
 

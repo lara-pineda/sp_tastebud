@@ -82,31 +82,19 @@ class AppBottomNavBar extends StatelessWidget {
                   fit: BoxFit.cover,
                 )),
 
-                // Pages
-
                 // SafeArea is for adding marginTop
                 child: SafeArea(
+                  // Area for page contents
                   child: navigationShell,
                 ),
               ),
-
-              // bottomNavigationBar: NavigationBar(
-              //   // type: BottomNavigationBarType.fixed,
-              //   // selectedItemColor: '#45B5B4'.toColor(),
-              //   // unselectedItemColor: '#ECAC70'.toColor(),
-              //   // showUnselectedLabels: false,
-              //
-              //   selectedIndex: navigationShell.currentIndex,
-              //   destinations: bottomNavItems,
-              //   onDestinationSelected: _goBranch,
-              // ),
               bottomNavigationBar: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
                 items: bottomNavItems,
                 currentIndex: state.tabIndex,
                 selectedItemColor: '#45B5B4'.toColor(),
                 unselectedItemColor: '#ECAC70'.toColor(),
-                showUnselectedLabels: false,
+                // showUnselectedLabels: false,
                 onTap: _goBranch,
               ));
         });

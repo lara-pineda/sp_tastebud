@@ -1,8 +1,13 @@
 import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sp_tastebud/core/config/service_locator.dart';
 import 'package:sp_tastebud/core/utils/hex_to_color.dart';
+
+import '../bloc/auth_bloc.dart';
+import '../data/preferences_service.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({super.key, required this.appName1, required this.appName2});
@@ -15,6 +20,8 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
+  late AuthBloc _authBloc;
+
   // navigate to signup page
   void signupClicked() {
     context.go("/signup");
@@ -24,6 +31,26 @@ class _MainMenuState extends State<MainMenu> {
   void signinClicked() {
     print("sign in button clicked!");
     context.go("/login");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _authBloc = GetIt.instance<AuthBloc>();
+    _loadRememberMeState();
+  }
+
+  // load remember me functionality
+  void _loadRememberMeState() async {
+    bool rememberMe = await PreferencesService().getRememberMe();
+    if (rememberMe) {
+      _attemptAutoLogin();
+    }
+  }
+
+  // auto login user
+  void _attemptAutoLogin() {
+    _authBloc.add(CheckLoginStatus());
   }
 
   @override

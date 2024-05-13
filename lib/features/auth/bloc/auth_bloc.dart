@@ -22,7 +22,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       User user = await _userRepository.createUser(event.email, event.password);
       emit(AuthSuccess(user));
     } on FirebaseAuthException catch (e) {
-      emit(AuthFailure(e.message ?? "An unknown error occurred"));
+      if (e.code == 'email-already-in-use') {
+        emit(AuthFailure('This email address is already in use.'));
+      } else if (e.code == 'invalid-email') {
+        emit(AuthFailure('Invalid email.'));
+      } else {
+        emit(AuthFailure("An unknown error occurred"));
+      }
     } catch (e) {
       emit(AuthFailure("An unknown error occurred"));
     }
@@ -35,23 +41,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       User user = await _userRepository.signIn(event.email, event.password);
       emit(AuthSuccess(user));
     } on FirebaseAuthException catch (e) {
-      emit(AuthFailure(e.message ?? "An unknown error occurred"));
+      print(e.code);
+      if (e.code == 'invalid-credential') {
+        emit(AuthFailure('Incorrect email or password.'));
+      } else if (e.code == 'invalid-email') {
+        emit(AuthFailure('Invalid email.'));
+      } else if (e.code == 'user-not-found') {
+        emit(AuthFailure('User not found.'));
+      } else if (e.code == 'too-many-requests') {
+        emit(AuthFailure('Too many failed attempts. Try again later.'));
+      } else {
+        emit(AuthFailure("An unknown error occurred,"));
+      }
     } catch (e) {
       emit(AuthFailure("An unknown error occurred"));
     }
-    // USAGE
-    // context.read<LoginBloc>().add(CheckLoginStatus());
-
-    // BlocBuilder<LoginBloc, LoginState>(
-    //   builder: (context, state) {
-    //     if (state is LoginSuccess) {
-    //       return Text(state.message);  // "User is logged in"
-    //     } else if (state is LoginFailure) {
-    //       return Text(state.message);  // "User not logged in"
-    //     }
-    //     return CircularProgressIndicator();
-    //   },
-    // );
   }
 
   void _onCheckLoginStatus(CheckLoginStatus event, Emitter<AuthState> emit) {

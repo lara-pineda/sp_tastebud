@@ -55,8 +55,6 @@ class MyApp extends StatelessWidget {
         ),
 
         routerConfig: AppRoutes.router,
-        // routerDelegate: AppRoutes.router.routerDelegate,
-        // routeInformationParser: AppRoutes.router.routeInformationParser,
       ),
     );
   }
