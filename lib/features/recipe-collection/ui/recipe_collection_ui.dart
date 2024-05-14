@@ -14,6 +14,12 @@ class RecipeCollection extends StatelessWidget {
   // Retrieve AuthBloc using GetIt
   final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
 
+  void navigateToRecipePage(BuildContext context, String type) {
+    String routeName =
+        type == 'Saved Recipes' ? 'viewSavedRecipes' : 'viewRejectedRecipes';
+    context.goNamed('viewCollection');
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
@@ -25,16 +31,17 @@ class RecipeCollection extends StatelessWidget {
           return Text("User not logged in.");
         } else {
           // If login is successful, proceed with UserProfileBloc
-          return _buildCollectionScreen();
+          return _buildCollectionScreen(context);
         }
       },
     );
   }
 
-  Widget _buildCollectionScreen() {
+  Widget _buildCollectionScreen(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: (50.toVHLength).toPX()),
           Text(
@@ -58,6 +65,10 @@ class RecipeCollection extends StatelessWidget {
                   1.2, // Adjusted aspect ratio to accommodate text outside the card
               children:
                   <String>['Saved Recipes', 'Rejected Recipes'].map((title) {
+                return GestureDetector(
+                  onTap: () => navigateToRecipePage(context, title),
+                  child: _buildRecipeCard(title),
+                );
                 return _buildRecipeCard(title);
               }).toList(),
             ),

@@ -20,6 +20,9 @@ import 'package:sp_tastebud/features/user-profile/data/user_profile_repository.d
 import 'package:sp_tastebud/features/ingredients/data/ingredients_repository.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/data/search_repository.dart';
 
+import '../../features/recipe-collection/bloc/recipe_collection_bloc.dart';
+import '../../features/recipe-collection/data/recipe_collection_repository.dart';
+import '../../features/recipe-collection/data/recipe_collection_services.dart';
 import '../../features/recipe/view-recipe/data/view_recipe_repository.dart';
 
 // instantiate get_it
@@ -41,6 +44,8 @@ void setupServices() {
       () => SearchRecipeRepository(getIt(), getIt()));
   getIt.registerLazySingleton<ViewRecipeRepository>(
       () => ViewRecipeRepository(getIt(), getIt()));
+  getIt.registerLazySingleton<RecipeCollectionService>(
+      () => RecipeCollectionService(getIt(), getIt()));
 
   // Register repositories
   getIt.registerFactory<UserRepository>(
@@ -49,6 +54,8 @@ void setupServices() {
       () => UserProfileRepository(getIt<UserProfileService>()));
   getIt.registerFactory<IngredientsRepository>(
       () => IngredientsRepository(getIt<IngredientsService>()));
+  getIt.registerFactory<RecipeCollectionRepository>(
+      () => RecipeCollectionRepository(getIt<RecipeCollectionService>()));
 
   // Register BLoCs
   getIt.registerFactory<AuthBloc>(() => AuthBloc(getIt<UserRepository>()));
@@ -60,4 +67,6 @@ void setupServices() {
       getIt<SearchRecipeRepository>(), getIt<UserProfileBloc>()));
   getIt.registerFactory<ViewRecipeBloc>(
       () => ViewRecipeBloc(getIt<ViewRecipeRepository>()));
+  getIt.registerLazySingleton<RecipeCollectionBloc>(
+      () => RecipeCollectionBloc(getIt<RecipeCollectionRepository>()));
 }

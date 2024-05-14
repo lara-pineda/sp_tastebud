@@ -56,17 +56,29 @@ class RecipeSearchAPI {
         // get lesser of the two numbers
         final int maxRecipes = math.min(end, data['hits'].length as int);
 
-        final List<dynamic> recipes = data['hits']
-            .map((hit) => hit['recipe'])
-            .toList()
-            .sublist(start, maxRecipes); // Manage slicing locally
-        return recipes;
+        // Manage slicing locally
+        final List<dynamic> recipes =
+            data['hits'].map((hit) => hit['recipe']).toList();
+
+        print('data hits');
+        print(data['hits']);
+
+        // Ensuring 'start' and 'end' are within the bounds of the list
+        final int actualEnd = min(recipes.length, end);
+        print(recipes.length);
+        print(start);
+        if (start < recipes.length) {
+          return recipes.sublist(start, actualEnd);
+        } else {
+          return [];
+        }
       } else {
         print('Error: ${response.statusCode}');
         throw Exception('Failed to load recipes');
       }
     } catch (e) {
       print('Error: $e');
+      print("here error");
       throw Exception('Failed to load recipes');
     }
   }

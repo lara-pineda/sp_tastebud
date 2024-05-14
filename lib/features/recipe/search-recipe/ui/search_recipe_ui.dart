@@ -36,10 +36,13 @@ class _SearchRecipeState extends State<SearchRecipe> {
   List<dynamic> _recipes = [];
   bool _isLoading = false;
   String _searchKey = '';
+  String _lastSearchKey = '';
 
   @override
   void initState() {
     super.initState();
+
+    _searchController.addListener(_onSearchChanged);
 
     // Listen to the user profile loaded state
     // addPostFrameCallback to defer actions until after the build phase completes
@@ -56,8 +59,17 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onSearchChanged() {
+    if (_searchController.text.isEmpty) {
+      // Handle case for empty search or reset
+    } else {
+      _loadMoreRecipes(_searchController.text);
+    }
   }
 
   void _initializeQueriesAndLoadRecipes(UserProfileLoaded state) {
@@ -87,19 +99,30 @@ class _SearchRecipeState extends State<SearchRecipe> {
   }
 
   // Call the recipe search api
-  void _loadMoreRecipes(String searchKey) async {
+  Future<void> _loadMoreRecipes(String searchKey) async {
+    print("Loading recipes for search key: $searchKey");
+
     if (_isLoading) return; // Prevent multiple simultaneous loads
+
+    if (_lastSearchKey != searchKey) {
+      _recipes.clear(); // Clear the recipes if the search key has changed
+      _lastSearchKey = searchKey; // Update the last search key
+    }
+
     // setState(() => _isLoading = true);
     _isLoading = true;
 
     try {
-      // print('$_healthQuery$_macroQuery$_microQuery');
       var query = '$_healthQuery$_macroQuery$_microQuery';
       print("query");
       print(query);
 
       final newRecipes = await RecipeSearchAPI.searchRecipes(searchKey, query,
-          start: _recipes.length, end: _recipes.length + 10);
+          start: 0, end: _recipes.length + 10);
+
+      print('newrecipes:');
+      print(newRecipes);
+
       if (mounted) {
         if (newRecipes.isNotEmpty) {
           setState(() {

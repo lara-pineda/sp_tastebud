@@ -9,7 +9,9 @@ import 'package:sp_tastebud/features/auth/ui/main_menu_ui.dart';
 import 'package:sp_tastebud/features/auth/ui/signup_ui.dart';
 import 'package:sp_tastebud/features/ingredients/ui/ingredient_management_ui.dart';
 import 'package:sp_tastebud/features/navigation/ui/navigation_bar_ui.dart';
+import 'package:sp_tastebud/features/recipe-collection/bloc/recipe_collection_bloc.dart';
 import 'package:sp_tastebud/features/recipe-collection/ui/recipe_collection_ui.dart';
+import 'package:sp_tastebud/features/recipe-collection/ui/view_collection_page.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/ui/search_recipe_ui.dart';
 import 'package:sp_tastebud/features/recipe/view-recipe/bloc/view_recipe_bloc.dart';
 import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
@@ -108,11 +110,18 @@ class AppRoutes {
                   routes: [
                     GoRoute(
                       path: '/recipe-collection',
-                      builder: (context, state) =>
-                          BlocProvider<SearchRecipeBloc>(
-                        create: (context) => getIt<SearchRecipeBloc>(),
-                        child: RecipeCollection(),
-                      ),
+                      builder: (context, state) => RecipeCollection(),
+                      routes: [
+                        GoRoute(
+                          name: "viewCollection",
+                          path: "collection",
+                          builder: (context, state) =>
+                              BlocProvider<RecipeCollectionBloc>(
+                            create: (context) => getIt<RecipeCollectionBloc>(),
+                            child: ViewCollectionPage(),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

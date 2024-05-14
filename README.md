@@ -57,17 +57,16 @@ sp_tastebud/
 
 ## Features TODO
 
-
--   view recipe details polish styling
--   manage saved recipes
--   manage rejected recipes
--   dialog styling
--   sort recipe
+-   add ingredients to query
+-   connect firestore methods to ui layer for collection
 -   substitute recipe
 
-POLISHING
+MINOR STUFF
+-   navigation change color
+-   view recipe details polish styling
+-   dialog styling
 -   move save changes button for ingredient mgmt and user profile
--   empty search page results
+-   page for empty search results
 -   logout button
 -   make user email not editable
 -   finalize options for ingredients

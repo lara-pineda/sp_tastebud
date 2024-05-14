@@ -85,6 +85,8 @@ class Assets {
       'assets/images/ImagePlaceholder.png';
   static const String imagesLandingFruits = 'assets/images/LandingFruits.jpg';
   static const String imagesMiniStarIcon = 'assets/images/MiniStarIcon.svg';
+  static const String imagesRejectedRecipe = 'assets/images/rejectedRecipe.png';
+  static const String imagesSavedRecipe = 'assets/images/savedRecipe.png';
   static const String imagesStarIcon = 'assets/images/StarIcon.svg';
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
@@ -116,6 +118,8 @@ class Assets {
   static const String uiSignupUi = 'lib/features/auth/ui/signup_ui.dart';
   static const String uiUserProfileUi =
       'lib/features/user-profile/ui/user_profile_ui.dart';
+  static const String uiViewCollectionPage =
+      'lib/features/recipe-collection/ui/view_collection_page.dart';
   static const String uiViewRecipeUi =
       'lib/features/recipe/view-recipe/ui/view_recipe_ui.dart';
   static const String utilsExtractRecipeId =
