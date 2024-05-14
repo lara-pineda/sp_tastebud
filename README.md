@@ -59,8 +59,9 @@ sp_tastebud/
 
 
 -   view recipe details polish styling
--   dialog styling
 -   manage saved recipes
+-   manage rejected recipes
+-   dialog styling
 -   sort recipe
 -   substitute recipe
 
@@ -71,8 +72,8 @@ POLISHING
 -   make user email not editable
 -   finalize options for ingredients
 -   add more filters
+-   forgot password
 
 SUGGESTIONS
--   manage rejected recipes
 -   manage equipments
 -   leave a review

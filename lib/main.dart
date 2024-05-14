@@ -55,6 +55,18 @@ class MyApp extends StatelessWidget {
         ),
 
         routerConfig: AppRoutes.router,
+        // routeInformationParser: AppRoutes.router.routeInformationParser,
+        // routerDelegate: AppRoutes.router.routerDelegate,
+
+        builder: (context, child) => BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthSuccess) {
+              // Trigger user profile loading on successful authentication.
+              BlocProvider.of<UserProfileBloc>(context).add(LoadUserProfile());
+            }
+          },
+          child: child!,
+        ),
       ),
     );
   }

@@ -6,8 +6,9 @@ import 'package:sp_tastebud/shared/custom_dialog.dart';
 import 'package:sp_tastebud/shared/search_bar/custom_search_bar.dart';
 import 'package:sp_tastebud/shared/recipe_card/recipe_card.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/recipe_search_api.dart';
-import '../../../../core/utils/extract_recipe_id.dart';
-import '../../../../shared/checkbox_card/options.dart';
+import 'package:sp_tastebud/core/config/service_locator.dart';
+import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
+import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import '../../../user-profile/bloc/user_profile_bloc.dart';
 import '../bloc/search_recipe_bloc.dart';
 
@@ -25,8 +26,33 @@ class _SearchRecipeState extends State<SearchRecipe> {
   List<bool> selectedMacronutrients = [];
   List<bool> selectedMicronutrients = [];
 
-  TextEditingController _searchController = TextEditingController();
+  // store query parameters
+  String _healthQuery = '';
+  String _macroQuery = '';
+  String _microQuery = '';
+
+  final TextEditingController _searchController = TextEditingController();
+
   List<dynamic> _recipes = [];
+  bool _isLoading = false;
+  String _searchKey = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Listen to the user profile loaded state
+    // addPostFrameCallback to defer actions until after the build phase completes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userProfileBloc = getIt<UserProfileBloc>();
+      if (userProfileBloc.state is UserProfileLoaded) {
+        _initializeQueriesAndLoadRecipes(
+            userProfileBloc.state as UserProfileLoaded);
+        // Ensure the searchKey or initial parameters are set before calling
+        _loadMoreRecipes(_searchKey);
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -34,57 +60,66 @@ class _SearchRecipeState extends State<SearchRecipe> {
     super.dispose();
   }
 
-  // Call the recipe search api
-  Future<void> _searchRecipes(String recipeId, String healthQuery,
-      String macroQuery, String microQuery) async {
-    try {
-      // print(healthQuery + macroQuery + microQuery);
-      var query = healthQuery + macroQuery + microQuery;
+  void _initializeQueriesAndLoadRecipes(UserProfileLoaded state) {
+    // setState(() {
+    //   _healthQuery = buildHealthTags(state.dietaryPreferences) +
+    //       buildHealthTags(state.allergies);
+    //   _macroQuery = mapNutrients(state.macronutrients,
+    //       Options.macronutrients, Options.nutrientTag1);
+    //   _microQuery = mapNutrients(state.micronutrients,
+    //       Options.micronutrients, Options.nutrientTag2);
+    // });
 
-      final recipes = await RecipeSearchAPI.searchRecipes(recipeId, query);
-      if (recipes.isNotEmpty) {
-        setState(() {
-          _recipes = recipes;
-        });
-      } else {
-        print("SEARCH RESULTS LIST EMPTY!");
+    // Building the queries based on the loaded user profile state
+    _healthQuery = buildHealthTags(state.dietaryPreferences) +
+        buildHealthTags(state.allergies);
+    _macroQuery = mapNutrients(
+        state.macronutrients, Options.macronutrients, Options.nutrientTag1);
+    _microQuery = mapNutrients(
+        state.micronutrients, Options.micronutrients, Options.nutrientTag2);
+
+    print(_healthQuery + _microQuery + _macroQuery);
+
+    // Loading the first set of recipes
+    // _loadMoreRecipes(_searchKey);
+    // Only load recipes if the user explicitly performs an action or if it's necessary upon initial load
+    // Consider triggering the initial recipe load with a user action or a different lifecycle method
+  }
+
+  // Call the recipe search api
+  void _loadMoreRecipes(String searchKey) async {
+    if (_isLoading) return; // Prevent multiple simultaneous loads
+    // setState(() => _isLoading = true);
+    _isLoading = true;
+
+    try {
+      // print('$_healthQuery$_macroQuery$_microQuery');
+      var query = '$_healthQuery$_macroQuery$_microQuery';
+      print("query");
+      print(query);
+
+      final newRecipes = await RecipeSearchAPI.searchRecipes(searchKey, query,
+          start: _recipes.length, end: _recipes.length + 10);
+      if (mounted) {
+        if (newRecipes.isNotEmpty) {
+          setState(() {
+            _recipes.addAll(newRecipes);
+          });
+          // Ensure to turn off the loading indicator
+          _isLoading = false;
+        } else {
+          print("SEARCH RESULTS LIST EMPTY!");
+        }
       }
     } catch (e) {
       print('Error: $e');
+      // reset loading state on error
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Accessing UserProfileBloc using BlocBuilder
-    return BlocBuilder<UserProfileBloc, UserProfileState>(
-      buildWhen: (previous, current) =>
-          current is UserProfileLoaded ||
-          current is UserProfileError ||
-          current is UserProfileInitial,
-      builder: (context, userProfileState) {
-        if (userProfileState is UserProfileLoaded) {
-          return BlocListener<SearchRecipeBloc, SearchRecipeState>(
-            listener: (context, state) {
-              if (state is FavoritesError) {
-                // Handle error, maybe show a snackbar
-                print("Error adding to recipe collection");
-              } else if (state is FavoritesAdded) {
-                print("Added to recipe collection!");
-              }
-            },
-            child: _buildSearchRecipeUI(userProfileState),
-          );
-        } else if (userProfileState is UserProfileError) {
-          // Show error message if loading fails
-          return Center(child: Text(userProfileState.error));
-        } else if (userProfileState is UserProfileInitial) {
-          return Center(child: Text("Initial"));
-        }
-        // Fallback widget
-        return CircularProgressIndicator();
-      },
-    );
   }
 
   String buildHealthTags(List<dynamic> tags) {
@@ -103,26 +138,71 @@ class _SearchRecipeState extends State<SearchRecipe> {
         .join('');
   }
 
+  @override
+  Widget build(BuildContext context) {
+    // Accessing UserProfileBloc using BlocBuilder
+    return BlocBuilder<UserProfileBloc, UserProfileState>(
+      buildWhen: (previous, current) =>
+          current is UserProfileLoaded ||
+          current is UserProfileError ||
+          current is UserProfileInitial,
+      builder: (context, userProfileState) {
+        if (userProfileState is UserProfileLoaded) {
+          print('userprofilestate is userprofileloaded');
+
+          return BlocListener<SearchRecipeBloc, SearchRecipeState>(
+            listener: (context, state) {
+              if (state is FavoritesError) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Error adding to recipe collection")));
+              } else if (state is FavoritesAdded) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Added to recipe collection!")));
+              }
+            },
+            child: _buildSearchRecipeUI(userProfileState),
+          );
+        } else if (userProfileState is UserProfileError) {
+          // Show error message if loading fails
+          return Center(child: Text(userProfileState.error));
+        } else if (userProfileState is UserProfileInitial) {
+          return Center(child: Text("Initial"));
+        }
+        // Fallback widget
+        print('blocbuilder search recipe ui');
+        return CircularProgressIndicator();
+      },
+    );
+  }
+
   Widget _buildSearchRecipeUI(UserProfileLoaded state) {
+    // Check to prevent multiple initial loads
+    if (_recipes.isEmpty) {
+      print('initialize recipeee');
+      _initializeQueriesAndLoadRecipes(state);
+    }
+    return _buildRecipeList();
+  }
+
+  Widget _buildRecipeList() {
     // print("FETCHED USER PROFILE:");
     // print(state.dietaryPreferences);
     // print(state.allergies);
     // print(state.macronutrients);
     // print(state.micronutrients);
 
-    String healthQuery = buildHealthTags(state.dietaryPreferences) +
-        buildHealthTags(state.allergies);
-    String macroQuery = mapNutrients(
-        state.macronutrients, Options.macronutrients, Options.nutrientTag1);
-    String microQuery = mapNutrients(
-        state.micronutrients, Options.micronutrients, Options.nutrientTag2);
+    // String healthQuery = buildHealthTags(state.dietaryPreferences) +
+    //     buildHealthTags(state.allergies);
+    // String macroQuery = mapNutrients(
+    //     state.macronutrients, Options.macronutrients, Options.nutrientTag1);
+    // String microQuery = mapNutrients(
+    //     state.micronutrients, Options.micronutrients, Options.nutrientTag2);
 
     return Center(
       child: Column(children: <Widget>[
         // search bar
         CustomSearchBar(
-          onSubmitted: (query) =>
-              _searchRecipes(query, healthQuery, macroQuery, microQuery),
+          onSubmitted: (searchKey) => _loadMoreRecipes(searchKey),
         ),
 
         // sample button for dialog
@@ -148,8 +228,15 @@ class _SearchRecipeState extends State<SearchRecipe> {
         // search results
         Expanded(
           child: ListView.builder(
-            itemCount: _recipes.length,
+            itemCount: _recipes.length + 1, // Add one for loading indicator
             itemBuilder: (context, index) {
+              if (index >= _recipes.length) {
+                if (!_isLoading) {
+                  _loadMoreRecipes(
+                      _searchKey); // Load more at the end of the list
+                }
+                return Center(child: CircularProgressIndicator());
+              }
               final recipe = _recipes[index];
               return GestureDetector(
                 onTap: () {

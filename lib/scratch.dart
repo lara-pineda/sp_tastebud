@@ -13,5 +13,3 @@
 // &nutrients%5BFATRN%5D=0%2B
 // &nutrients%5BFE%5D=0%2B
 // &nutrients%5BMG%5D=0%2B
-
-// options to display inside checkbox cards

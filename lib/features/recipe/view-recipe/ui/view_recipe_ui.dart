@@ -55,6 +55,9 @@ class _ViewRecipeState extends State<ViewRecipe>
     // Convert the map to a Recipe object right here within the method
     Recipe recipe = Recipe.fromJson(recipeData);
 
+    print(recipe.image);
+    print(recipe.images);
+
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
@@ -91,7 +94,7 @@ class _ViewRecipeState extends State<ViewRecipe>
         children: <Widget>[
           TabBar(
             controller: _tabController,
-            tabs: [
+            tabs: const [
               Tab(text: "Overview"),
               Tab(text: "Ingredients"),
               Tab(text: "Nutritional Information"),

@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
+import 'dart:math' as math;
 
 class RecipeSearchAPI {
   final FirebaseFirestore _firestore;
@@ -11,7 +13,8 @@ class RecipeSearchAPI {
 
   // Construct the URL for the Edamam Recipe Search API
   static Future<List<dynamic>> searchRecipes(
-      String searchKey, String queryParams) async {
+      String searchKey, String queryParams,
+      {int start = 0, int end = 10}) async {
     // 3scale credentials
     const String appId = '944184b7';
     const String appKey = '32a51da0f5bf093de7b4cd19e2f55112';
@@ -25,9 +28,19 @@ class RecipeSearchAPI {
       // Make the HTTP request
       final response = await http.get(Uri.parse(url));
 
+      print(url);
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
-        return data['hits'].map((hit) => hit['recipe']).toList();
+
+        // get lesser of the two numbers
+        final int maxRecipes = math.min(end, data['hits'].length as int);
+
+        final List<dynamic> recipes = data['hits']
+            .map((hit) => hit['recipe'])
+            .toList()
+            .sublist(start, maxRecipes); // Manage slicing locally
+        return recipes;
       } else {
         print('Error: ${response.statusCode}');
         throw Exception('Failed to load recipes');

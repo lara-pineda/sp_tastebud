@@ -111,7 +111,7 @@ class AppRoutes {
                       builder: (context, state) =>
                           BlocProvider<SearchRecipeBloc>(
                         create: (context) => getIt<SearchRecipeBloc>(),
-                        child: const RecipeCollection(),
+                        child: RecipeCollection(),
                       ),
                     ),
                   ],
