@@ -18,6 +18,9 @@ class AppBottomNavBar extends StatelessWidget {
       required this.navigationShell});
 
   void _goBranch(int index) {
+    // context.read<AppNavigationBloc>().add(TabChange(tabIndex: index));
+    print(
+        "Tab tapped: $index"); // Add debug statement to check if this method is called
     navigationShell.goBranch(
       index,
       // A common pattern when using bottom navigation bars is to support

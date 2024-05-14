@@ -109,6 +109,8 @@ flutter:
     - assets/images/MiniStarIcon.svg
     - assets/images/ImagePlaceholder.png
     - assets/images/Edamam_Badge.svg
+    - assets/images/savedRecipe.png
+    - assets/images/rejectedRecipe.png
     - lib/features/navigation/ui/
 
   # An image asset can refer to one or more resolution-specific "variants", see

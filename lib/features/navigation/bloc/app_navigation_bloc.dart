@@ -8,7 +8,7 @@ class AppNavigationBloc extends Bloc<AppNavigationEvent, AppNavigationState> {
   AppNavigationBloc() : super(const AppNavigationInitial(tabIndex: 0)) {
     on<AppNavigationEvent>((event, emit) {
       if (event is TabChange) {
-        print(event.tabIndex);
+        print("Changing tab index to: ${event.tabIndex}"); // Debug statement
         emit(AppNavigationInitial(tabIndex: event.tabIndex));
       }
     });

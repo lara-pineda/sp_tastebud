@@ -11,6 +11,26 @@ class RecipeSearchAPI {
 
   RecipeSearchAPI(this._firestore, this._firebaseAuth);
 
+  // with ingredients
+  // https://api.edamam.com/api/recipes/v2?type=public&app_id=your_app_id&app_key=your_app_key&q=chicken,garlic,onion&random=true
+
+  // Future<List<Recipe>> fetchRecipes(List<String> ingredients) async {
+  //   String ingredientQuery = ingredients.join(',');
+  //   var url = Uri.parse(
+  //       'https://api.edamam.com/api/recipes/v2?type=public&app_id=your_app_id&app_key=your_app_key&q=$ingredientQuery&random=true');
+  //
+  //   var response = await http.get(url);
+  //   if (response.statusCode == 200) {
+  //     var data = json.decode(response.body);
+  //     List<Recipe> recipes = data['hits']
+  //         .map<Recipe>((data) => Recipe.fromJson(data['recipe']))
+  //         .toList();
+  //     return recipes;
+  //   } else {
+  //     throw Exception('Failed to load recipes');
+  //   }
+  // }
+
   // Construct the URL for the Edamam Recipe Search API
   static Future<List<dynamic>> searchRecipes(
       String searchKey, String queryParams,

@@ -13,6 +13,9 @@ class Assets {
   static const String imagesEdamamAttribution =
       'assets/images/Edamam_Badge.svg';
   static const String imagesStarIcon = 'assets/images/StarIcon.svg';
+
+  static const String savedRecipe = 'assets/images/savedRecipe.png';
+  static const String rejectedRecipe = 'assets/images/rejectedRecipe.png';
 }
 
 // USAGE

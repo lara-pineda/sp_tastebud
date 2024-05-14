@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
+import 'package:sp_tastebud/core/config/assets_path.dart';
 
 import '../../auth/bloc/auth_bloc.dart';
 
@@ -12,76 +13,6 @@ class RecipeCollection extends StatelessWidget {
 
   // Retrieve AuthBloc using GetIt
   final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
-
-  Widget _buildCollectionScreen() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                SizedBox(height: (50.toVHLength).toPX()),
-                Text(
-                  'Collection',
-                  style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 30,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.purpleColor),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: (20.toVHLength).toPX()),
-
-                // saved recipes
-                InkWell(
-                  // onTap: context.go(),
-                  child: Card(
-                    elevation: 4.0,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Icon(Icons.emoji_food_beverage_outlined,
-                            color: Colors.green),
-                        // Expanded(
-                        //   child: Image.asset(
-                        //     thumbnailAsset,
-                        //     fit: BoxFit.cover,  // Adjust based on your thumbnail style
-                        //   ),
-                        // ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text("Saved Recipes"),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // rejected recipes
-                InkWell(
-                  // onTap: context.go(),
-                  child: Card(
-                    elevation: 4.0,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Icon(Icons.no_food_outlined, color: Colors.red),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text("Rejected Recipes"),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +28,89 @@ class RecipeCollection extends StatelessWidget {
           return _buildCollectionScreen();
         }
       },
+    );
+  }
+
+  Widget _buildCollectionScreen() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+      child: Column(
+        children: [
+          SizedBox(height: (50.toVHLength).toPX()),
+          Text(
+            'Collection',
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 30,
+                fontWeight: FontWeight.w700,
+                color: AppColors.purpleColor),
+            textAlign: TextAlign.left,
+          ),
+          SizedBox(height: (20.toVHLength).toPX()),
+          Container(
+            height: 500,
+            child: GridView.count(
+              crossAxisCount: 2, // Number of columns
+              crossAxisSpacing: 10, // Horizontal space between cards
+              mainAxisSpacing:
+                  20, // Vertical space between cards increased for text space
+              childAspectRatio: 1.0 /
+                  1.2, // Adjusted aspect ratio to accommodate text outside the card
+              children:
+                  <String>['Saved Recipes', 'Rejected Recipes'].map((title) {
+                return _buildRecipeCard(title);
+              }).toList(),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecipeCard(String title) {
+    String image =
+        title == 'Saved Recipes' ? Assets.savedRecipe : Assets.rejectedRecipe;
+    return Column(
+      mainAxisSize:
+          MainAxisSize.min, // Use the minimum space needed by the child widgets
+      children: [
+        Flexible(
+          flex: 5, // Allocates 5 parts of the space to the image card
+          child: Card(
+            elevation: 10,
+            shadowColor: Colors.grey.withOpacity(0.5),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                image: DecorationImage(
+                  image: AssetImage(image),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 1, // Allocates 1 part of the space to the text
+          child: Padding(
+            padding: const EdgeInsets.only(
+                top: 8, bottom: 4), // Space around the text
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
