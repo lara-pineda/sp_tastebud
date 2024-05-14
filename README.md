@@ -57,10 +57,8 @@ sp_tastebud/
 
 ## Features TODO
 
--   shade hearts if in recipe collection
 -   add ingredients to query
 -   add/remove for rejected recipes via search recipe, view recipe, recipe collection
--   remove for favorite recipe via view recipe page
 -   substitute recipe
 
 MINOR STUFF

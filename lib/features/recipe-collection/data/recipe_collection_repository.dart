@@ -54,4 +54,20 @@ class RecipeCollectionRepository {
       throw (e);
     }
   }
+
+  Future<bool> isRecipeInFavorites(String recipeId) async {
+    final user = _firebaseAuth.currentUser;
+    if (user == null) {
+      throw Exception('No user logged in!');
+    }
+
+    final doc = await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('savedRecipes')
+        .doc(recipeId)
+        .get();
+
+    return doc.exists;
+  }
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
 import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
+
+import '../../features/recipe-collection/data/recipe_collection_repository.dart';
 
 class RecipeCard extends StatefulWidget {
   final String recipeName;
@@ -25,6 +28,23 @@ class RecipeCard extends StatefulWidget {
 class _RecipeCardState extends State<RecipeCard> {
   // State to track if recipe is in recipe collection
   bool isInFavorites = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfInFavorites();
+  }
+
+  Future<void> _checkIfInFavorites() async {
+    final recipeId = extractRecipeIdUsingRegExp(widget.recipeUri);
+    final recipeCollectionRepository =
+        GetIt.instance<RecipeCollectionRepository>();
+    final isFavorite =
+        await recipeCollectionRepository.isRecipeInFavorites(recipeId);
+    setState(() {
+      isInFavorites = isFavorite;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
