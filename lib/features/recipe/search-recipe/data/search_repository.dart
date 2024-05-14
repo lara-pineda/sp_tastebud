@@ -72,4 +72,32 @@ class SearchRecipeRepository {
       'timestamp': FieldValue.serverTimestamp(),
     });
   }
+
+  Future<void> removeFromFavorites(String recipeId) async {
+    print('in remove from favorites, search repository');
+    print(recipeId);
+
+    try {
+      User? user = _firebaseAuth.currentUser;
+      if (user == null) {
+        throw Exception('No user logged in!');
+      }
+
+      DocumentReference recipeRef = _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('savedRecipes')
+          .doc(recipeId);
+
+      DocumentSnapshot snapshot = await recipeRef.get();
+      if (!snapshot.exists) {
+        throw Exception('Recipe not found in favorites.');
+      }
+
+      await recipeRef.delete();
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
 }

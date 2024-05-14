@@ -44,8 +44,10 @@ void setupServices() {
       () => SearchRecipeRepository(getIt(), getIt()));
   getIt.registerLazySingleton<ViewRecipeRepository>(
       () => ViewRecipeRepository(getIt(), getIt()));
-  getIt.registerLazySingleton<RecipeCollectionService>(
-      () => RecipeCollectionService(getIt(), getIt()));
+  // getIt.registerLazySingleton<RecipeCollectionService>(
+  //     () => RecipeCollectionService(getIt(), getIt()));
+  getIt.registerFactory<RecipeCollectionRepository>(
+      () => RecipeCollectionRepository(getIt(), getIt()));
 
   // Register repositories
   getIt.registerFactory<UserRepository>(
@@ -54,8 +56,8 @@ void setupServices() {
       () => UserProfileRepository(getIt<UserProfileService>()));
   getIt.registerFactory<IngredientsRepository>(
       () => IngredientsRepository(getIt<IngredientsService>()));
-  getIt.registerFactory<RecipeCollectionRepository>(
-      () => RecipeCollectionRepository(getIt<RecipeCollectionService>()));
+  // getIt.registerFactory<RecipeCollectionRepository>(
+  //     () => RecipeCollectionRepository(getIt<RecipeCollectionService>()));
 
   // Register BLoCs
   getIt.registerFactory<AuthBloc>(() => AuthBloc(getIt<UserRepository>()));

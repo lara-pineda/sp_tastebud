@@ -21,6 +21,15 @@ class AddToFavorites extends SearchRecipeEvent {
   List<Object> get props => [recipeName, image, recipeId];
 }
 
+class RemoveFromFavorites extends SearchRecipeEvent {
+  final String recipeUri;
+
+  const RemoveFromFavorites(this.recipeUri);
+
+  @override
+  List<Object> get props => [recipeUri];
+}
+
 class RecipeSelected extends SearchRecipeEvent {
   final Map<String, dynamic> recipe;
   const RecipeSelected(this.recipe);

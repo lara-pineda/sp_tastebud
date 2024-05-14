@@ -119,8 +119,11 @@ class _RecipeCardState extends State<RecipeCard> {
                       widget.sourceWebsite,
                       extractRecipeIdUsingRegExp(widget.recipeUri),
                       widget.recipeUri));
+                } else {
+                  // handle removing from favorites
+                  context.read<SearchRecipeBloc>().add(RemoveFromFavorites(
+                      extractRecipeIdUsingRegExp(widget.recipeUri)));
                 }
-                // Optionally handle removing from favorites
               },
               child: Icon(
                 isInFavorites ? Icons.favorite : Icons.favorite_border,
@@ -131,8 +134,6 @@ class _RecipeCardState extends State<RecipeCard> {
           ),
         ],
       ),
-      // navigate to /my-path, pass 2 arguments to context.state.extra
-      // context.push("/view", extra: {"recipeJson": recipe});
     );
   }
 }

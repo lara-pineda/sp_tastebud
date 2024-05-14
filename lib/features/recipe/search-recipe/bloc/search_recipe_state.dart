@@ -48,6 +48,15 @@ class FavoritesAdded extends SearchRecipeState {
   List<Object?> get props => [uri];
 }
 
+class FavoritesRemoved extends SearchRecipeState {
+  final String uri;
+
+  const FavoritesRemoved(this.uri);
+
+  @override
+  List<Object?> get props => [uri];
+}
+
 class FavoritesError extends SearchRecipeState {
   final String message;
 
@@ -59,6 +68,7 @@ class FavoritesError extends SearchRecipeState {
 
 class RecipeDetailState extends SearchRecipeState {
   final Map<String, dynamic> recipe;
+
   RecipeDetailState(this.recipe);
 
   @override

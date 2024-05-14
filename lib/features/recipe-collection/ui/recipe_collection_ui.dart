@@ -32,7 +32,6 @@ class RecipeCollection extends StatelessWidget {
           // Return error text if login fails
           return Text("User not logged in.");
         } else {
-          // If login is successful, proceed with UserProfileBloc
           return _buildCollectionScreen(context);
         }
       },

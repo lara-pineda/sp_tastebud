@@ -181,6 +181,9 @@ class _SearchRecipeState extends State<SearchRecipe> {
               } else if (state is FavoritesAdded) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Added to recipe collection!")));
+              } else if (state is FavoritesRemoved) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Removed from recipe collection!")));
               }
             },
             child: _buildSearchRecipeUI(userProfileState),

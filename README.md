@@ -57,13 +57,15 @@ sp_tastebud/
 
 ## Features TODO
 
+-   shade hearts if in recipe collection
 -   add ingredients to query
--   connect firestore methods to ui layer for collection
+-   add/remove for rejected recipes via search recipe, view recipe, recipe collection
+-   remove for favorite recipe via view recipe page
 -   substitute recipe
 
 MINOR STUFF
 -   view recipe details polish styling
--   dialog styling
+-   dialog styling + state for checkboxes
 -   move save changes button for ingredient mgmt and user profile
 -   page for empty search results
 -   logout button

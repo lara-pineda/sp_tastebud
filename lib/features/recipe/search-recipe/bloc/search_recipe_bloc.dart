@@ -1,8 +1,7 @@
 import 'dart:async';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../user-profile/bloc/user_profile_bloc.dart';
+import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import '../data/search_repository.dart';
 
 part 'search_recipe_event.dart';
@@ -24,6 +23,7 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
     });
 
     on<AddToFavorites>(_onAddToFavorites);
+    on<RemoveFromFavorites>(_onRemoveFromFavorites);
     on<RecipeSelected>((event, emit) => emit(RecipeDetailState(event.recipe)));
   }
 
@@ -64,6 +64,19 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
     } catch (e, stacktrace) {
       // This will print more detailed error information
       print('Failed to add to favorites: $e');
+      print('Stacktrace: $stacktrace');
+      emit(FavoritesError(e.toString()));
+    }
+  }
+
+  Future<void> _onRemoveFromFavorites(
+      RemoveFromFavorites event, Emitter<SearchRecipeState> emit) async {
+    emit(FavoritesLoading());
+    try {
+      await _recipeRepository.removeFromFavorites(event.recipeUri);
+      emit(FavoritesRemoved(event.recipeUri));
+    } catch (e, stacktrace) {
+      print('Failed to remove from favorites: $e');
       print('Stacktrace: $stacktrace');
       emit(FavoritesError(e.toString()));
     }

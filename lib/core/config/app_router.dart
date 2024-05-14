@@ -121,9 +121,15 @@ class AppRoutes {
                                 state.pathParameters['collectionType']!;
                             print(
                                 'collectiontype from parameter: $collectionType');
-                            return BlocProvider<RecipeCollectionBloc>(
-                              create: (context) =>
-                                  getIt<RecipeCollectionBloc>(),
+                            return MultiBlocProvider(
+                              providers: [
+                                BlocProvider<RecipeCollectionBloc>.value(
+                                  value: getIt<RecipeCollectionBloc>(),
+                                ),
+                                BlocProvider<SearchRecipeBloc>.value(
+                                  value: getIt<SearchRecipeBloc>(),
+                                ),
+                              ],
                               child: ViewCollectionPage(
                                   collectionType: collectionType),
                             );

@@ -1,16 +1,57 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'recipe_collection_services.dart';
 
 class RecipeCollectionRepository {
-  final RecipeCollectionService _recipeCollectionService;
+  // final RecipeCollectionService _recipeCollectionService;
 
-  RecipeCollectionRepository(this._recipeCollectionService);
+  // RecipeCollectionRepository(this._recipeCollectionService);
 
-  Future<List<dynamic>> getSavedRecipes() {
-    print('in recipe collection repository');
-    return _recipeCollectionService.fetchSavedRecipes();
+  final FirebaseFirestore _firestore;
+  final FirebaseAuth _firebaseAuth;
+
+  RecipeCollectionRepository(this._firestore, this._firebaseAuth);
+
+  Stream<List<Map<String, dynamic>>> getSavedRecipesStream() {
+    try {
+      User? user = _firebaseAuth.currentUser;
+
+      print('user: $user');
+
+      if (user == null) throw Exception("User not logged in");
+
+      return _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('savedRecipes')
+          .snapshots()
+          .map((snapshot) => snapshot.docs
+              .map((doc) => doc.data() as Map<String, dynamic>)
+              .toList());
+    } catch (e) {
+      throw (e);
+    }
   }
 
-  Future<List<dynamic>> getRejectedRecipes() {
-    return _recipeCollectionService.fetchRejectedRecipes();
+  Stream<List<Map<String, dynamic>>> getRejectedRecipesStream() {
+    try {
+      User? user = _firebaseAuth.currentUser;
+
+      print('user: $user');
+
+      if (user == null) throw Exception("User not logged in");
+
+      return _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('rejectedRecipes')
+          .snapshots()
+          .map((snapshot) => snapshot.docs
+              .map((doc) => doc.data() as Map<String, dynamic>)
+              .toList());
+    } catch (e) {
+      throw (e);
+    }
   }
 }
