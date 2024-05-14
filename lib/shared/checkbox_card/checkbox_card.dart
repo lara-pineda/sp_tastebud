@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'checkbox_list_tile.dart';
 
 class CheckboxCard extends StatefulWidget {
@@ -139,7 +140,7 @@ class _CheckboxCardState extends State<CheckboxCard> {
             width: 30,
             height: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.red.shade300,
+              color: AppColors.redColor,
               borderRadius: const BorderRadius.only(
                 topRight: Radius.circular(15),
                 bottomRight: Radius.circular(15),

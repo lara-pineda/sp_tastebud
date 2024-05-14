@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sp_tastebud/core/themes/app_palette.dart';
 
 class IconCheckbox extends StatefulWidget {
   final bool value;
@@ -43,7 +44,7 @@ class _IconCheckboxState extends State<IconCheckbox> {
                 child: Icon(
                   Icons.check_rounded,
                   size: 25,
-                  color: Colors.red,
+                  color: AppColors.redColor,
                 ))
             : Container(
                 // Custom dot for unchecked state
@@ -52,7 +53,7 @@ class _IconCheckboxState extends State<IconCheckbox> {
                 // Adjust spacing around the dot
                 margin: const EdgeInsets.symmetric(horizontal: 11),
                 decoration: BoxDecoration(
-                  color: Colors.green,
+                  color: AppColors.seaGreenColor,
                   shape: BoxShape.circle,
                 ),
               ),

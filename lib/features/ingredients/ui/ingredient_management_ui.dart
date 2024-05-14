@@ -3,7 +3,7 @@ import 'package:dimension/dimension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
@@ -141,7 +141,7 @@ class _IngredientsState extends State<IngredientManagement> {
                       fontFamily: 'Poppins',
                       fontSize: 30,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black45),
+                      color: AppColors.purpleColor),
                   textAlign: TextAlign.left,
                 ),
                 SizedBox(height: (20.toVHLength).toPX()),

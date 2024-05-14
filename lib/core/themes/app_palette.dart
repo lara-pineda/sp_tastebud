@@ -1,16 +1,11 @@
 import 'package:flutter/painting.dart';
+import 'package:sp_tastebud/core/utils/hex_to_color.dart';
 
 /// Convenience class to access application colors.
 abstract class AppColors {
-  /// Dark background color.
-  static const Color backgroundColor = Color(0xFF191D1F);
-
-  /// Slightly lighter version of [backgroundColor].
-  static const Color backgroundFadedColor = Color(0xFF191B1C);
-
-  /// Color used for cards and surfaces.
-  static const Color cardColor = Color(0xFF1F2426);
-
-  /// Accent color used in the application.
-  static const Color accentColor = Color(0xFFef8354);
+  static Color orangeColor = '#ECAC70'.toColor();
+  static Color seaGreenColor = '#4AB7B6'.toColor();
+  static Color redColor = '#F06F6F'.toColor();
+  static Color redDisabledColor = '#FFD4D4'.toColor();
+  static Color purpleColor = '#BB6E9C'.toColor();
 }

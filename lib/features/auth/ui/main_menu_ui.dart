@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sp_tastebud/core/config/service_locator.dart';
-import 'package:sp_tastebud/core/utils/hex_to_color.dart';
+import 'package:sp_tastebud/core/themes/app_palette.dart';
 
 import '../bloc/auth_bloc.dart';
 import '../data/preferences_service.dart';
@@ -112,7 +111,7 @@ class _MainMenuState extends State<MainMenu> {
                       fontFamily: 'Poppins',
                       fontSize: 34,
                       fontWeight: FontWeight.w700,
-                      color: '#ECAC70'.toColor(),
+                      color: AppColors.orangeColor,
                     ),
                   ),
                   TextSpan(
@@ -121,7 +120,7 @@ class _MainMenuState extends State<MainMenu> {
                       fontFamily: 'Poppins',
                       fontSize: 34,
                       fontWeight: FontWeight.w700,
-                      color: '#4AB7B6'.toColor(),
+                      color: AppColors.seaGreenColor,
                     ),
                   ),
                 ],
@@ -152,7 +151,7 @@ class _MainMenuState extends State<MainMenu> {
               child: ElevatedButton(
                 onPressed: signinClicked,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: '#F06F6F'.toColor(),
+                  backgroundColor: AppColors.redColor,
                   foregroundColor: const Color(0xFFF7EBE8),
                 ),
                 child: const Text("Sign In"),

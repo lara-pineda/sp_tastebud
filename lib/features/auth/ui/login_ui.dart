@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sp_tastebud/core/utils/hex_to_color.dart';
-import 'package:sp_tastebud/core/config/service_locator.dart';
+import 'package:sp_tastebud/core/themes/app_palette.dart';
 import '../bloc/auth_bloc.dart';
 import '../data/preferences_service.dart';
 
@@ -164,7 +163,7 @@ class _LoginState extends State<LoginPage> {
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
                         fontSize: 28,
-                        color: '#ECAC70'.toColor(),
+                        color: AppColors.orangeColor,
                       ),
                     ),
 
@@ -287,9 +286,9 @@ class _LoginState extends State<LoginPage> {
                               (Set<MaterialState> states) {
                                 // Light red when disabled
                                 if (states.contains(MaterialState.disabled)) {
-                                  return Colors.red.shade100;
+                                  return AppColors.redDisabledColor;
                                 }
-                                return '#F06F6F'.toColor();
+                                return AppColors.redColor;
                               },
                             ),
                             // text color for button

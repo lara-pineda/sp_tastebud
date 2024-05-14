@@ -67,7 +67,7 @@ sp_tastebud/
 
 POLISHING
 -   move save changes button for ingredient mgmt and user profile
--   empty initial search page
+-   empty search page results
 -   logout button
 -   make user email not editable
 -   finalize options for ingredients

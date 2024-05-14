@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sp_tastebud/core/themes/app_palette.dart';
 
 import '../../auth/bloc/auth_bloc.dart';
 
@@ -27,7 +28,7 @@ class RecipeCollection extends StatelessWidget {
                       fontFamily: 'Poppins',
                       fontSize: 30,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black45),
+                      color: AppColors.purpleColor),
                   textAlign: TextAlign.left,
                 ),
                 SizedBox(height: (20.toVHLength).toPX()),
