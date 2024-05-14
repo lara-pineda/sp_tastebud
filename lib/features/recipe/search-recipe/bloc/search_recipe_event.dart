@@ -12,9 +12,10 @@ class AddToFavorites extends SearchRecipeEvent {
   final String image;
   final String sourceWebsite;
   final String recipeId;
+  final String recipeUri;
 
-  AddToFavorites(
-      this.recipeName, this.image, this.sourceWebsite, this.recipeId);
+  const AddToFavorites(this.recipeName, this.image, this.sourceWebsite,
+      this.recipeId, this.recipeUri);
 
   @override
   List<Object> get props => [recipeName, image, recipeId];
@@ -22,5 +23,5 @@ class AddToFavorites extends SearchRecipeEvent {
 
 class RecipeSelected extends SearchRecipeEvent {
   final Map<String, dynamic> recipe;
-  RecipeSelected(this.recipe);
+  const RecipeSelected(this.recipe);
 }

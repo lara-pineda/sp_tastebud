@@ -7,8 +7,8 @@ class SearchRecipeRepository {
 
   SearchRecipeRepository(this._firestore, this._firebaseAuth);
 
-  Future<void> addToFavorites(
-      String recipeName, String image, String source, String recipeId) async {
+  Future<void> addToFavorites(String recipeName, String image, String source,
+      String recipeId, String recipeUri) async {
     User? user = _firebaseAuth.currentUser;
     if (user == null) {
       throw Exception('No user logged in!');
@@ -18,7 +18,7 @@ class SearchRecipeRepository {
     // print(recipeName);
     // print(image);
     // print(source);
-    // print(recipeId);
+    // print(recipeUri);
 
     DocumentReference recipeRef = _firestore
         .collection('users')
@@ -35,13 +35,13 @@ class SearchRecipeRepository {
       'recipeName': recipeName,
       'image': image,
       'source': source,
-      'recipeId': recipeId,
+      'recipeUri': recipeUri,
       'timestamp': FieldValue.serverTimestamp(),
     });
   }
 
-  Future<void> addToRejected(
-      String recipeName, String image, String source, String recipeId) async {
+  Future<void> addToRejected(String recipeName, String image, String source,
+      String recipeId, String recipeUri) async {
     User? user = _firebaseAuth.currentUser;
     if (user == null) {
       throw Exception('No user logged in!');
@@ -68,7 +68,7 @@ class SearchRecipeRepository {
       'recipeName': recipeName,
       'image': image,
       'source': source,
-      'recipeId': recipeId,
+      'recipeUri': recipeUri,
       'timestamp': FieldValue.serverTimestamp(),
     });
   }

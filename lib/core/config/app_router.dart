@@ -114,15 +114,13 @@ class AppRoutes {
                       routes: [
                         GoRoute(
                           name: "viewCollection",
-                          path: 'view/:collectionType',
+                          path: 'collection/:collectionType',
                           builder: (context, state) {
                             // Extract the 'collectionType' parameter from the route
                             final collectionType =
                                 state.pathParameters['collectionType']!;
-
                             print(
                                 'collectiontype from parameter: $collectionType');
-
                             return BlocProvider<RecipeCollectionBloc>(
                               create: (context) =>
                                   getIt<RecipeCollectionBloc>(),
@@ -130,13 +128,21 @@ class AppRoutes {
                                   collectionType: collectionType),
                             );
                           },
-
-                          // path: "collection",
-                          // builder: (context, state) =>
-                          //     BlocProvider<RecipeCollectionBloc>(
-                          //   create: (context) => getIt<RecipeCollectionBloc>(),
-                          //   child: ViewCollectionPage(),
-                          // ),
+                          routes: [
+                            GoRoute(
+                              name: "viewRecipeFromCollection",
+                              path: "view/:recipeId",
+                              builder: (context, state) =>
+                                  BlocProvider<ViewRecipeBloc>(
+                                create: (context) => getIt<ViewRecipeBloc>(),
+                                child: ViewRecipe(
+                                  // Retrieve the recipe ID from path parameters
+                                  // Assert that recipeId is non-null
+                                  recipeId: state.pathParameters['recipeId']!,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

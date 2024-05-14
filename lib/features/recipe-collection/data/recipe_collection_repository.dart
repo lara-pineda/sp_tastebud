@@ -6,6 +6,7 @@ class RecipeCollectionRepository {
   RecipeCollectionRepository(this._recipeCollectionService);
 
   Future<List<dynamic>> getSavedRecipes() {
+    print('in recipe collection repository');
     return _recipeCollectionService.fetchSavedRecipes();
   }
 

@@ -9,6 +9,9 @@ class RecipeCollectionService {
 
   Future<List<dynamic>> fetchSavedRecipes() async {
     User? user = _firebaseAuth.currentUser;
+
+    print('user: $user');
+
     if (user == null) throw Exception("User not logged in");
     var collection =
         _firestore.collection('users').doc(user.uid).collection('savedRecipes');

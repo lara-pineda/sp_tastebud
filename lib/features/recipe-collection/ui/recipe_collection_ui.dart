@@ -19,7 +19,7 @@ class RecipeCollection extends StatelessWidget {
 
     print("collectionType: $collectionType");
 
-    context.go('/recipe-collection/view/$collectionType');
+    context.go('/recipe-collection/collection/$collectionType');
   }
 
   @override

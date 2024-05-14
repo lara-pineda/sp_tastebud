@@ -51,8 +51,8 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
     // Emit loading state before the process starts
     emit(FavoritesLoading());
     try {
-      await _recipeRepository.addToFavorites(
-          event.recipeName, event.image, event.sourceWebsite, event.recipeId);
+      await _recipeRepository.addToFavorites(event.recipeName, event.image,
+          event.sourceWebsite, event.recipeId, event.recipeUri);
 
       // print("in bloc");
       // print(event.recipeName);
@@ -60,7 +60,7 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
       // print(event.sourceWebsite);
       // print(event.recipeId);
 
-      emit(FavoritesAdded(event.recipeId));
+      emit(FavoritesAdded(event.recipeUri));
     } catch (e, stacktrace) {
       // This will print more detailed error information
       print('Failed to add to favorites: $e');

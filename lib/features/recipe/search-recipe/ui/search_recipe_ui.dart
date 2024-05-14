@@ -273,7 +273,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
                   imageUrl: recipe['images']['THUMBNAIL']['url'],
                   sourceWebsite: recipe['source'],
                   recipeUri: recipe['uri'],
-                  bloc: BlocProvider.of<SearchRecipeBloc>(context),
                 ),
               );
             },

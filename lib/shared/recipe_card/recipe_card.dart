@@ -9,7 +9,6 @@ class RecipeCard extends StatefulWidget {
   final String imageUrl;
   final String sourceWebsite;
   final String recipeUri;
-  final SearchRecipeBloc bloc;
 
   const RecipeCard({
     super.key,
@@ -17,7 +16,6 @@ class RecipeCard extends StatefulWidget {
     required this.imageUrl,
     required this.sourceWebsite,
     required this.recipeUri,
-    required this.bloc,
   });
 
   @override
@@ -119,7 +117,8 @@ class _RecipeCardState extends State<RecipeCard> {
                       widget.recipeName,
                       widget.imageUrl,
                       widget.sourceWebsite,
-                      extractRecipeIdUsingRegExp(widget.recipeUri)));
+                      extractRecipeIdUsingRegExp(widget.recipeUri),
+                      widget.recipeUri));
                 }
                 // Optionally handle removing from favorites
               },
