@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ViewCollectionPage extends StatelessWidget {
-  // final String collectionType; // 'Saved' or 'Rejected'
+  final String collectionType; // 'Saved' or 'Rejected'
 
-  ViewCollectionPage({Key? key}) : super(key: key);
+  ViewCollectionPage({super.key, required this.collectionType});
 
   // Dummy data for recipes. Replace these with your actual data fetching logic.
   final List<Map<String, String>> recipes = [
@@ -26,21 +26,28 @@ class ViewCollectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: recipes.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          leading: Image.asset(recipes[index]['imageUrl']!,
-              fit: BoxFit
-                  .cover), // Ensure you have a placeholder if the image is not available
-          title: Text(recipes[index]['title']!),
-          subtitle: Text(recipes[index]['source']!),
-          onTap: () {
-            // Navigation or further action can be handled here
-            print("Recipe tapped: ${recipes[index]['title']}");
-          },
-        );
-      },
+    return Column(
+      children: [
+        Text('$collectionType Recipes'),
+        Container(
+            height: (MediaQuery.of(context).size.height / 3) * 2,
+            child: ListView.builder(
+              itemCount: recipes.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Image.asset(recipes[index]['imageUrl']!,
+                      fit: BoxFit
+                          .cover), // Ensure you have a placeholder if the image is not available
+                  title: Text(recipes[index]['title']!),
+                  subtitle: Text(recipes[index]['source']!),
+                  onTap: () {
+                    // Navigation or further action can be handled here
+                    print("Recipe tapped: ${recipes[index]['title']}");
+                  },
+                );
+              },
+            ))
+      ],
     );
   }
 }

@@ -15,9 +15,11 @@ class RecipeCollection extends StatelessWidget {
   final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
 
   void navigateToRecipePage(BuildContext context, String type) {
-    String routeName =
-        type == 'Saved Recipes' ? 'viewSavedRecipes' : 'viewRejectedRecipes';
-    context.goNamed('viewCollection');
+    String collectionType = type == 'Saved Recipes' ? 'saved' : 'rejected';
+
+    print("collectionType: $collectionType");
+
+    context.go('/recipe-collection/view/$collectionType');
   }
 
   @override

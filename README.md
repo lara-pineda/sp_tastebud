@@ -62,7 +62,6 @@ sp_tastebud/
 -   substitute recipe
 
 MINOR STUFF
--   navigation change color
 -   view recipe details polish styling
 -   dialog styling
 -   move save changes button for ingredient mgmt and user profile

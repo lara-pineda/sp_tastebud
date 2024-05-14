@@ -17,10 +17,14 @@ class AppBottomNavBar extends StatelessWidget {
       required this.appName2,
       required this.navigationShell});
 
-  void _goBranch(int index) {
+  void _goBranch(BuildContext context, int index) {
     // context.read<AppNavigationBloc>().add(TabChange(tabIndex: index));
     print(
         "Tab tapped: $index"); // Add debug statement to check if this method is called
+
+    // Dispatch the TabChange event to update the state
+    context.read<AppNavigationBloc>().add(TabChange(tabIndex: index));
+
     navigationShell.goBranch(
       index,
       // A common pattern when using bottom navigation bars is to support
@@ -98,7 +102,7 @@ class AppBottomNavBar extends StatelessWidget {
                 selectedItemColor: '#45B5B4'.toColor(),
                 unselectedItemColor: '#ECAC70'.toColor(),
                 // showUnselectedLabels: false,
-                onTap: _goBranch,
+                onTap: (index) => _goBranch(context, index),
               ));
         });
   }
