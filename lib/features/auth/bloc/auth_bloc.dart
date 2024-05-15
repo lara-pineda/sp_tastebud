@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:equatable/equatable.dart';
+import '../data/preferences_service.dart';
 import '../data/user_repository.dart';
 
 part 'auth_event.dart';
@@ -8,11 +9,14 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserRepository _userRepository;
+  final PreferencesService _preferencesService;
 
-  AuthBloc(this._userRepository) : super(AuthInitial()) {
+  AuthBloc(this._userRepository, this._preferencesService)
+      : super(AuthInitial()) {
     on<LoginRequested>(_onLoginRequested);
     on<SignUpRequested>(_onSignUpRequested);
     on<CheckLoginStatus>(_onCheckLoginStatus);
+    on<LogoutRequested>(_onLogoutRequested);
   }
 
   Future<void> _onSignUpRequested(
@@ -53,6 +57,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else {
         emit(AuthFailure("An unknown error occurred,"));
       }
+    } catch (e) {
+      emit(AuthFailure("An unknown error occurred"));
+    }
+  }
+
+  Future<void> _onLogoutRequested(
+      LogoutRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      await _userRepository.signOut();
+      await _preferencesService
+          .setRememberMe(false); // Clear remember me preference
+      emit(AuthFailure("User not logged in"));
     } catch (e) {
       emit(AuthFailure("An unknown error occurred"));
     }

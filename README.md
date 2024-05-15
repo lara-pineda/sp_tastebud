@@ -57,8 +57,9 @@ sp_tastebud/
 
 ## Features TODO
 
--   check if wifi is on
 -   add ingredients to query
+-   finalize options for ingredients
+-   dialog styling + state for checkboxes
 -   substitute recipe
 -   if nasa rejected recipes, di na dapat lumabas sa search results
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients
@@ -66,16 +67,13 @@ sp_tastebud/
 MINOR STUFF
 -   implement debounce on recipe collection
 -   nagrerefresh page sa recipe collection pag nagreremove, wag na sana refresh, updatelist na lang
--   dialog styling + state for checkboxes
--   move save changes button for ingredient mgmt and user profile
--   logout button
-- 
--   finalize options for ingredients
+-   check if wifi is on
 -   add more filters
 -   forgot password
 -   confirmation windows for:
     - saving changes when switching tabs
     - rejecting a favorited recipe
+-   center title sa view recipe ui on scroll up
 
 SUGGESTIONS
 -   manage equipments

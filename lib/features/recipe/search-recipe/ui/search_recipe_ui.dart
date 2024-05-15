@@ -1,3 +1,4 @@
+import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +10,7 @@ import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
+import 'package:sp_tastebud/core/themes/app_palette.dart';
 import '../bloc/search_recipe_bloc.dart';
 import 'dart:async';
 
@@ -250,7 +252,26 @@ class _SearchRecipeState extends State<SearchRecipe> {
             _loadMoreRecipes(searchKey);
           },
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: (10.toVHLength).toPX()),
+        Container(
+          width:
+              double.infinity, // Ensures the container takes up the full width
+          padding: EdgeInsets.symmetric(
+              horizontal: 22.0), // Adjust padding as needed
+          child: Text(
+            'Recommended\nfor You',
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 30,
+                fontWeight: FontWeight.w700,
+                color: AppColors.purpleColor),
+            textAlign: TextAlign.left,
+            softWrap: true,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+        ),
+        SizedBox(height: (10.toVHLength).toPX()),
         if (_recipes.isEmpty && !_isLoading && _initialLoadComplete)
           Expanded(
               child: Padding(
@@ -296,7 +317,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
                         recipeUri: recipe['uri'],
                       ),
                     );
-                  }))
+                  })),
+        SizedBox(height: (40.toVHLength).toPX()),
       ]),
     );
   }

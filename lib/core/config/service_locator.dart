@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 //BLoCs
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
+import 'package:sp_tastebud/features/auth/data/preferences_service.dart';
 import 'package:sp_tastebud/features/recipe/view-recipe/bloc/view_recipe_bloc.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
@@ -59,8 +60,12 @@ void setupServices() {
   // getIt.registerFactory<RecipeCollectionRepository>(
   //     () => RecipeCollectionRepository(getIt<RecipeCollectionService>()));
 
+  // Register PreferencesService
+  getIt.registerLazySingleton<PreferencesService>(() => PreferencesService());
+
   // Register BLoCs
-  getIt.registerFactory<AuthBloc>(() => AuthBloc(getIt<UserRepository>()));
+  getIt.registerFactory<AuthBloc>(
+      () => AuthBloc(getIt<UserRepository>(), getIt<PreferencesService>()));
   getIt.registerFactory<UserProfileBloc>(
       () => UserProfileBloc(getIt<UserProfileRepository>()));
   getIt.registerFactory<IngredientsBloc>(

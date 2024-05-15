@@ -3,7 +3,7 @@ import 'package:dimension/dimension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
@@ -87,6 +87,11 @@ class _UserProfileState extends State<UserProfile> {
     }
 
     return selectedOptions;
+  }
+
+  void _logout(BuildContext context) {
+    _authBloc.add(LogoutRequested());
+    context.go('/');
   }
 
   // handler for save button
@@ -259,126 +264,178 @@ class _UserProfileState extends State<UserProfile> {
     selectedMicronutrients =
         mapOptionsToBoolean(state.micronutrients, Options.micronutrients);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                SizedBox(height: (30.toVHLength).toPX()),
-                // Adding a section for the user profile icon and editable email
-                Image.asset(
-                  Assets.imagesDefaultProfile,
-                  width: 150,
-                  height: 150,
-                  fit: BoxFit.contain,
-                ),
-
-                SizedBox(height: (20.toVHLength).toPX()),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
+    return Stack(children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            labelText: 'Email Address',
-                            border: OutlineInputBorder(),
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: _showEditEmailBottomSheet,
-                            ),
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          readOnly: true,
-                        ),
+                      // page title
+                      Text(
+                        'User Profile',
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.purpleColor),
+                        textAlign: TextAlign.left,
+                      ),
+
+                      // logout button on upper right
+                      IconButton(
+                        icon: Icon(Icons.logout),
+                        onPressed: () => _logout(context),
+                        iconSize: 36,
                       ),
                     ],
                   ),
-                ),
 
-                SizedBox(height: (30.toVHLength).toPX()),
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  // Adding a section for the user profile icon and editable email
+                  Image.asset(
+                    Assets.imagesDefaultProfile,
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.contain,
+                  ),
 
-                Text(
-                  'Dietary Preferences',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              labelText: 'Email Address',
+                              border: OutlineInputBorder(),
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: _showEditEmailBottomSheet,
+                              ),
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            readOnly: true,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: (20.toVHLength).toPX()),
-                CheckboxCard(
-                  allChoices: Options.dietaryPreferences,
-                  initialSelections: selectedDietaryPreferences,
-                  onSelectionChanged: _onDietPrefSelectionChanged,
-                ),
-                SizedBox(height: (40.toVHLength).toPX()),
-                Text(
-                  'Allergies',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
+
+                  SizedBox(height: (30.toVHLength).toPX()),
+
+                  Text(
+                    'Dietary Preferences',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.left,
                   ),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: (20.toVHLength).toPX()),
-                CheckboxCard(
-                  allChoices: Options.allergies,
-                  initialSelections: selectedAllergies,
-                  onSelectionChanged: _onAllergiesSelectionChanged,
-                ),
-                SizedBox(height: (40.toVHLength).toPX()),
-                Text(
-                  'Macronutrients',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  CheckboxCard(
+                    allChoices: Options.dietaryPreferences,
+                    initialSelections: selectedDietaryPreferences,
+                    onSelectionChanged: _onDietPrefSelectionChanged,
                   ),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: (20.toVHLength).toPX()),
-                CheckboxCard(
-                  allChoices: Options.macronutrients,
-                  initialSelections: selectedMacronutrients,
-                  onSelectionChanged: _onMacronutrientSelectionChanged,
-                ),
-                SizedBox(height: (40.toVHLength).toPX()),
-                Text(
-                  'Micronutrients',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
+                  SizedBox(height: (40.toVHLength).toPX()),
+                  Text(
+                    'Allergies',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.left,
                   ),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: (20.toVHLength).toPX()),
-                CheckboxCard(
-                  allChoices: Options.micronutrients,
-                  initialSelections: selectedMicronutrients,
-                  onSelectionChanged: _onMicronutrientSelectionChanged,
-                ),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () => _onSaveButtonPressed(context),
-            child: Text('Save Changes'),
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  CheckboxCard(
+                    allChoices: Options.allergies,
+                    initialSelections: selectedAllergies,
+                    onSelectionChanged: _onAllergiesSelectionChanged,
+                  ),
+                  SizedBox(height: (40.toVHLength).toPX()),
+                  Text(
+                    'Macronutrients',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  CheckboxCard(
+                    allChoices: Options.macronutrients,
+                    initialSelections: selectedMacronutrients,
+                    onSelectionChanged: _onMacronutrientSelectionChanged,
+                  ),
+                  SizedBox(height: (40.toVHLength).toPX()),
+                  Text(
+                    'Micronutrients',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  CheckboxCard(
+                    allChoices: Options.micronutrients,
+                    initialSelections: selectedMicronutrients,
+                    onSelectionChanged: _onMicronutrientSelectionChanged,
+                  ),
+                  SizedBox(height: (40.toVHLength).toPX()),
+                ],
               ),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             ),
-          ),
-        ],
+            // ElevatedButton(
+            //   onPressed: () => _onSaveButtonPressed(context),
+            //   child: Text('Save Changes'),
+            //   style: ElevatedButton.styleFrom(
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            //   ),
+            // ),
+          ],
+        ),
       ),
-    );
+
+      // logout button on upper right
+      // Positioned(
+      //   top: 40,
+      //   right: 20,
+      //   child: IconButton(
+      //     icon: Icon(Icons.logout),
+      //     onPressed: () => _logout(context),
+      //   ),
+      // ),
+
+      // save changes button on lower right
+      Positioned(
+        bottom: 20,
+        right: 20,
+        child: FloatingActionButton(
+          onPressed: () => _onSaveButtonPressed(context),
+          backgroundColor: Colors.white,
+          elevation: 4,
+          child: const Icon(
+            Icons.save_outlined,
+            color: Colors.black54,
+          ),
+        ),
+      ),
+    ]);
   }
 }

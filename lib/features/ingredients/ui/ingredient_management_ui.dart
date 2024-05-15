@@ -127,87 +127,103 @@ class _IngredientsState extends State<IngredientManagement> {
     selectedVegetables =
         mapOptionsToBoolean(state.vegetables, Options.vegetables);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                SizedBox(height: (50.toVHLength).toPX()),
-                Text(
-                  'Ingredients',
-                  style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 30,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.purpleColor),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: (20.toVHLength).toPX()),
-                Text(
-                  'Pantry Essentials',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
+    return Stack(children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  SizedBox(height: (50.toVHLength).toPX()),
+                  Text(
+                    'Ingredients',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 30,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.purpleColor),
+                    textAlign: TextAlign.left,
                   ),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: (20.toVHLength).toPX()),
-                CheckboxCard(
-                  allChoices: Options.pantryEssentials,
-                  initialSelections: selectedPantryEssentials,
-                  onSelectionChanged: _onPantryEssentialsSelectionChanged,
-                ),
-                SizedBox(height: (40.toVHLength).toPX()),
-                Text(
-                  'Meat',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  Text(
+                    'Pantry Essentials',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.left,
                   ),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: (20.toVHLength).toPX()),
-                CheckboxCard(
-                  allChoices: Options.meat,
-                  initialSelections: selectedMeat,
-                  onSelectionChanged: _onMeatSelectionChanged,
-                ),
-                SizedBox(height: (40.toVHLength).toPX()),
-                Text(
-                  'Vegetables',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  CheckboxCard(
+                    allChoices: Options.pantryEssentials,
+                    initialSelections: selectedPantryEssentials,
+                    onSelectionChanged: _onPantryEssentialsSelectionChanged,
                   ),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: (20.toVHLength).toPX()),
-                CheckboxCard(
-                  allChoices: Options.vegetables,
-                  initialSelections: selectedVegetables,
-                  onSelectionChanged: _onVegetablesSelectionChanged,
-                ),
-                SizedBox(height: (40.toVHLength).toPX()),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () => _onSaveButtonPressed(context),
-            child: Text('Save Changes'),
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                  SizedBox(height: (40.toVHLength).toPX()),
+                  Text(
+                    'Meat',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  CheckboxCard(
+                    allChoices: Options.meat,
+                    initialSelections: selectedMeat,
+                    onSelectionChanged: _onMeatSelectionChanged,
+                  ),
+                  SizedBox(height: (40.toVHLength).toPX()),
+                  Text(
+                    'Vegetables',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  CheckboxCard(
+                    allChoices: Options.vegetables,
+                    initialSelections: selectedVegetables,
+                    onSelectionChanged: _onVegetablesSelectionChanged,
+                  ),
+                  SizedBox(height: (40.toVHLength).toPX()),
+                ],
               ),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             ),
-          ),
-        ],
+            // ElevatedButton(
+            //   onPressed: () => _onSaveButtonPressed(context),
+            //   child: Text('Save Changes'),
+            //   style: ElevatedButton.styleFrom(
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //     padding: EdgeInsets.symmetric(vertical: 20),
+            //   ),
+            // ),
+          ],
+        ),
       ),
-    );
+      // save changes button on lower right
+      Positioned(
+        bottom: 20,
+        right: 20,
+        child: FloatingActionButton(
+          onPressed: () => _onSaveButtonPressed(context),
+          backgroundColor: Colors.white,
+          elevation: 4,
+          child: const Icon(
+            Icons.save_outlined,
+            color: Colors.black54,
+          ),
+        ),
+      ),
+    ]);
   }
 }
