@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/shared/recipe_card/recipe_card.dart';
 import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
+import '../../../core/themes/app_palette.dart';
 import '../../recipe/search-recipe/bloc/search_recipe_bloc.dart';
 import '../bloc/recipe_collection_bloc.dart';
 
@@ -94,7 +95,18 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
 
     return Column(
       children: [
-        Text('$collectionType Recipes'),
+        SizedBox(height: (50.toVHLength).toPX()),
+        Text(
+          '$collectionType' == 'saved' ? 'Saved Recipes' : 'Rejected Recipes',
+          style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 30,
+              fontWeight: FontWeight.w700,
+              color: AppColors.purpleColor),
+          textAlign: TextAlign.left,
+        ),
+        SizedBox(height: (20.toVHLength).toPX()),
+        // Recipe list
         Expanded(
           child: ListView.builder(
             itemCount: recipes.length,

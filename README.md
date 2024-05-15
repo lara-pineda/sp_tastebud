@@ -63,7 +63,6 @@ sp_tastebud/
 -   if nasa rejected recipes, di na dapat lumabas sa search results
 
 MINOR STUFF
--   notif for save changes
 -   implement debounce on recipe collection
 -   nagrerefresh page sa recipe collection pag nagreremove, wag na sana refresh, updatelist na lang
 -   check if wifi is on
@@ -73,6 +72,8 @@ MINOR STUFF
     - saving changes when switching tabs
     - rejecting a favorited recipe
 -   center title sa view recipe ui on scroll up
+-   no checking if there are actual changes made sa ingredient mgmt and user profile
+-   no notif if save is successful sa ingredient mgmt and user profile
 
 SUGGESTIONS
 -   manage equipments
