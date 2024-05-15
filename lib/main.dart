@@ -42,10 +42,6 @@ class MyApp extends StatelessWidget {
           create: (context) => getIt<IngredientsBloc>(),
           lazy: false,
         ),
-        BlocProvider<IngredientsBloc>(
-          create: (context) => getIt<IngredientsBloc>(),
-          lazy: false,
-        ),
       ],
       child: MaterialApp.router(
         // removes debug tag when running app test
