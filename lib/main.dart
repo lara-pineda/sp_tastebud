@@ -75,3 +75,23 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// class AppRoutes {
+//   static GoRouter get router => GoRouter(
+//         initialLocation: "/",
+//         routes: [
+//           GoRoute(
+//               name: "viewRecipe",
+//               path: "/",
+//               builder: (context, state) {
+//                 return BlocProvider<ViewRecipeBloc>(
+//                     create: (context) => getIt<ViewRecipeBloc>(),
+//                     child: Scaffold(
+//                       body: const ViewRecipe(
+//                         recipeId: '1b0095b7bff243e8a5176a0e5d5043e6',
+//                       ),
+//                     ));
+//               }),
+//         ],
+//       );
+// }

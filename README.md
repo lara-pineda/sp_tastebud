@@ -57,6 +57,7 @@ sp_tastebud/
 
 ## Features TODO
 
+-   check if wifi is on
 -   add ingredients to query
 -   substitute recipe
 -   if nasa rejected recipes, di na dapat lumabas sa search results
@@ -64,12 +65,11 @@ sp_tastebud/
 
 MINOR STUFF
 -   implement debounce on recipe collection
--   view recipe details polish styling
 -   nagrerefresh page sa recipe collection pag nagreremove, wag na sana refresh, updatelist na lang
 -   dialog styling + state for checkboxes
 -   move save changes button for ingredient mgmt and user profile
 -   logout button
--   make user email not editable
+- 
 -   finalize options for ingredients
 -   add more filters
 -   forgot password

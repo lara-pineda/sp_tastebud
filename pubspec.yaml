@@ -108,7 +108,7 @@ flutter:
     - assets/images/StarIcon.svg
     - assets/images/MiniStarIcon.svg
     - assets/images/ImagePlaceholder.png
-    - assets/images/Edamam_Badge.svg
+    - assets/images/Edamam_Badge.png
     - assets/images/savedRecipe.png
     - assets/images/rejectedRecipe.png
     - assets/images/noMatchingRecipe.png

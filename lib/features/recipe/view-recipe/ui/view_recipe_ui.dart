@@ -1,9 +1,17 @@
+import 'dart:convert';
+
+import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/config/assets_path.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:sp_tastebud/core/themes/app_palette.dart';
+import 'package:sp_tastebud/core/utils/capitalize_first_letter.dart';
+import 'package:sp_tastebud/core/config/assets_path.dart';
+import 'package:sp_tastebud/core/utils/load_svg.dart';
 import '../bloc/view_recipe_bloc.dart';
 import '../model/recipe_model.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'info_row.dart';
 
 class ViewRecipe extends StatefulWidget {
   final String recipeId;
@@ -73,11 +81,14 @@ class _ViewRecipeState extends State<ViewRecipe>
             ],
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
-              title: Text(recipe.label ?? 'No Title',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                  )),
+              title: Text(
+                recipe.label ?? 'No Title',
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 16.0,
+                  fontFamily: 'Poppins',
+                ),
+              ),
               background: Image.network(
                 recipe.image ?? '',
                 height: 200,
@@ -87,8 +98,6 @@ class _ViewRecipeState extends State<ViewRecipe>
                   print('Failed to load image: $error');
                   return Image.asset(
                     Assets.imagePlaceholder, // Use a local fallback image
-                    // width: 100,
-                    // height: 100,
                   );
                 },
               ),
@@ -97,9 +106,21 @@ class _ViewRecipeState extends State<ViewRecipe>
         ];
       },
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TabBar(
             controller: _tabController,
+            labelStyle: TextStyle(
+              fontSize: 18.0,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w700,
+            ),
+            labelColor: AppColors.orangeColor,
+            unselectedLabelStyle: TextStyle(
+              fontSize: 16.0,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w400,
+            ),
             tabs: const [
               Tab(text: "Overview"),
               Tab(text: "Ingredients"),
@@ -116,6 +137,21 @@ class _ViewRecipeState extends State<ViewRecipe>
               ],
             ),
           ),
+          SizedBox(height: (20.toVHLength).toPX()),
+          Center(
+            child: Image.asset(
+              Assets.imagesEdamamAttribution,
+              width: 250,
+              errorBuilder: (context, error, stackTrace) {
+                // Print error to console
+                print('Failed to load image: $error');
+                return Image.asset(
+                  Assets.imagePlaceholder, // Use a local fallback image
+                );
+              },
+            ),
+          ),
+          SizedBox(height: (20.toVHLength).toPX()),
         ],
       ),
     );
@@ -123,42 +159,328 @@ class _ViewRecipeState extends State<ViewRecipe>
 
   Widget _buildOverviewTab(Recipe recipe) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          Text('Source: ${recipe.source ?? 'Unknown'}'),
-          Text(
-              'Servings: ${recipe.yield?.toString() ?? 'N/A'} | Calories: ${recipe.calories?.toStringAsFixed(0) ?? 'N/A'}'),
-          Text(
-              'Cuisine Type: ${recipe.cuisineType.join(', ')} | Meal Type: ${recipe.mealType.join(', ')}'),
-          Text('Tags: ${recipe.tags.join(', ')}'),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        child: Column(
+          children: [
+            InfoRow(
+              columns: [
+                Text(
+                  'Source',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.0,
+                    color: AppColors.purpleColor,
+                  ),
+                ),
+                Text(
+                  recipe.source,
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                  ),
+                ),
+              ],
+            ),
+            InfoRow(
+              columns: [
+                Text(
+                  'Servings',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.0,
+                    color: AppColors.purpleColor,
+                  ),
+                ),
+                Text(
+                  recipe.yield.toString(),
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                  ),
+                ),
+              ],
+            ),
+            InfoRow(
+              columns: [
+                Text(
+                  'Calories',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.0,
+                    color: AppColors.purpleColor,
+                  ),
+                ),
+                Text(
+                  recipe.calories.toStringAsFixed(0),
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                  ),
+                  textAlign: TextAlign.end,
+                ),
+              ],
+            ),
+            InfoRow(
+              columns: [
+                Text(
+                  'Cuisine Type',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.0,
+                    color: AppColors.purpleColor,
+                  ),
+                ),
+                Text(
+                  recipe.cuisineType
+                      .map((type) {
+                        return capitalizeFirstLetter(type);
+                      })
+                      .toList()
+                      .join(', '),
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                  ),
+                  textAlign: TextAlign.end,
+                ),
+              ],
+            ),
+            InfoRow(
+              columns: [
+                Text(
+                  'Meal Type',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.0,
+                    color: AppColors.purpleColor,
+                  ),
+                ),
+                Text(
+                  recipe.mealType
+                      .map((type) {
+                        return capitalizeFirstLetter(type);
+                      })
+                      .toList()
+                      .join(', '),
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                  ),
+                  textAlign: TextAlign.end,
+                ),
+              ],
+            ),
+            InfoRow(
+              columns: [
+                Text(
+                  'Tags',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.0,
+                    color: AppColors.purpleColor,
+                  ),
+                ),
+                Text(
+                  recipe.tags.join(', '),
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                  ),
+                  softWrap: true,
+                  overflow: TextOverflow.visible,
+                  maxLines: null,
+                  textAlign: TextAlign.end,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildIngredientsTab(Recipe recipe) {
     return SingleChildScrollView(
+        child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: recipe.ingredientLines.map((line) => Text(line)).toList(),
+        children: recipe.ingredientLines
+            .map((line) => InfoRow(
+                  columns: [
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "> ",
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.0,
+                              color: AppColors.purpleColor,
+                            ),
+                          ),
+                          TextSpan(
+                            text: line,
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ))
+            .toList(),
       ),
-    );
+    ));
   }
 
   Widget _buildNutritionTab(Recipe recipe) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Nutritional Information',
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          ...recipe.totalNutrients.nutrients.entries.map((entry) => Text(
-              '${entry.value.label}: ${entry.value.quantity} ${entry.value.unit}')),
-          ...recipe.totalDaily.nutrients.entries.map((entry) => Text(
-              '${entry.value.label}: ${entry.value.quantity}% of daily needs')),
-          ...recipe.digest.map((digest) => Text(
-              '${digest.label}: ${digest.total.toStringAsFixed(2)} ${digest.unit}')),
+    int servings = recipe.yield ??
+        1; // Get the number of servings, default to 1 if not specified
+
+    Map<String, List<String>> nutrientMap = {};
+
+    // Process totalNutrients entries
+    recipe.totalNutrients.nutrients.entries.forEach((entry) {
+      final String unit =
+          entry.value.unit == 'Âµg' ? '\u00B5g' : entry.value.unit;
+      nutrientMap[entry.value.label] = [
+        '${(entry.value.quantity / servings).toStringAsFixed(2)} $unit',
+        '',
+      ];
+    });
+
+    // Process totalDaily entries
+    recipe.totalDaily.nutrients.entries.forEach((entry) {
+      if (nutrientMap.containsKey(entry.value.label)) {
+        nutrientMap[entry.value.label]![1] =
+            '${(entry.value.quantity / servings).toStringAsFixed(2)}%';
+      } else {
+        nutrientMap[entry.value.label] = [
+          '',
+          '${(entry.value.quantity / servings).toStringAsFixed(2)}%',
+        ];
+      }
+    });
+
+    List<Widget> rows = [];
+
+    // Add the header row
+    rows.add(
+      InfoRow(
+        columns: [
+          Text(
+            'Per Serving',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600,
+              fontSize: 16.0,
+              color: AppColors.purpleColor,
+            ),
+          ),
+          Text(
+            'Amount',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600,
+              fontSize: 16.0,
+              color: AppColors.purpleColor,
+            ),
+            textAlign: TextAlign.end,
+          ),
+          Text(
+            'RDA',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600,
+              fontSize: 16.0,
+              color: AppColors.purpleColor,
+            ),
+            textAlign: TextAlign.end,
+          ),
         ],
+      ),
+    );
+
+    // Create rows from nutrientMap
+    nutrientMap.forEach((label, values) {
+      rows.add(
+        InfoRow(
+          columns: [
+            Text(
+              label,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w600,
+                fontSize: 16.0,
+                color: AppColors.purpleColor,
+              ),
+            ),
+            ...values.map((value) => Text(
+                  value == '' ? '-' : value,
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                  ),
+                  softWrap: true,
+                  overflow: TextOverflow.visible,
+                  maxLines: null,
+                  textAlign: TextAlign.end,
+                )),
+          ],
+        ),
+      );
+    });
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Nutritional Information',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  color: AppColors.purpleColor,
+                )),
+            SizedBox(height: (20.toVHLength).toPX()),
+            ...rows,
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                'Percent Daily Values are based on a 2,000 calorie diet. Your Daily Values may be higher or lower depending on your calorie intake.',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black54,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -10,7 +10,7 @@ class Assets {
   static const String imagesLandingFruits = 'assets/images/LandingFruits.jpg';
   static const String imagesMiniStarIcon = 'assets/images/MiniStarIcon.svg';
   static const String imagesEdamamAttribution =
-      'assets/images/Edamam_Badge.svg';
+      'assets/images/Edamam_Badge.png';
   static const String imagesStarIcon = 'assets/images/StarIcon.svg';
 
   static const String savedRecipe = 'assets/images/savedRecipe.png';

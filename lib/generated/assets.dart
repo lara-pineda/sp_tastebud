@@ -103,6 +103,8 @@ class Assets {
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';
   static const String themesAppTypography =
       'lib/core/themes/app_typography.dart';
+  static const String uiInfoRow =
+      'lib/features/recipe/view-recipe/ui/info_row.dart';
   static const String uiIngredientManagementUi =
       'lib/features/ingredients/ui/ingredient_management_ui.dart';
   static const String uiLoginUi = 'lib/features/auth/ui/login_ui.dart';
@@ -122,11 +124,14 @@ class Assets {
       'lib/features/recipe-collection/ui/view_collection_page.dart';
   static const String uiViewRecipeUi =
       'lib/features/recipe/view-recipe/ui/view_recipe_ui.dart';
+  static const String utilsCapitalizeFirstLetter =
+      'lib/core/utils/capitalize_first_letter.dart';
   static const String utilsExtractRecipeId =
       'lib/core/utils/extract_recipe_id.dart';
   static const String utilsGetCurrentRoute =
       'lib/core/utils/get_current_route.dart';
   static const String utilsHexToColor = 'lib/core/utils/hex_to_color.dart';
+  static const String utilsLoadSvg = 'lib/core/utils/load_svg.dart';
   static const String viewRecipeIngredientSubstitutionApi =
       'lib/features/recipe/view-recipe/ingredient_substitution_api.dart';
 }
