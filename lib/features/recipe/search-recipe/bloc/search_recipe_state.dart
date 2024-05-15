@@ -4,66 +4,18 @@ abstract class SearchRecipeState extends Equatable {
   const SearchRecipeState();
 
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [];
 }
 
 class SearchRecipeInitial extends SearchRecipeState {}
 
-class SearchRecipeLoading extends SearchRecipeState {
-  const SearchRecipeLoading();
-}
+class SearchRecipeLoaded extends SearchRecipeState {
+  final List<Map<String, dynamic>> recipes;
 
-class SearchRecipeLoaded extends UserProfileState {
-  SearchRecipeLoaded();
-  // final List dietaryPreferences;
-  // final List allergies;
-  // final List macronutrients;
-  // final List micronutrients;
-  //
-  // UserProfileLoaded(this.dietaryPreferences, this.allergies,
-  //     this.macronutrients, this.micronutrients);
-}
-
-class SearchRecipeError extends SearchRecipeState {
-  final String message;
-
-  const SearchRecipeError(this.message);
+  SearchRecipeLoaded(this.recipes);
 
   @override
-  List<Object?> get props => [message];
-}
-
-class FavoritesInitial extends SearchRecipeState {}
-
-class FavoritesLoading extends SearchRecipeState {
-  const FavoritesLoading();
-}
-
-class FavoritesAdded extends SearchRecipeState {
-  final String uri;
-
-  const FavoritesAdded(this.uri);
-
-  @override
-  List<Object?> get props => [uri];
-}
-
-class FavoritesRemoved extends SearchRecipeState {
-  final String uri;
-
-  const FavoritesRemoved(this.uri);
-
-  @override
-  List<Object?> get props => [uri];
-}
-
-class FavoritesError extends SearchRecipeState {
-  final String message;
-
-  const FavoritesError(this.message);
-
-  @override
-  List<Object?> get props => [message];
+  List<Object> get props => [recipes];
 }
 
 class RecipeDetailState extends SearchRecipeState {
@@ -73,4 +25,33 @@ class RecipeDetailState extends SearchRecipeState {
 
   @override
   List<Object> get props => [recipe];
+}
+
+class FavoritesLoading extends SearchRecipeState {}
+
+class FavoritesAdded extends SearchRecipeState {
+  final String recipeUri;
+
+  FavoritesAdded(this.recipeUri);
+
+  @override
+  List<Object> get props => [recipeUri];
+}
+
+class FavoritesRemoved extends SearchRecipeState {
+  final String recipeUri;
+
+  FavoritesRemoved(this.recipeUri);
+
+  @override
+  List<Object> get props => [recipeUri];
+}
+
+class FavoritesError extends SearchRecipeState {
+  final String error;
+
+  FavoritesError(this.error);
+
+  @override
+  List<Object> get props => [error];
 }

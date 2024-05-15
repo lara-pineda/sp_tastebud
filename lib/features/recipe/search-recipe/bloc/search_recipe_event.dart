@@ -4,7 +4,7 @@ abstract class SearchRecipeEvent extends Equatable {
   const SearchRecipeEvent();
 
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [];
 }
 
 class AddToFavorites extends SearchRecipeEvent {
@@ -14,23 +14,31 @@ class AddToFavorites extends SearchRecipeEvent {
   final String recipeId;
   final String recipeUri;
 
-  const AddToFavorites(this.recipeName, this.image, this.sourceWebsite,
-      this.recipeId, this.recipeUri);
-
-  @override
-  List<Object> get props => [recipeName, image, recipeId];
+  AddToFavorites(this.recipeName, this.image, this.sourceWebsite, this.recipeId,
+      this.recipeUri);
 }
 
 class RemoveFromFavorites extends SearchRecipeEvent {
   final String recipeUri;
 
-  const RemoveFromFavorites(this.recipeUri);
-
-  @override
-  List<Object> get props => [recipeUri];
+  RemoveFromFavorites(this.recipeUri);
 }
 
 class RecipeSelected extends SearchRecipeEvent {
   final Map<String, dynamic> recipe;
-  const RecipeSelected(this.recipe);
+
+  RecipeSelected(this.recipe);
+}
+
+class UpdateRecipeFavorites extends SearchRecipeEvent {
+  final String recipeUri;
+  final bool isFavorite;
+
+  UpdateRecipeFavorites(this.recipeUri, this.isFavorite);
+}
+
+class UpdateRecipeFavoritesFromCollection extends SearchRecipeEvent {
+  final List<Map<String, dynamic>> recipes;
+
+  UpdateRecipeFavoritesFromCollection(this.recipes);
 }

@@ -4,7 +4,7 @@ abstract class RecipeCollectionState extends Equatable {
   const RecipeCollectionState();
 
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [];
 }
 
 class RecipeCollectionInitial extends RecipeCollectionState {}
@@ -14,7 +14,7 @@ class RecipeCollectionLoading extends RecipeCollectionState {}
 class SavedRecipesLoaded extends RecipeCollectionState {
   final List<Map<String, dynamic>> savedRecipes;
 
-  const SavedRecipesLoaded(this.savedRecipes);
+  SavedRecipesLoaded(this.savedRecipes);
 
   @override
   List<Object> get props => [savedRecipes];
@@ -23,7 +23,7 @@ class SavedRecipesLoaded extends RecipeCollectionState {
 class RejectedRecipesLoaded extends RecipeCollectionState {
   final List<Map<String, dynamic>> rejectedRecipes;
 
-  const RejectedRecipesLoaded(this.rejectedRecipes);
+  RejectedRecipesLoaded(this.rejectedRecipes);
 
   @override
   List<Object> get props => [rejectedRecipes];
@@ -32,7 +32,7 @@ class RejectedRecipesLoaded extends RecipeCollectionState {
 class RecipeCollectionError extends RecipeCollectionState {
   final String error;
 
-  const RecipeCollectionError(this.error);
+  RecipeCollectionError(this.error);
 
   @override
   List<Object> get props => [error];

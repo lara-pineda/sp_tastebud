@@ -66,7 +66,7 @@ void setupServices() {
   getIt.registerFactory<IngredientsBloc>(
       () => IngredientsBloc(getIt<IngredientsRepository>()));
   getIt.registerFactory<SearchRecipeBloc>(() => SearchRecipeBloc(
-      getIt<SearchRecipeRepository>(), getIt<UserProfileBloc>()));
+      getIt<SearchRecipeRepository>(), getIt<RecipeCollectionBloc>()));
   getIt.registerFactory<ViewRecipeBloc>(
       () => ViewRecipeBloc(getIt<ViewRecipeRepository>()));
   getIt.registerLazySingleton<RecipeCollectionBloc>(

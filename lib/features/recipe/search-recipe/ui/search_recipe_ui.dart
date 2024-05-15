@@ -9,7 +9,8 @@ import 'package:sp_tastebud/features/recipe/search-recipe/recipe_search_api.dart
 import 'package:sp_tastebud/core/config/service_locator.dart';
 import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
-import '../../../user-profile/bloc/user_profile_bloc.dart';
+import 'package:sp_tastebud/core/config/assets_path.dart';
+import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import '../bloc/search_recipe_bloc.dart';
 
 class SearchRecipe extends StatefulWidget {
@@ -35,6 +36,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
   List<dynamic> _recipes = [];
   bool _isLoading = false;
+  bool _initialLoadComplete = false; // Flag to track initial load completion
   String _searchKey = '';
   String _lastSearchKey = '';
 
@@ -73,16 +75,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
   }
 
   void _initializeQueriesAndLoadRecipes(UserProfileLoaded state) {
-    // setState(() {
-    //   _healthQuery = buildHealthTags(state.dietaryPreferences) +
-    //       buildHealthTags(state.allergies);
-    //   _macroQuery = mapNutrients(state.macronutrients,
-    //       Options.macronutrients, Options.nutrientTag1);
-    //   _microQuery = mapNutrients(state.micronutrients,
-    //       Options.micronutrients, Options.nutrientTag2);
-    // });
-
-    // Building the queries based on the loaded user profile state
     _healthQuery = buildHealthTags(state.dietaryPreferences) +
         buildHealthTags(state.allergies);
     _macroQuery = mapNutrients(
@@ -91,11 +83,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
         state.micronutrients, Options.micronutrients, Options.nutrientTag2);
 
     print(_healthQuery + _microQuery + _macroQuery);
-
-    // Loading the first set of recipes
-    // _loadMoreRecipes(_searchKey);
-    // Only load recipes if the user explicitly performs an action or if it's necessary upon initial load
-    // Consider triggering the initial recipe load with a user action or a different lifecycle method
   }
 
   // Call the recipe search api
@@ -109,7 +96,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
       _lastSearchKey = searchKey; // Update the last search key
     }
 
-    // setState(() => _isLoading = true);
     _isLoading = true;
 
     try {
@@ -124,15 +110,17 @@ class _SearchRecipeState extends State<SearchRecipe> {
       print(newRecipes);
 
       if (mounted) {
-        if (newRecipes.isNotEmpty) {
-          setState(() {
+        setState(() {
+          if (newRecipes.isNotEmpty) {
             _recipes.addAll(newRecipes);
-          });
-          // Ensure to turn off the loading indicator
+            // _recipes = [];
+          } else {
+            print("SEARCH RESULTS LIST EMPTY!");
+            _recipes = [];
+          }
           _isLoading = false;
-        } else {
-          print("SEARCH RESULTS LIST EMPTY!");
-        }
+          _initialLoadComplete = true; // Mark initial load as complete
+        });
       }
     } catch (e) {
       print('Error: $e');
@@ -140,6 +128,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
       if (mounted) {
         setState(() {
           _isLoading = false;
+          _initialLoadComplete = true; // Mark initial load as complete
         });
       }
     }
@@ -203,8 +192,9 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
   Widget _buildSearchRecipeUI(UserProfileLoaded state) {
     // Check to prevent multiple initial loads
-    if (_recipes.isEmpty) {
+    if (_recipes.isEmpty && !_isLoading && !_initialLoadComplete) {
       print('initialize recipeee');
+      _recipes.clear();
       _initializeQueriesAndLoadRecipes(state);
     }
     return _buildRecipeList();
@@ -216,13 +206,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
     // print(state.allergies);
     // print(state.macronutrients);
     // print(state.micronutrients);
-
-    // String healthQuery = buildHealthTags(state.dietaryPreferences) +
-    //     buildHealthTags(state.allergies);
-    // String macroQuery = mapNutrients(
-    //     state.macronutrients, Options.macronutrients, Options.nutrientTag1);
-    // String microQuery = mapNutrients(
-    //     state.micronutrients, Options.micronutrients, Options.nutrientTag2);
 
     return Center(
       child: Column(children: <Widget>[
@@ -236,7 +219,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
           width: (MediaQuery.of(context).size.width / 6) * 4.5,
           child: ElevatedButton(
             onPressed: () {
-              openDialog(context, "Sample Title", "Lorem ipsum dolor sit amet");
+              openDialog(context, "Sample Title", "Lorem ipsum dolor sit amet",
+                  onConfirm: () {});
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: '#F06F6F'.toColor(),
@@ -251,36 +235,46 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
         const SizedBox(height: 20),
 
-        // search results
-        Expanded(
-          child: ListView.builder(
-            itemCount: _recipes.length + 1, // Add one for loading indicator
-            itemBuilder: (context, index) {
-              if (index >= _recipes.length) {
-                if (!_isLoading) {
-                  _loadMoreRecipes(
-                      _searchKey); // Load more at the end of the list
+        // Display "No Matching Recipes" image if no results and initial load complete
+        if (_recipes.isEmpty && !_isLoading && _initialLoadComplete)
+          Expanded(
+              child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Center(
+              child: Image.asset(Assets.noMatchingRecipe),
+            ),
+          ))
+        else
+          // search results
+          Expanded(
+            child: ListView.builder(
+              itemCount: _recipes.length + 1, // Add one for loading indicator
+              itemBuilder: (context, index) {
+                if (index >= _recipes.length) {
+                  if (!_isLoading) {
+                    _loadMoreRecipes(
+                        _searchKey); // Load more at the end of the list
+                  }
+                  return Center(child: CircularProgressIndicator());
                 }
-                return Center(child: CircularProgressIndicator());
-              }
-              final recipe = _recipes[index];
-              return GestureDetector(
-                onTap: () {
-                  // Get the recipe data as a Map or directly pass the Recipe object if serialized
-                  final recipeId = extractRecipeIdUsingRegExp(recipe['uri']);
-                  context.goNamed('viewRecipe',
-                      pathParameters: {'recipeId': recipeId});
-                },
-                child: RecipeCard(
-                  recipeName: recipe['label'],
-                  imageUrl: recipe['images']['THUMBNAIL']['url'],
-                  sourceWebsite: recipe['source'],
-                  recipeUri: recipe['uri'],
-                ),
-              );
-            },
-          ),
-        )
+                final recipe = _recipes[index];
+                return GestureDetector(
+                  onTap: () {
+                    // Get the recipe data as a Map or directly pass the Recipe object if serialized
+                    final recipeId = extractRecipeIdUsingRegExp(recipe['uri']);
+                    context.goNamed('viewRecipe',
+                        pathParameters: {'recipeId': recipeId});
+                  },
+                  child: RecipeCard(
+                    recipeName: recipe['label'],
+                    imageUrl: recipe['images']['THUMBNAIL']['url'],
+                    sourceWebsite: recipe['source'],
+                    recipeUri: recipe['uri'],
+                  ),
+                );
+              },
+            ),
+          )
       ]),
     );
   }

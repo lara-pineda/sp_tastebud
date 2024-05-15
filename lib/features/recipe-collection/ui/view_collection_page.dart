@@ -29,12 +29,6 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
     _fetchRecipes();
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   _fetchRecipes();
-  // }
-
   void _fetchRecipes() {
     print(widget.collectionType);
     // Dispatch FetchSavedRecipes or FetchRejectedRecipes event based on collectionType
@@ -49,6 +43,12 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
     }
   }
 
+  // telling search recipe bloc to update its state
+  void _handleRemoveFromFavorites(String recipeUri) {
+    _searchRecipeBloc.add(UpdateRecipeFavorites(recipeUri, false));
+    _fetchRecipes(); // Refetch recipes when a favorite is removed
+  }
+
   @override
   Widget build(BuildContext context) {
     print('inside view collection page');
@@ -58,7 +58,6 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Removed from recipe collection!")),
           );
-          _fetchRecipes(); // Refetch recipes when a favorite is removed
         }
       },
       child: BlocBuilder<RecipeCollectionBloc, RecipeCollectionState>(
@@ -80,11 +79,6 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
             print('last statement');
             return Container();
           }
-          // } else if (state is RecipeCollectionError) {
-          //   return Center(child: Text(state.message));
-          // } else {
-          //   return Center(child: CircularProgressIndicator());
-          // }
         },
       ),
     );
@@ -106,7 +100,6 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
                 return GestureDetector(
                   onTap: () {
                     print("Recipe tapped: ${recipe['recipeName']}");
-                    // Get the recipe data as a Map or directly pass the Recipe object if serialized
                     final recipeId =
                         extractRecipeIdUsingRegExp(recipe['recipeUri']);
                     context.goNamed('viewRecipeFromCollection',
@@ -120,6 +113,8 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
                     imageUrl: recipe['image']!,
                     sourceWebsite: recipe['source']!,
                     recipeUri: recipe['recipeUri'],
+                    onRemoveFromFavorites: () =>
+                        _handleRemoveFromFavorites(recipe['recipeUri']),
                   ),
                 );
               },

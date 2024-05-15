@@ -65,12 +65,17 @@ MINOR STUFF
 -   view recipe details polish styling
 -   dialog styling + state for checkboxes
 -   move save changes button for ingredient mgmt and user profile
--   page for empty search results
 -   logout button
 -   make user email not editable
 -   finalize options for ingredients
 -   add more filters
 -   forgot password
+-   confirmation windows for:
+    - saving changes when switching tabs
+    - removing saved recipe from collection
+    - restoring rejected recipe
+    - adding to rejected recipe
+    - rejecting a favorited recipe
 
 SUGGESTIONS
 -   manage equipments

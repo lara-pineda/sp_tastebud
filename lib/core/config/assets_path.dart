@@ -16,6 +16,7 @@ class Assets {
 
   static const String savedRecipe = 'assets/images/savedRecipe.png';
   static const String rejectedRecipe = 'assets/images/rejectedRecipe.png';
+  static const String noMatchingRecipe = 'assets/images/noMatchingRecipe.png';
 }
 
 // USAGE

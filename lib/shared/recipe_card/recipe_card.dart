@@ -6,12 +6,14 @@ import 'package:sp_tastebud/features/recipe/search-recipe/bloc/search_recipe_blo
 import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
 
 import '../../features/recipe-collection/data/recipe_collection_repository.dart';
+import '../custom_dialog.dart';
 
 class RecipeCard extends StatefulWidget {
   final String recipeName;
   final String imageUrl;
   final String sourceWebsite;
   final String recipeUri;
+  final VoidCallback? onRemoveFromFavorites;
 
   const RecipeCard({
     super.key,
@@ -19,6 +21,7 @@ class RecipeCard extends StatefulWidget {
     required this.imageUrl,
     required this.sourceWebsite,
     required this.recipeUri,
+    this.onRemoveFromFavorites,
   });
 
   @override
@@ -41,9 +44,48 @@ class _RecipeCardState extends State<RecipeCard> {
         GetIt.instance<RecipeCollectionRepository>();
     final isFavorite =
         await recipeCollectionRepository.isRecipeInFavorites(recipeId);
-    setState(() {
-      isInFavorites = isFavorite;
-    });
+    if (mounted) {
+      setState(() {
+        isInFavorites = isFavorite;
+      });
+    }
+  }
+
+  void _handleFavoriteToggle(BuildContext context) {
+    final action = isInFavorites
+        ? 'remove the selected item from'
+        : 'add the selected item to';
+    final confirmationMessage =
+        'Are you sure you want to $action your saved recipes collection?';
+
+    openDialog(
+      context,
+      'Confirmation',
+      confirmationMessage,
+      onConfirm: () {
+        setState(() {
+          isInFavorites = !isInFavorites; // Toggle favorite state
+        });
+        if (isInFavorites) {
+          context.read<SearchRecipeBloc>().add(AddToFavorites(
+              widget.recipeName,
+              widget.imageUrl,
+              widget.sourceWebsite,
+              extractRecipeIdUsingRegExp(widget.recipeUri),
+              widget.recipeUri));
+        } else {
+          print('not in favorites');
+          if (widget.onRemoveFromFavorites != null) {
+            widget.onRemoveFromFavorites!();
+          }
+          context.read<SearchRecipeBloc>().add(RemoveFromFavorites(
+              extractRecipeIdUsingRegExp(widget.recipeUri)));
+          // Ensure UpdateRecipeFavorites is called immediately after removal
+          context.read<SearchRecipeBloc>().add(UpdateRecipeFavorites(
+              extractRecipeIdUsingRegExp(widget.recipeUri), false));
+        }
+      },
+    );
   }
 
   @override
@@ -127,24 +169,7 @@ class _RecipeCardState extends State<RecipeCard> {
             bottom: 8,
             right: 8,
             child: GestureDetector(
-              // Handle click action for adding to favorites
-              onTap: () {
-                setState(() {
-                  isInFavorites = !isInFavorites; // Toggle favorite state
-                });
-                if (isInFavorites) {
-                  context.read<SearchRecipeBloc>().add(AddToFavorites(
-                      widget.recipeName,
-                      widget.imageUrl,
-                      widget.sourceWebsite,
-                      extractRecipeIdUsingRegExp(widget.recipeUri),
-                      widget.recipeUri));
-                } else {
-                  // handle removing from favorites
-                  context.read<SearchRecipeBloc>().add(RemoveFromFavorites(
-                      extractRecipeIdUsingRegExp(widget.recipeUri)));
-                }
-              },
+              onTap: () => _handleFavoriteToggle(context),
               child: Icon(
                 isInFavorites ? Icons.favorite : Icons.favorite_border,
                 color: Colors.red,
