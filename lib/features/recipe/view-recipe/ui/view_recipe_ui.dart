@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/config/assets_path.dart';
 import '../bloc/view_recipe_bloc.dart';
 import '../model/recipe_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -52,11 +53,9 @@ class _ViewRecipeState extends State<ViewRecipe>
   }
 
   Widget _buildRecipePage(Map<String, dynamic> recipeData) {
+    // print(recipeData);
     // Convert the map to a Recipe object right here within the method
-    Recipe recipe = Recipe.fromJson(recipeData);
-
-    print(recipe.image);
-    print(recipe.images);
+    Recipe recipe = Recipe.fromJson(recipeData['recipe']);
 
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -81,10 +80,17 @@ class _ViewRecipeState extends State<ViewRecipe>
                   )),
               background: Image.network(
                 recipe.image ?? '',
-                // width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
+                errorBuilder: (context, error, stackTrace) {
+                  // Print error to console
+                  print('Failed to load image: $error');
+                  return Image.asset(
+                    Assets.imagePlaceholder, // Use a local fallback image
+                    // width: 100,
+                    // height: 100,
+                  );
+                },
               ),
             ),
           ),
@@ -117,22 +123,20 @@ class _ViewRecipeState extends State<ViewRecipe>
 
   Widget _buildOverviewTab(Recipe recipe) {
     return SingleChildScrollView(
-        child: Column(
-      children: [
-        Text('Source: ${recipe.source}'),
-        Text(
-            'Servings: ${recipe.yield} | Calories: ${recipe.calories.toStringAsFixed(0)}'),
-        Text(
-            'Cuisine Type: ${recipe.cuisineType.join(', ')} | Meal Type: ${recipe.mealType.join(', ')}'),
-        Text('Tags: ${recipe.tags.join(', ')}'),
-      ],
-    ));
+      child: Column(
+        children: [
+          Text('Source: ${recipe.source ?? 'Unknown'}'),
+          Text(
+              'Servings: ${recipe.yield?.toString() ?? 'N/A'} | Calories: ${recipe.calories?.toStringAsFixed(0) ?? 'N/A'}'),
+          Text(
+              'Cuisine Type: ${recipe.cuisineType.join(', ')} | Meal Type: ${recipe.mealType.join(', ')}'),
+          Text('Tags: ${recipe.tags.join(', ')}'),
+        ],
+      ),
+    );
   }
 
   Widget _buildIngredientsTab(Recipe recipe) {
-    // return ListView(
-    //   children: recipe.ingredientLines.map((line) => ListTile(title: Text(line))).toList(),
-    // );
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,13 +146,6 @@ class _ViewRecipeState extends State<ViewRecipe>
   }
 
   Widget _buildNutritionTab(Recipe recipe) {
-    // return ListView(
-    //   children: recipe.totalNutrients.nutrients.entries.map((entry) =>
-    //       ListTile(
-    //           title: Text('${entry.value.label}: ${entry.value.quantity} ${entry.value.unit}')
-    //       )
-    //   ).toList(),
-    // );
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

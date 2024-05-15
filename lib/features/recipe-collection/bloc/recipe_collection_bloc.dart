@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:sp_tastebud/features/recipe-collection/data/recipe_collection_repository.dart';

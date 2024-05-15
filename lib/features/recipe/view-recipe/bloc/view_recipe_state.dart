@@ -31,6 +31,8 @@ class RejectedError extends ViewRecipeState {
   List<Object?> get props => [message];
 }
 
+class RecipeInitial extends ViewRecipeState {}
+
 // State to indicate loading
 class RecipeLoading extends ViewRecipeState {}
 

@@ -60,8 +60,10 @@ sp_tastebud/
 -   add ingredients to query
 -   substitute recipe
 -   if nasa rejected recipes, di na dapat lumabas sa search results
+-   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients
 
 MINOR STUFF
+-   implement debounce on recipe collection
 -   view recipe details polish styling
 -   nagrerefresh page sa recipe collection pag nagreremove, wag na sana refresh, updatelist na lang
 -   dialog styling + state for checkboxes

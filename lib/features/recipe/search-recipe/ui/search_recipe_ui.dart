@@ -10,6 +10,7 @@ import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import '../bloc/search_recipe_bloc.dart';
+import 'dart:async';
 
 class SearchRecipe extends StatefulWidget {
   const SearchRecipe({super.key});
@@ -19,13 +20,11 @@ class SearchRecipe extends StatefulWidget {
 }
 
 class _SearchRecipeState extends State<SearchRecipe> {
-  // used for fetching user details
   List<bool> selectedDietaryPreferences = [];
   List<bool> selectedAllergies = [];
   List<bool> selectedMacronutrients = [];
   List<bool> selectedMicronutrients = [];
 
-  // store query parameters
   String _healthQuery = '';
   String _macroQuery = '';
   String _microQuery = '';
@@ -34,9 +33,11 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
   List<dynamic> _recipes = [];
   bool _isLoading = false;
-  bool _initialLoadComplete = false; // Flag to track initial load completion
-  String? _nextUrl; // Initialize _nextUrl as null
+  bool _initialLoadComplete = false;
+  String? _nextUrl;
   String _searchKey = '';
+
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -44,14 +45,11 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
     _searchController.addListener(_onSearchChanged);
 
-    // Listen to the user profile loaded state
-    // addPostFrameCallback to defer actions until after the build phase completes
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userProfileBloc = getIt<UserProfileBloc>();
       if (userProfileBloc.state is UserProfileLoaded) {
         _initializeQueriesAndLoadRecipes(
             userProfileBloc.state as UserProfileLoaded);
-        // Ensure the searchKey or initial parameters are set before calling
         _loadMoreRecipes('');
       }
     });
@@ -61,12 +59,19 @@ class _SearchRecipeState extends State<SearchRecipe> {
   void dispose() {
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
   void _onSearchChanged() {
-    setState(() {
-      _searchKey = _searchController.text;
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      setState(() {
+        _searchKey = _searchController.text;
+        _recipes.clear();
+        _nextUrl = null;
+        _loadMoreRecipes(_searchKey);
+      });
     });
   }
 
@@ -81,11 +86,10 @@ class _SearchRecipeState extends State<SearchRecipe> {
     print(_healthQuery + _microQuery + _macroQuery);
   }
 
-  // Call the recipe search api
   Future<void> _loadMoreRecipes(String searchKey) async {
     print("Loading recipes for search key: $searchKey");
 
-    if (_isLoading) return; // Prevent multiple simultaneous loads
+    if (_isLoading) return;
 
     _isLoading = true;
 
@@ -97,7 +101,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
       );
 
       final newRecipes = data['hits'].map((hit) => hit['recipe']).toList();
-      _nextUrl = data['_links']?['next']?['href']; // Update the next URL
+      _nextUrl = data['_links']?['next']?['href'];
 
       print('newrecipes:');
       print(newRecipes);
@@ -111,12 +115,47 @@ class _SearchRecipeState extends State<SearchRecipe> {
             print("SEARCH RESULTS LIST EMPTY!");
           }
           _isLoading = false;
-          _initialLoadComplete = true; // Mark initial load as complete
+          _initialLoadComplete = true;
         });
       }
     } catch (e) {
       print('Error: $e');
-      // reset loading state on error
+      // Retry logic
+      int retryCount = 0;
+      const int maxRetries = 3;
+      const Duration retryInterval = Duration(seconds: 2);
+
+      while (retryCount < maxRetries) {
+        await Future.delayed(retryInterval);
+        retryCount++;
+        try {
+          final data = await RecipeSearchAPI.searchRecipes(
+            searchKey,
+            _healthQuery + _macroQuery + _microQuery,
+            nextUrl: _nextUrl,
+          );
+
+          final newRecipes = data['hits'].map((hit) => hit['recipe']).toList();
+          _nextUrl = data['_links']?['next']?['href']; // Update the next URL
+
+          if (mounted) {
+            setState(() {
+              if (newRecipes.isNotEmpty) {
+                _recipes.addAll(newRecipes);
+              } else {
+                print("SEARCH RESULTS LIST EMPTY!");
+              }
+              _isLoading = false;
+              _initialLoadComplete = true; // Mark initial load as complete
+            });
+          }
+          return; // Exit the retry loop if successful
+        } catch (e) {
+          print('Retry $retryCount failed: $e');
+        }
+      }
+
+      // reset loading state on final error
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -144,7 +183,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
   @override
   Widget build(BuildContext context) {
-    // Accessing UserProfileBloc using BlocBuilder
     return BlocBuilder<UserProfileBloc, UserProfileState>(
       buildWhen: (previous, current) =>
           current is UserProfileLoaded ||
@@ -181,12 +219,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
             child: _buildSearchRecipeUI(userProfileState),
           );
         } else if (userProfileState is UserProfileError) {
-          // Show error message if loading fails
           return Center(child: Text(userProfileState.error));
-        } else if (userProfileState is UserProfileInitial) {
-          return Center(child: Text("Initial"));
         }
-        // Fallback widget
         print('blocbuilder search recipe ui');
         return CircularProgressIndicator();
       },
@@ -194,7 +228,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
   }
 
   Widget _buildSearchRecipeUI(UserProfileLoaded state) {
-    // Check to prevent multiple initial loads
     if (_recipes.isEmpty && !_isLoading && !_initialLoadComplete) {
       print('initialize recipeee');
       _recipes.clear();
@@ -206,7 +239,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
   Widget _buildRecipeList() {
     return Center(
       child: Column(children: <Widget>[
-        // search bar
         CustomSearchBar(
           onSubmitted: (searchKey) {
             setState(() {
@@ -218,10 +250,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
             _loadMoreRecipes(searchKey);
           },
         ),
-
         const SizedBox(height: 20),
-
-        // Display "No Matching Recipes" image if no results and initial load complete
         if (_recipes.isEmpty && !_isLoading && _initialLoadComplete)
           Expanded(
               child: Padding(
@@ -231,7 +260,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
             ),
           ))
         else
-          // search results
           Expanded(
               child: ListView.builder(
                   itemCount:
@@ -239,8 +267,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
                   itemBuilder: (context, index) {
                     if (index >= _recipes.length) {
                       if (!_isLoading && _nextUrl != null) {
-                        _loadMoreRecipes(
-                            _searchKey); // Load more at the end of the list
+                        // Load more at the end of the list
+                        _loadMoreRecipes(_searchKey);
                       } else if (!_isLoading &&
                           _nextUrl == null &&
                           _searchKey.isEmpty) {
@@ -256,7 +284,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
                     final recipe = _recipes[index];
                     return GestureDetector(
                       onTap: () {
-                        // Get the recipe data as a Map or directly pass the Recipe object if serialized
                         final recipeId =
                             extractRecipeIdUsingRegExp(recipe['uri']);
                         context.goNamed('viewRecipe',

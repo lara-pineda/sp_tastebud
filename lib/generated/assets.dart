@@ -75,8 +75,6 @@ class Assets {
       'lib/features/auth/data/user_repository.dart';
   static const String dataViewRecipeRepository =
       'lib/features/recipe/view-recipe/data/view_recipe_repository.dart';
-  static const String dataViewRecipeServices =
-      'lib/features/recipe/view-recipe/data/view_recipe_services.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesBackground = 'assets/images/Background.png';
   static const String imagesDefaultProfile = 'assets/images/DefaultProfile.jpg';
@@ -85,6 +83,8 @@ class Assets {
       'assets/images/ImagePlaceholder.png';
   static const String imagesLandingFruits = 'assets/images/LandingFruits.jpg';
   static const String imagesMiniStarIcon = 'assets/images/MiniStarIcon.svg';
+  static const String imagesNoMatchingRecipe =
+      'assets/images/noMatchingRecipe.png';
   static const String imagesRejectedRecipe = 'assets/images/rejectedRecipe.png';
   static const String imagesSavedRecipe = 'assets/images/savedRecipe.png';
   static const String imagesStarIcon = 'assets/images/StarIcon.svg';

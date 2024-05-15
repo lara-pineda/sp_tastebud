@@ -18,7 +18,9 @@ class ViewRecipeBloc extends Bloc<ViewRecipeEvent, ViewRecipeState> {
       FetchRecipe event, Emitter<ViewRecipeState> emit) async {
     emit(RecipeLoading());
     try {
-      final data = await RecipeSearchAPI.searchRecipeById(event.recipeId);
+      print("in view recipe bloc");
+      print("recipe ID: ${event.recipeId}");
+      final data = await _viewRecipeRepository.fetchRecipeById(event.recipeId);
       emit(RecipeLoaded(data));
     } catch (e) {
       emit(RecipeError(e.toString()));

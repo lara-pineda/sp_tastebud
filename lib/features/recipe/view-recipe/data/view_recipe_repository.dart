@@ -1,11 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../search-recipe/recipe_search_api.dart';
+
 class ViewRecipeRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _firebaseAuth;
 
   ViewRecipeRepository(this._firestore, this._firebaseAuth);
+
+  Future<Map<String, dynamic>> fetchRecipeById(String recipeId) async {
+    return await RecipeSearchAPI.searchRecipeById(recipeId);
+  }
 
   Future<void> addToRejected(
       String recipeName, String image, String source, String recipeId) async {

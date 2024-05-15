@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
 import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
 
+import '../../core/config/assets_path.dart';
 import '../../features/recipe-collection/data/recipe_collection_repository.dart';
 import '../custom_dialog.dart';
 
@@ -159,9 +160,28 @@ class _RecipeCardState extends State<RecipeCard> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // ClipRRect(
+              //   borderRadius: BorderRadius.circular(8.0),
+              //   child: Image.network(widget.imageUrl, fit: BoxFit.cover),
+              // ),
+              // Load the image and handle errors gracefully
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
-                child: Image.network(widget.imageUrl, fit: BoxFit.cover),
+                child: Image.network(
+                  widget.imageUrl,
+                  fit: BoxFit.cover,
+                  // width: 100,
+                  // height: 100,
+                  errorBuilder: (context, error, stackTrace) {
+                    // Print error to console
+                    print('Failed to load image: $error');
+                    return Image.asset(
+                      Assets.imagePlaceholder, // Use a local fallback image
+                      // width: 100,
+                      // height: 100,
+                    );
+                  },
+                ),
               ),
               Flexible(
                 child: Padding(

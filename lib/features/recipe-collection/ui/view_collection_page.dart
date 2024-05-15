@@ -30,7 +30,6 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
   }
 
   void _fetchRecipes() {
-    print(widget.collectionType);
     // Dispatch FetchSavedRecipes or FetchRejectedRecipes event based on collectionType
     if (!_recipeCollectionBloc.isClosed) {
       if (widget.collectionType.toLowerCase() == 'saved') {
@@ -52,6 +51,7 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
   @override
   Widget build(BuildContext context) {
     print('inside view collection page');
+
     return BlocListener<SearchRecipeBloc, SearchRecipeState>(
       listener: (context, state) {
         if (state is FavoritesRemoved) {
@@ -70,7 +70,6 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
             return Center(child: CircularProgressIndicator());
           } else if (state is SavedRecipesLoaded ||
               state is RejectedRecipesLoaded) {
-            print('else conditionnn');
             final recipes = state is SavedRecipesLoaded
                 ? state.savedRecipes
                 : (state as RejectedRecipesLoaded).rejectedRecipes;
@@ -96,31 +95,32 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
       children: [
         Text('$collectionType Recipes'),
         Expanded(
-            child: ListView.builder(
-          itemCount: recipes.length,
-          itemBuilder: (context, index) {
-            final recipe = recipes[index];
-            return GestureDetector(
-              onTap: () {
-                print("Recipe tapped: ${recipe['recipeName']}");
-                final recipeId =
-                    extractRecipeIdUsingRegExp(recipe['recipeUri']);
-                context.goNamed('viewRecipeFromCollection', pathParameters: {
-                  'collectionType': collectionType,
-                  'recipeId': recipeId
-                });
-              },
-              child: RecipeCard(
-                recipeName: recipe['recipeName']!,
-                imageUrl: recipe['image']!,
-                sourceWebsite: recipe['source']!,
-                recipeUri: recipe['recipeUri'],
-                onRemoveFromFavorites: () =>
-                    _handleRemoveFromFavorites(recipe['recipeUri']),
-              ),
-            );
-          },
-        ))
+          child: ListView.builder(
+            itemCount: recipes.length,
+            itemBuilder: (context, index) {
+              final recipe = recipes[index];
+              return GestureDetector(
+                onTap: () {
+                  print("Recipe tapped: ${recipe['recipeName']}");
+                  final recipeId =
+                      extractRecipeIdUsingRegExp(recipe['recipeUri']);
+                  context.goNamed('viewRecipeFromCollection', pathParameters: {
+                    'collectionType': collectionType,
+                    'recipeId': recipeId
+                  });
+                },
+                child: RecipeCard(
+                  recipeName: recipe['recipeName']!,
+                  imageUrl: recipe['image']!,
+                  sourceWebsite: recipe['source']!,
+                  recipeUri: recipe['recipeUri'],
+                  onRemoveFromFavorites: () =>
+                      _handleRemoveFromFavorites(recipe['recipeUri']),
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }
