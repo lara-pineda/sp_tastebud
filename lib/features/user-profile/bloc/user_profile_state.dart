@@ -9,9 +9,11 @@ class UserProfileLoaded extends UserProfileState {
   final List allergies;
   final List macronutrients;
   final List micronutrients;
+  final String? email;
 
   UserProfileLoaded(this.dietaryPreferences, this.allergies,
-      this.macronutrients, this.micronutrients);
+      this.macronutrients, this.micronutrients,
+      [this.email]);
 }
 
 class UserProfileUpdated extends UserProfileState {}
@@ -19,4 +21,15 @@ class UserProfileUpdated extends UserProfileState {}
 class UserProfileError extends UserProfileState {
   final String error;
   UserProfileError(this.error);
+}
+
+class UserProfileChangeEmailError extends UserProfileState {
+  final String error;
+  UserProfileChangeEmailError(this.error);
+}
+
+class UserProfileEmailChanged extends UserProfileState {
+  final String newEmail;
+
+  UserProfileEmailChanged(this.newEmail);
 }

@@ -17,6 +17,33 @@ class UserProfileService {
     }
   }
 
+  Future<void> changeEmail(
+      String currentEmail, String newEmail, String password) async {
+    final user = _firebaseAuth.currentUser;
+    if (user != null) {
+      try {
+        final credential = EmailAuthProvider.credential(
+          email: currentEmail,
+          password: password,
+        );
+
+        // Reauthenticate the user
+        await user.reauthenticateWithCredential(credential);
+
+        // Update the email
+        await user.verifyBeforeUpdateEmail(newEmail);
+
+        // Update email in Firestore
+        await _firestore
+            .collection('users')
+            .doc(user.uid)
+            .update({'email': newEmail});
+      } catch (e) {
+        throw Exception(e);
+      }
+    }
+  }
+
   Future<void> updateDietPref(
       String userId, List<String> selectedOptions) async {
     try {

@@ -12,6 +12,34 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
   UserProfileBloc(this._userProfileRepository) : super(UserProfileInitial()) {
     on<LoadUserProfile>(_onLoadUserProfile);
     on<UpdateUserProfile>(_onUpdateUserProfile);
+    on<ChangeEmail>(_onChangeEmail);
+  }
+
+  void _onChangeEmail(ChangeEmail event, Emitter<UserProfileState> emit) async {
+    try {
+      await _userProfileRepository.callChangeEmail(
+          event.currentEmail, event.newEmail, event.password);
+
+      // Update the state with the new email
+      emit(UserProfileEmailChanged(event.newEmail));
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        switch (e.code) {
+          case 'user-not-found':
+            emit(UserProfileChangeEmailError('No user found for that email.'));
+            break;
+          case 'wrong-password':
+            emit(UserProfileChangeEmailError('Wrong password provided.'));
+            break;
+          default:
+            emit(UserProfileChangeEmailError(
+                'Failed to change email: ${e.message}'));
+            break;
+        }
+      } else {
+        emit(UserProfileChangeEmailError(e.toString()));
+      }
+    }
   }
 
   void _onLoadUserProfile(
@@ -29,15 +57,17 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
         var fetchAllergies = data['allergies'] as List<dynamic>;
         var fetchMacro = data['macronutrients'] as List<dynamic>;
         var fetchMicro = data['micronutrients'] as List<dynamic>;
+        var email = data['email'] as String;
 
         print("fetchDietPref: $fetchDietPref");
         print("fetchAllergies: $fetchAllergies");
         print("fetchMacro: $fetchMacro");
         print("fetchMicro: $fetchMicro");
+        print("email: $email");
 
         // Update state with the loaded profile data
         emit(UserProfileLoaded(
-            fetchDietPref, fetchAllergies, fetchMacro, fetchMicro));
+            fetchDietPref, fetchAllergies, fetchMacro, fetchMicro, email));
       } else {
         // Return empty lists
         emit(UserProfileLoaded(
@@ -45,6 +75,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
           [],
           [],
           [],
+          '',
         ));
       }
     } catch (e) {
@@ -70,9 +101,15 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
           event.selectedMacro,
           event.selectedMicro);
 
+      // Get current email from state if available
+      String? currentEmail;
+      if (state is UserProfileLoaded) {
+        currentEmail = (state as UserProfileLoaded).email;
+      }
+
       // load again after updating to firestore
       emit(UserProfileLoaded(event.selectedDietPref, event.selectedAllergies,
-          event.selectedMacro, event.selectedMicro));
+          event.selectedMacro, event.selectedMicro, currentEmail));
     } catch (e) {
       emit(UserProfileError(e.toString()));
     }

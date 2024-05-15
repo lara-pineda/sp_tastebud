@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:sp_tastebud/core/config/assets_path.dart';
+import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
@@ -24,47 +25,58 @@ class _UserProfileState extends State<UserProfile> {
   List<bool> selectedMacronutrients = [];
   List<bool> selectedMicronutrients = [];
 
-  // Retrieve AuthBloc using GetIt
+  // Retrieve blocs using GetIt
   final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
+  final UserProfileBloc _userProfileBloc = GetIt.instance<UserProfileBloc>();
 
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _newEmailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
-    // Load the initial value for the email controller here, if needed.
-    _emailController.text = 'user@gmail.com'; // Placeholder email
-
     // Load the user profile data when the widget is initialized
-    BlocProvider.of<UserProfileBloc>(context).add(LoadUserProfile());
+    // BlocProvider.of<UserProfileBloc>(context).add(LoadUserProfile());
+    _userProfileBloc.add(LoadUserProfile());
   }
 
   @override
   void dispose() {
     // Dispose the controller when the widget is removed
     _emailController.dispose();
+    _newEmailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
-  // This function will be called whenever a checkbox state changes.
+  // These functions will be called whenever a checkbox state changes.
   void _onDietPrefSelectionChanged(List<bool> newSelections) {
-    selectedDietaryPreferences = newSelections;
+    setState(() {
+      selectedDietaryPreferences = newSelections;
+    });
   }
 
   void _onAllergiesSelectionChanged(List<bool> newSelections) {
-    selectedAllergies = newSelections;
+    setState(() {
+      selectedAllergies = newSelections;
+    });
   }
 
   void _onMacronutrientSelectionChanged(List<bool> newSelections) {
-    selectedMacronutrients = newSelections;
+    setState(() {
+      selectedMacronutrients = newSelections;
+    });
   }
 
   void _onMicronutrientSelectionChanged(List<bool> newSelections) {
-    selectedMicronutrients = newSelections;
+    setState(() {
+      selectedMicronutrients = newSelections;
+    });
   }
 
-  // maps checked indices to option label in list
+  // Maps checked indices to option label in list
   List<String> getSelectedOptions(List selections, List<String> options) {
     List<String> selectedOptions = [];
 
@@ -128,19 +140,113 @@ class _UserProfileState extends State<UserProfile> {
           return BlocBuilder<UserProfileBloc, UserProfileState>(
             builder: (context, userProfileState) {
               if (userProfileState is UserProfileLoaded) {
-                // Use the state values to build your UI
+                // Use the state values to build the UI
+                _emailController.text =
+                    userProfileState.email ?? ''; // Set the fetched email
+
                 return buildUserProfileUI(userProfileState);
               } else if (userProfileState is UserProfileError) {
                 // Show error message if loading fails
                 return Text(userProfileState.error);
+              } else if (userProfileState is UserProfileChangeEmailError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(userProfileState.error),
+                    // backgroundColor: Colors.red,
+                  ),
+                );
               }
               // Fallback widget
-              return Text("Page not found");
+              return Text("Page not found.");
             },
           );
         }
       },
     );
+  }
+
+  Future<void> _showEditEmailBottomSheet() async {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Make the bottom sheet scrollable
+      builder: (context) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                MediaQuery(
+                  data: MediaQuery.of(context).copyWith(
+                    viewInsets: EdgeInsets.zero, // Remove the bottom inset
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom /
+                            1.2 // Adjust padding based on the inset
+                        ),
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Text(
+                            'Change Email Address',
+                            style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16),
+                          ),
+                        ),
+                        SizedBox(height: (20.toVHLength).toPX()),
+                        TextFormField(
+                          controller: _newEmailController,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          // keyboardType: TextInputType.none,
+                          decoration: InputDecoration(
+                            labelText: 'New Email Address',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        SizedBox(height: (20.toVHLength).toPX()),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: 'Confirm Password',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        SizedBox(height: (20.toVHLength).toPX()),
+                        SizedBox(
+                          width: (MediaQuery.of(context).size.width / 6) * 4.5,
+                          child: ElevatedButton(
+                            onPressed: () => _changeEmail(context),
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: AppColors.seaGreenColor,
+                              foregroundColor: const Color(0xFFF7EBE8),
+                            ),
+                            child: Text('Change Email'),
+                          ),
+                        ),
+                        SizedBox(height: (20.toVHLength).toPX()),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _changeEmail(BuildContext context) {
+    _userProfileBloc.add(ChangeEmail(
+      _emailController.text,
+      _newEmailController.text,
+      _passwordController.text,
+    ));
   }
 
   Widget buildUserProfileUI(UserProfileLoaded state) {
@@ -172,17 +278,24 @@ class _UserProfileState extends State<UserProfile> {
                 SizedBox(height: (20.toVHLength).toPX()),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30),
-                  child: TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Email Address',
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.edit),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    onSaved: (value) {
-                      // Implement logic to save the email when form is saved
-                    },
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            labelText: 'Email Address',
+                            border: OutlineInputBorder(),
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: _showEditEmailBottomSheet,
+                            ),
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                          readOnly: true,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 

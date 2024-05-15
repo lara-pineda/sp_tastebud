@@ -9,6 +9,16 @@ class UserProfileRepository {
     return await _userProfileService.getUserProfile(userId);
   }
 
+  Future<void> callChangeEmail(
+      String currentEmail, String newEmail, String password) async {
+    try {
+      return await _userProfileService.changeEmail(
+          currentEmail, newEmail, password);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<void> saveUserProfile(
       String userId,
       List<String> dietPref,

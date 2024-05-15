@@ -13,3 +13,11 @@ class UpdateUserProfile extends UserProfileEvent {
   UpdateUserProfile(this.selectedDietPref, this.selectedAllergies,
       this.selectedMacro, this.selectedMicro);
 }
+
+class ChangeEmail extends UserProfileEvent {
+  final String currentEmail;
+  final String newEmail;
+  final String password;
+
+  ChangeEmail(this.currentEmail, this.newEmail, this.password);
+}
