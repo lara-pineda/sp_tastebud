@@ -242,21 +242,21 @@ class _LoginState extends State<LoginPage> {
                   ),
                 ),
 
-                // remember me
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      child: Text(
-                        'Forgot Password?',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                // forgot password
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: const [
+                //     Padding(
+                //       padding: EdgeInsets.symmetric(vertical: 12),
+                //       child: Text(
+                //         'Forgot Password?',
+                //         style: TextStyle(
+                //           fontFamily: 'Inter',
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
 
                 const Spacer(),
 
