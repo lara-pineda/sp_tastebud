@@ -24,7 +24,9 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
 
     // Register event handlers
     on<AddToFavorites>(_onAddToFavorites);
+    on<AddToRejected>(_onAddToRejected);
     on<RemoveFromFavorites>(_onRemoveFromFavorites);
+    on<RemoveFromRejected>(_onRemoveFromRejected);
     on<RecipeSelected>((event, emit) => emit(RecipeDetailState(event.recipe)));
     on<UpdateRecipeFavorites>(_onUpdateRecipeFavorites);
     on<UpdateRecipeFavoritesFromCollection>(
@@ -52,17 +54,63 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
     }
   }
 
+  void _onAddToRejected(
+      AddToRejected event, Emitter<SearchRecipeState> emit) async {
+    try {
+      await _recipeRepository.addToRejected(event.recipeName, event.image,
+          event.sourceWebsite, event.recipeId, event.recipeUri);
+      emit(RejectedAdded(event.recipeUri)); // You need to define this state
+    } catch (e) {
+      emit(RejectedError(e.toString())); // You need to define this state
+    }
+  }
+
+  // Future<void> _onRemoveFromRejected(
+  //     RemoveFromRejected event, Emitter<SearchRecipeState> emit) async {
+  //   emit(
+  //       RejectedLoading()); // Emitting a loading state before performing the operation
+  //   try {
+  //     await _recipeRepository.removeFromRejected(
+  //         event.recipeUri); // Assuming recipeUri uniquely identifies the recipe
+  //     emit(RejectedRemoved(event
+  //         .recipeUri)); // Emitting a state indicating the recipe was successfully removed
+  //   } catch (e) {
+  //     print('Failed to remove from rejected: $e');
+  //     emit(RejectedError(
+  //         e.toString())); // Emitting an error state if something goes wrong
+  //   }
+  // }
+
+  void _onRemoveFromRejected(
+      RemoveFromRejected event, Emitter<SearchRecipeState> emit) async {
+    emit(
+        RejectedLoading()); // Emitting a loading state before performing the operation
+    try {
+      await _recipeRepository.removeFromRejected(
+          event.recipeUri); // Assuming recipeUri uniquely identifies the recipe
+      emit(RejectedRemoved(event
+          .recipeUri)); // Emitting a state indicating the recipe was successfully removed
+    } catch (e) {
+      print('Failed to remove from rejected: $e');
+      emit(RejectedError(
+          e.toString())); // Emitting an error state if something goes wrong
+    }
+  }
+
   Future<void> _onRemoveFromFavorites(
       RemoveFromFavorites event, Emitter<SearchRecipeState> emit) async {
-    emit(FavoritesLoading());
+    emit(FavoritesLoading()); // Indicate loading state before the operation
     try {
-      await _recipeRepository.removeFromFavorites(event.recipeUri);
-      emit(FavoritesRemoved(event.recipeUri));
+      await _recipeRepository.removeFromFavorites(
+          event.recipeUri); // Attempt to remove the recipe from favorites
+      emit(FavoritesRemoved(event.recipeUri)); // Emit successful removal state
+      // Optionally update the local state list if maintaining a list of favorite recipes within the bloc
       _updateRecipeFavoritesState(event.recipeUri, false, emit);
     } catch (e, stacktrace) {
       print('Failed to remove from favorites: $e');
       print('Stacktrace: $stacktrace');
-      emit(FavoritesError(e.toString()));
+      emit(FavoritesError(
+          e.toString())); // Emit error state with the error message
     }
   }
 

@@ -100,4 +100,24 @@ class SearchRecipeRepository {
       throw e;
     }
   }
+
+  Future<void> removeFromRejected(String recipeId) async {
+    try {
+      User? user = _firebaseAuth.currentUser;
+      if (user == null) {
+        throw Exception('No user logged in!');
+      }
+
+      DocumentReference recipeRef = _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('rejectedRecipes')
+          .doc(recipeId);
+
+      await recipeRef.delete();
+    } catch (e) {
+      print('Failed to remove from rejected: $e');
+      throw Exception('Error removing recipe from rejected.');
+    }
+  }
 }

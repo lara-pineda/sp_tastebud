@@ -55,3 +55,32 @@ class FavoritesError extends SearchRecipeState {
   @override
   List<Object> get props => [error];
 }
+
+class RejectedLoading extends SearchRecipeState {}
+
+class RejectedAdded extends SearchRecipeState {
+  final String recipeUri;
+
+  RejectedAdded(this.recipeUri);
+
+  @override
+  List<Object> get props => [recipeUri];
+}
+
+class RejectedRemoved extends SearchRecipeState {
+  final String recipeUri;
+
+  RejectedRemoved(this.recipeUri);
+
+  @override
+  List<Object> get props => [recipeUri];
+}
+
+class RejectedError extends SearchRecipeState {
+  final String error;
+
+  RejectedError(this.error);
+
+  @override
+  List<Object> get props => [error];
+}

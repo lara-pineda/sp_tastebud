@@ -58,6 +58,10 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Removed from recipe collection!")),
           );
+        } else if (state is RejectedRemoved) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Removed from rejected recipes!")),
+          );
         }
       },
       child: BlocBuilder<RecipeCollectionBloc, RecipeCollectionState>(

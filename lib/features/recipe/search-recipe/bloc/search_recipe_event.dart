@@ -24,6 +24,23 @@ class RemoveFromFavorites extends SearchRecipeEvent {
   RemoveFromFavorites(this.recipeUri);
 }
 
+class AddToRejected extends SearchRecipeEvent {
+  final String recipeName;
+  final String image;
+  final String sourceWebsite;
+  final String recipeId;
+  final String recipeUri;
+
+  AddToRejected(this.recipeName, this.image, this.sourceWebsite, this.recipeId,
+      this.recipeUri);
+}
+
+class RemoveFromRejected extends SearchRecipeEvent {
+  final String recipeUri;
+
+  RemoveFromRejected(this.recipeUri);
+}
+
 class RecipeSelected extends SearchRecipeEvent {
   final Map<String, dynamic> recipe;
 

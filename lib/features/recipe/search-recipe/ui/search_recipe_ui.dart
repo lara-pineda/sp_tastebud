@@ -166,13 +166,24 @@ class _SearchRecipeState extends State<SearchRecipe> {
             listener: (context, state) {
               if (state is FavoritesError) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Error adding to recipe collection")));
+                    content:
+                        Text("Error adding to saved recipes collection.")));
               } else if (state is FavoritesAdded) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Added to recipe collection!")));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Added to saved recipe collection!")));
               } else if (state is FavoritesRemoved) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Removed from saved recipe collection!")));
+              } else if (state is RejectedAdded) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Removed from recipe collection!")));
+                    SnackBar(content: Text("Added to rejected recipes!")));
+              } else if (state is RejectedRemoved) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Removed from rejected recipes!")));
+              } else if (state is RejectedError) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content:
+                        Text("Error adding to rejected recipes collection.")));
               }
             },
             child: _buildSearchRecipeUI(userProfileState),

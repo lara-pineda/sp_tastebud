@@ -58,11 +58,12 @@ sp_tastebud/
 ## Features TODO
 
 -   add ingredients to query
--   add/remove for rejected recipes via search recipe, view recipe, recipe collection
 -   substitute recipe
 
 MINOR STUFF
 -   view recipe details polish styling
+-   recipe collection container height
+-   nagrerefresh page sa recipe collection pag nagreremove, wag na sana refresh, updatelist na lang
 -   dialog styling + state for checkboxes
 -   move save changes button for ingredient mgmt and user profile
 -   logout button

@@ -31,11 +31,13 @@ class RecipeCard extends StatefulWidget {
 class _RecipeCardState extends State<RecipeCard> {
   // State to track if recipe is in recipe collection
   bool isInFavorites = false;
+  bool isInRejected = false;
 
   @override
   void initState() {
     super.initState();
     _checkIfInFavorites();
+    _checkIfInRejected();
   }
 
   Future<void> _checkIfInFavorites() async {
@@ -47,6 +49,20 @@ class _RecipeCardState extends State<RecipeCard> {
     if (mounted) {
       setState(() {
         isInFavorites = isFavorite;
+      });
+    }
+  }
+
+  Future<void> _checkIfInRejected() async {
+    // Check if the recipe is in rejected collection similar to favorites
+    final recipeId = extractRecipeIdUsingRegExp(widget.recipeUri);
+    final recipeCollectionRepository =
+        GetIt.instance<RecipeCollectionRepository>();
+    final isRejected =
+        await recipeCollectionRepository.isRecipeInRejected(recipeId);
+    if (mounted) {
+      setState(() {
+        isInRejected = isRejected;
       });
     }
   }
@@ -78,11 +94,37 @@ class _RecipeCardState extends State<RecipeCard> {
           if (widget.onRemoveFromFavorites != null) {
             widget.onRemoveFromFavorites!();
           }
+          // Ensure RemoveFromFavorites is called immediately after removal
           context.read<SearchRecipeBloc>().add(RemoveFromFavorites(
               extractRecipeIdUsingRegExp(widget.recipeUri)));
-          // Ensure UpdateRecipeFavorites is called immediately after removal
-          context.read<SearchRecipeBloc>().add(UpdateRecipeFavorites(
-              extractRecipeIdUsingRegExp(widget.recipeUri), false));
+        }
+      },
+    );
+  }
+
+  void _handleRejectToggle(BuildContext context) {
+    final action = isInRejected ? 'remove from' : 'add to';
+    final confirmationMessage =
+        'Are you sure you want to $action your rejected recipes collection?';
+
+    openDialog(
+      context,
+      'Confirmation',
+      confirmationMessage,
+      onConfirm: () {
+        setState(() {
+          isInRejected = !isInRejected;
+        });
+        if (isInRejected) {
+          context.read<SearchRecipeBloc>().add(AddToRejected(
+              widget.recipeName,
+              widget.imageUrl,
+              widget.sourceWebsite,
+              extractRecipeIdUsingRegExp(widget.recipeUri),
+              widget.recipeUri));
+        } else {
+          context.read<SearchRecipeBloc>().add(
+              RemoveFromRejected(extractRecipeIdUsingRegExp(widget.recipeUri)));
         }
       },
     );
@@ -168,13 +210,28 @@ class _RecipeCardState extends State<RecipeCard> {
           Positioned(
             bottom: 8,
             right: 8,
-            child: GestureDetector(
-              onTap: () => _handleFavoriteToggle(context),
-              child: Icon(
-                isInFavorites ? Icons.favorite : Icons.favorite_border,
-                color: Colors.red,
-                size: 24,
-              ),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () => _handleFavoriteToggle(context),
+                  child: Icon(
+                    isInFavorites ? Icons.favorite : Icons.favorite_border,
+                    color: Colors.red,
+                    size: 24,
+                  ),
+                ),
+                SizedBox(width: 8), // Spacing between icons
+                GestureDetector(
+                  onTap: () => _handleRejectToggle(context),
+                  child: Icon(
+                    isInRejected
+                        ? Icons.remove_circle
+                        : Icons.remove_circle_outline,
+                    color: Colors.grey,
+                    size: 24,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
