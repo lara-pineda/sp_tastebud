@@ -122,11 +122,9 @@ class _IngredientsState extends State<IngredientManagement> {
           // Return error text if login fails
           return Text("User not logged in.");
         } else {
-          // If login is successful, proceed with UserProfileBloc
+          // If login is successful, proceed with IngredientsBloc
           return BlocBuilder<IngredientsBloc, IngredientsState>(
             builder: (context, ingredientsState) {
-              print(ingredientsState);
-
               if (ingredientsState is IngredientsLoaded) {
                 // Use the state values to build your UI
                 return buildIngredientManagementUI(ingredientsState);

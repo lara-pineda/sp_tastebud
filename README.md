@@ -58,9 +58,9 @@ sp_tastebud/
 ## Features TODO
 
 -   add ingredients to query
+-   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients
 -   substitute recipe
 -   if nasa rejected recipes, di na dapat lumabas sa search results
--   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients
 
 MINOR STUFF
 -   implement debounce on recipe collection

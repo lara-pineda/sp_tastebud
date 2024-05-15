@@ -1,5 +1,4 @@
 import 'package:sp_tastebud/features/ingredients/data/ingredients_services.dart';
-import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 
 class IngredientsRepository {
   final IngredientsService _ingredientsService;
@@ -17,14 +16,16 @@ class IngredientsRepository {
       List<String> vegetablesAndGreens,
       List<String> fishAndPoultry,
       List<String> baking) async {
-    print("UserID 2:");
-    print(userId);
-
-    await _ingredientsService.updatePantryEssentials(userId, pantryEssentials);
-    await _ingredientsService.updateMeat(userId, meat);
-    await _ingredientsService.updateVegetablesAndGreens(
-        userId, vegetablesAndGreens);
-    await _ingredientsService.updateFishAndPoultry(userId, fishAndPoultry);
-    await _ingredientsService.updateBaking(userId, baking);
+    try {
+      await _ingredientsService.updatePantryEssentials(
+          userId, pantryEssentials);
+      await _ingredientsService.updateMeat(userId, meat);
+      await _ingredientsService.updateVegetablesAndGreens(
+          userId, vegetablesAndGreens);
+      await _ingredientsService.updateFishAndPoultry(userId, fishAndPoultry);
+      await _ingredientsService.updateBaking(userId, baking);
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

@@ -57,8 +57,6 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
   void _onUpdateIngredients(
       UpdateIngredients event, Emitter<IngredientsState> emit) async {
     var userId = FirebaseAuth.instance.currentUser?.uid;
-    print("UserID 1:");
-    print(userId);
 
     if (userId == null) {
       emit(IngredientsError("User not logged in"));

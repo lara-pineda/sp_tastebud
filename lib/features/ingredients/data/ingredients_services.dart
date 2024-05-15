@@ -20,10 +20,6 @@ class IngredientsService {
   Future<void> updatePantryEssentials(
       String userId, List<String> selectedOptions) async {
     try {
-      print("UserID 3:");
-      print(userId);
-      print("received pantry essentials value:");
-      print(selectedOptions);
       await _firestore.collection('users').doc(userId).update({
         'pantryEssentials': selectedOptions,
       });

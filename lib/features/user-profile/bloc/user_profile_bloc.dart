@@ -106,7 +106,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       }
 
       // load again after updating to firestore
-      emit(UserProfileUpdated(event.selectedDietPref, event.selectedAllergies,
+      emit(UserProfileLoaded(event.selectedDietPref, event.selectedAllergies,
           event.selectedMacro, event.selectedMicro, currentEmail));
     } catch (e) {
       emit(UserProfileError(e.toString()));

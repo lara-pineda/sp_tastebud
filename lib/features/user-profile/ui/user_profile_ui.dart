@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
-import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
@@ -88,7 +87,7 @@ class _UserProfileState extends State<UserProfile> {
 
   // handler for save button
   void _onSaveButtonPressed(BuildContext context) {
-    final userProfileBloc = BlocProvider.of<UserProfileBloc>(context);
+    // final userProfileBloc = BlocProvider.of<UserProfileBloc>(context);
 
     final updatedDietPref = getSelectedOptions(
       selectedDietaryPreferences,
@@ -111,7 +110,7 @@ class _UserProfileState extends State<UserProfile> {
     );
 
     // dependency injection
-    userProfileBloc.add(UpdateUserProfile(updatedDietPref, updatedAllergies,
+    _userProfileBloc.add(UpdateUserProfile(updatedDietPref, updatedAllergies,
         updatedMacronutrients, updatedMicronutrients));
   }
 
@@ -154,7 +153,7 @@ class _UserProfileState extends State<UserProfile> {
                 );
               }
               // Fallback widget.
-              return Text("Page not found.");
+              return Text("State is not as expected.");
             },
           );
         }
@@ -330,6 +329,7 @@ class _UserProfileState extends State<UserProfile> {
 
                   SizedBox(height: (30.toVHLength).toPX()),
 
+                  // DIETARY PREFERENCES
                   Text(
                     'Dietary Preferences',
                     style: TextStyle(
@@ -346,6 +346,8 @@ class _UserProfileState extends State<UserProfile> {
                     onSelectionChanged: _onDietPrefSelectionChanged,
                     cardLabel: 'Dietary Preferences',
                   ),
+
+                  // ALLERGIES
                   SizedBox(height: (40.toVHLength).toPX()),
                   Text(
                     'Allergies',
@@ -364,6 +366,8 @@ class _UserProfileState extends State<UserProfile> {
                     cardLabel: 'Allergies',
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
+
+                  // MACRONUTRIENTS
                   Text(
                     'Macronutrients',
                     style: TextStyle(
@@ -381,6 +385,8 @@ class _UserProfileState extends State<UserProfile> {
                     cardLabel: 'Macronutrients',
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
+
+                  // MICRONUTRIENTS
                   Text(
                     'Micronutrients',
                     style: TextStyle(
