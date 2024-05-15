@@ -19,7 +19,9 @@ class IngredientManagement extends StatefulWidget {
 class _IngredientsState extends State<IngredientManagement> {
   List<bool> selectedPantryEssentials = [];
   List<bool> selectedMeat = [];
-  List<bool> selectedVegetables = [];
+  List<bool> selectedVegetablesAndGreens = [];
+  List<bool> selectedFishAndPoultry = [];
+  List<bool> selectedBaking = [];
 
   // Retrieve AuthBloc using GetIt
   final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
@@ -32,7 +34,7 @@ class _IngredientsState extends State<IngredientManagement> {
     BlocProvider.of<IngredientsBloc>(context).add(LoadIngredients());
   }
 
-  // This function will be called whenever a checkbox state changes.
+  // These functions will be called whenever a checkbox state changes.
   void _onPantryEssentialsSelectionChanged(List<bool> newSelections) {
     selectedPantryEssentials = newSelections;
   }
@@ -41,8 +43,16 @@ class _IngredientsState extends State<IngredientManagement> {
     selectedMeat = newSelections;
   }
 
-  void _onVegetablesSelectionChanged(List<bool> newSelections) {
-    selectedVegetables = newSelections;
+  void _onVegetablesAndGreensSelectionChanged(List<bool> newSelections) {
+    selectedVegetablesAndGreens = newSelections;
+  }
+
+  void _onFishAndPoultrySelectionChanged(List<bool> newSelections) {
+    selectedFishAndPoultry = newSelections;
+  }
+
+  void _onBakingSelectionChanged(List<bool> newSelections) {
+    selectedBaking = newSelections;
   }
 
   // maps checked indices to option label in list
@@ -71,13 +81,27 @@ class _IngredientsState extends State<IngredientManagement> {
     );
 
     final updatedVegetables = getSelectedOptions(
-      selectedVegetables,
-      Options.vegetables,
+      selectedVegetablesAndGreens,
+      Options.vegetablesAndGreens,
+    );
+
+    final updatedFishAndPoultry = getSelectedOptions(
+      selectedFishAndPoultry,
+      Options.fishAndPoultry,
+    );
+
+    final updatedBaking = getSelectedOptions(
+      selectedBaking,
+      Options.baking,
     );
 
     // dependency injection
     context.read<IngredientsBloc>().add(UpdateIngredients(
-        updatedPantryEssentials, updatedMeat, updatedVegetables));
+        updatedPantryEssentials,
+        updatedMeat,
+        updatedVegetables,
+        updatedFishAndPoultry,
+        updatedBaking));
   }
 
   // Helper method to map selected options to boolean values
@@ -124,8 +148,11 @@ class _IngredientsState extends State<IngredientManagement> {
     selectedPantryEssentials =
         mapOptionsToBoolean(state.pantryEssentials, Options.pantryEssentials);
     selectedMeat = mapOptionsToBoolean(state.meat, Options.meat);
-    selectedVegetables =
-        mapOptionsToBoolean(state.vegetables, Options.vegetables);
+    selectedVegetablesAndGreens = mapOptionsToBoolean(
+        state.vegetablesAndGreens, Options.vegetablesAndGreens);
+    selectedFishAndPoultry =
+        mapOptionsToBoolean(state.fishAndPoultry, Options.fishAndPoultry);
+    selectedBaking = mapOptionsToBoolean(state.baking, Options.baking);
 
     return Stack(children: [
       Padding(
@@ -146,6 +173,8 @@ class _IngredientsState extends State<IngredientManagement> {
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: (20.toVHLength).toPX()),
+
+                  // PANTRY ESSENTIALS
                   Text(
                     'Pantry Essentials',
                     style: TextStyle(
@@ -162,6 +191,8 @@ class _IngredientsState extends State<IngredientManagement> {
                     onSelectionChanged: _onPantryEssentialsSelectionChanged,
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
+
+                  // MEAT
                   Text(
                     'Meat',
                     style: TextStyle(
@@ -178,8 +209,10 @@ class _IngredientsState extends State<IngredientManagement> {
                     onSelectionChanged: _onMeatSelectionChanged,
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
+
+                  // FISH AND POULTRY
                   Text(
-                    'Vegetables',
+                    'Fish and Poultry',
                     style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 17,
@@ -189,24 +222,50 @@ class _IngredientsState extends State<IngredientManagement> {
                   ),
                   SizedBox(height: (20.toVHLength).toPX()),
                   CheckboxCard(
-                    allChoices: Options.vegetables,
-                    initialSelections: selectedVegetables,
-                    onSelectionChanged: _onVegetablesSelectionChanged,
+                    allChoices: Options.fishAndPoultry,
+                    initialSelections: selectedFishAndPoultry,
+                    onSelectionChanged: _onFishAndPoultrySelectionChanged,
+                  ),
+                  SizedBox(height: (40.toVHLength).toPX()),
+
+                  // VEGETABLES AND GREENS
+                  Text(
+                    'Vegetables and Greens',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  CheckboxCard(
+                    allChoices: Options.vegetablesAndGreens,
+                    initialSelections: selectedVegetablesAndGreens,
+                    onSelectionChanged: _onVegetablesAndGreensSelectionChanged,
+                  ),
+                  SizedBox(height: (40.toVHLength).toPX()),
+
+                  // BAKING
+                  Text(
+                    'Baking',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: (20.toVHLength).toPX()),
+                  CheckboxCard(
+                    allChoices: Options.baking,
+                    initialSelections: selectedBaking,
+                    onSelectionChanged: _onBakingSelectionChanged,
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
                 ],
               ),
             ),
-            // ElevatedButton(
-            //   onPressed: () => _onSaveButtonPressed(context),
-            //   child: Text('Save Changes'),
-            //   style: ElevatedButton.styleFrom(
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(10),
-            //     ),
-            //     padding: EdgeInsets.symmetric(vertical: 20),
-            //   ),
-            // ),
           ],
         ),
       ),

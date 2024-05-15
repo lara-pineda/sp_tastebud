@@ -49,7 +49,9 @@ class AuthService {
       'micronutrients': [],
       'pantryEssentials': [],
       'meat': [],
-      'vegetables': []
+      'vegetablesAndGreens': [],
+      'fishAndPoultry': [],
+      'baking': [],
     });
   }
 

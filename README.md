@@ -58,7 +58,6 @@ sp_tastebud/
 ## Features TODO
 
 -   add ingredients to query
--   finalize options for ingredients
 -   dialog styling + state for checkboxes
 -   substitute recipe
 -   if nasa rejected recipes, di na dapat lumabas sa search results

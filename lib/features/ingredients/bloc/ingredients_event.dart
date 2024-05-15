@@ -7,7 +7,10 @@ class LoadIngredients extends IngredientsEvent {}
 class UpdateIngredients extends IngredientsEvent {
   final List<String> pantryEssentials;
   final List<String> meat;
-  final List<String> vegetables;
+  final List<String> vegetablesAndGreens;
+  final List<String> fishAndPoultry;
+  final List<String> baking;
 
-  UpdateIngredients(this.pantryEssentials, this.meat, this.vegetables);
+  UpdateIngredients(this.pantryEssentials, this.meat, this.vegetablesAndGreens,
+      this.fishAndPoultry, this.baking);
 }

@@ -7,9 +7,12 @@ class IngredientsInitial extends IngredientsState {}
 class IngredientsLoaded extends IngredientsState {
   final List pantryEssentials;
   final List meat;
-  final List vegetables;
+  final List vegetablesAndGreens;
+  final List fishAndPoultry;
+  final List baking;
 
-  IngredientsLoaded(this.pantryEssentials, this.meat, this.vegetables);
+  IngredientsLoaded(this.pantryEssentials, this.meat, this.vegetablesAndGreens,
+      this.fishAndPoultry, this.baking);
 }
 
 class IngredientsUpdated extends IngredientsState {}

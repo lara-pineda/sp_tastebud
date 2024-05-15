@@ -42,14 +42,35 @@ class IngredientsService {
     }
   }
 
-  Future<void> updateVegetables(
+  Future<void> updateVegetablesAndGreens(
       String userId, List<String> selectedOptions) async {
     try {
       await _firestore.collection('users').doc(userId).update({
-        'vegetables': selectedOptions,
+        'vegetablesAndGreens': selectedOptions,
       });
     } catch (e) {
-      throw Exception('Failed to update vegetables: $e');
+      throw Exception('Failed to update vegetablesAndGreens: $e');
+    }
+  }
+
+  Future<void> updateFishAndPoultry(
+      String userId, List<String> selectedOptions) async {
+    try {
+      await _firestore.collection('users').doc(userId).update({
+        'fishAndPoultry': selectedOptions,
+      });
+    } catch (e) {
+      throw Exception('Failed to update fishAndPoultry: $e');
+    }
+  }
+
+  Future<void> updateBaking(String userId, List<String> selectedOptions) async {
+    try {
+      await _firestore.collection('users').doc(userId).update({
+        'baking': selectedOptions,
+      });
+    } catch (e) {
+      throw Exception('Failed to update baking: $e');
     }
   }
 }
