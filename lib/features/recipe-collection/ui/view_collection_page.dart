@@ -95,34 +95,32 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
     return Column(
       children: [
         Text('$collectionType Recipes'),
-        Container(
-            height: (MediaQuery.of(context).size.height / 3) * 2,
+        Expanded(
             child: ListView.builder(
-              itemCount: recipes.length,
-              itemBuilder: (context, index) {
-                final recipe = recipes[index];
-                return GestureDetector(
-                  onTap: () {
-                    print("Recipe tapped: ${recipe['recipeName']}");
-                    final recipeId =
-                        extractRecipeIdUsingRegExp(recipe['recipeUri']);
-                    context.goNamed('viewRecipeFromCollection',
-                        pathParameters: {
-                          'collectionType': collectionType,
-                          'recipeId': recipeId
-                        });
-                  },
-                  child: RecipeCard(
-                    recipeName: recipe['recipeName']!,
-                    imageUrl: recipe['image']!,
-                    sourceWebsite: recipe['source']!,
-                    recipeUri: recipe['recipeUri'],
-                    onRemoveFromFavorites: () =>
-                        _handleRemoveFromFavorites(recipe['recipeUri']),
-                  ),
-                );
+          itemCount: recipes.length,
+          itemBuilder: (context, index) {
+            final recipe = recipes[index];
+            return GestureDetector(
+              onTap: () {
+                print("Recipe tapped: ${recipe['recipeName']}");
+                final recipeId =
+                    extractRecipeIdUsingRegExp(recipe['recipeUri']);
+                context.goNamed('viewRecipeFromCollection', pathParameters: {
+                  'collectionType': collectionType,
+                  'recipeId': recipeId
+                });
               },
-            ))
+              child: RecipeCard(
+                recipeName: recipe['recipeName']!,
+                imageUrl: recipe['image']!,
+                sourceWebsite: recipe['source']!,
+                recipeUri: recipe['recipeUri'],
+                onRemoveFromFavorites: () =>
+                    _handleRemoveFromFavorites(recipe['recipeUri']),
+              ),
+            );
+          },
+        ))
       ],
     );
   }

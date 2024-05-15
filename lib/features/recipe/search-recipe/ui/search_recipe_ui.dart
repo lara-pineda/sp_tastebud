@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sp_tastebud/core/utils/hex_to_color.dart';
-import 'package:sp_tastebud/shared/custom_dialog.dart';
 import 'package:sp_tastebud/shared/search_bar/custom_search_bar.dart';
 import 'package:sp_tastebud/shared/recipe_card/recipe_card.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/recipe_search_api.dart';
@@ -37,8 +35,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
   List<dynamic> _recipes = [];
   bool _isLoading = false;
   bool _initialLoadComplete = false; // Flag to track initial load completion
+  String? _nextUrl; // Initialize _nextUrl as null
   String _searchKey = '';
-  String _lastSearchKey = '';
 
   @override
   void initState() {
@@ -54,7 +52,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
         _initializeQueriesAndLoadRecipes(
             userProfileBloc.state as UserProfileLoaded);
         // Ensure the searchKey or initial parameters are set before calling
-        _loadMoreRecipes(_searchKey);
+        _loadMoreRecipes('');
       }
     });
   }
@@ -67,11 +65,9 @@ class _SearchRecipeState extends State<SearchRecipe> {
   }
 
   void _onSearchChanged() {
-    if (_searchController.text.isEmpty) {
-      // Handle case for empty search or reset
-    } else {
-      _loadMoreRecipes(_searchController.text);
-    }
+    setState(() {
+      _searchKey = _searchController.text;
+    });
   }
 
   void _initializeQueriesAndLoadRecipes(UserProfileLoaded state) {
@@ -91,32 +87,28 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
     if (_isLoading) return; // Prevent multiple simultaneous loads
 
-    if (_lastSearchKey != searchKey) {
-      _recipes.clear(); // Clear the recipes if the search key has changed
-      _lastSearchKey = searchKey; // Update the last search key
-    }
-
     _isLoading = true;
 
     try {
-      var query = '$_healthQuery$_macroQuery$_microQuery';
-      print("query");
-      print(query);
+      final data = await RecipeSearchAPI.searchRecipes(
+        searchKey,
+        _healthQuery + _macroQuery + _microQuery,
+        nextUrl: _nextUrl,
+      );
 
-      final newRecipes = await RecipeSearchAPI.searchRecipes(searchKey, query,
-          start: 0, end: _recipes.length + 10);
+      final newRecipes = data['hits'].map((hit) => hit['recipe']).toList();
+      _nextUrl = data['_links']?['next']?['href']; // Update the next URL
 
       print('newrecipes:');
       print(newRecipes);
+      print('Number of new recipes: ${newRecipes.length}');
 
       if (mounted) {
         setState(() {
           if (newRecipes.isNotEmpty) {
             _recipes.addAll(newRecipes);
-            // _recipes = [];
           } else {
             print("SEARCH RESULTS LIST EMPTY!");
-            _recipes = [];
           }
           _isLoading = false;
           _initialLoadComplete = true; // Mark initial load as complete
@@ -212,36 +204,19 @@ class _SearchRecipeState extends State<SearchRecipe> {
   }
 
   Widget _buildRecipeList() {
-    // print("FETCHED USER PROFILE:");
-    // print(state.dietaryPreferences);
-    // print(state.allergies);
-    // print(state.macronutrients);
-    // print(state.micronutrients);
-
     return Center(
       child: Column(children: <Widget>[
         // search bar
         CustomSearchBar(
-          onSubmitted: (searchKey) => _loadMoreRecipes(searchKey),
-        ),
-
-        // sample button for dialog
-        SizedBox(
-          width: (MediaQuery.of(context).size.width / 6) * 4.5,
-          child: ElevatedButton(
-            onPressed: () {
-              openDialog(context, "Sample Title", "Lorem ipsum dolor sit amet",
-                  onConfirm: () {});
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: '#F06F6F'.toColor(),
-              foregroundColor: const Color(0xFFF7EBE8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(7.0),
-              ),
-            ),
-            child: const Text("Click Me"),
-          ),
+          onSubmitted: (searchKey) {
+            setState(() {
+              _recipes.clear(); // Clear the results first
+              _nextUrl = null; // Reset next URL
+              _searchKey =
+                  searchKey; // Update searchKey with the submitted value
+            });
+            _loadMoreRecipes(searchKey);
+          },
         ),
 
         const SizedBox(height: 20),
@@ -258,34 +233,43 @@ class _SearchRecipeState extends State<SearchRecipe> {
         else
           // search results
           Expanded(
-            child: ListView.builder(
-              itemCount: _recipes.length + 1, // Add one for loading indicator
-              itemBuilder: (context, index) {
-                if (index >= _recipes.length) {
-                  if (!_isLoading) {
-                    _loadMoreRecipes(
-                        _searchKey); // Load more at the end of the list
-                  }
-                  return Center(child: CircularProgressIndicator());
-                }
-                final recipe = _recipes[index];
-                return GestureDetector(
-                  onTap: () {
-                    // Get the recipe data as a Map or directly pass the Recipe object if serialized
-                    final recipeId = extractRecipeIdUsingRegExp(recipe['uri']);
-                    context.goNamed('viewRecipe',
-                        pathParameters: {'recipeId': recipeId});
-                  },
-                  child: RecipeCard(
-                    recipeName: recipe['label'],
-                    imageUrl: recipe['images']['THUMBNAIL']['url'],
-                    sourceWebsite: recipe['source'],
-                    recipeUri: recipe['uri'],
-                  ),
-                );
-              },
-            ),
-          )
+              child: ListView.builder(
+                  itemCount:
+                      _recipes.length + 1, // Add one for loading indicator
+                  itemBuilder: (context, index) {
+                    if (index >= _recipes.length) {
+                      if (!_isLoading && _nextUrl != null) {
+                        _loadMoreRecipes(
+                            _searchKey); // Load more at the end of the list
+                      } else if (!_isLoading &&
+                          _nextUrl == null &&
+                          _searchKey.isEmpty) {
+                        // Only load default results if searchKey is empty and there are no more next URLs
+                        _loadMoreRecipes('');
+                      } else if (_nextUrl == null) {
+                        return Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: Center(child: Text("End of results.")));
+                      }
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    final recipe = _recipes[index];
+                    return GestureDetector(
+                      onTap: () {
+                        // Get the recipe data as a Map or directly pass the Recipe object if serialized
+                        final recipeId =
+                            extractRecipeIdUsingRegExp(recipe['uri']);
+                        context.goNamed('viewRecipe',
+                            pathParameters: {'recipeId': recipeId});
+                      },
+                      child: RecipeCard(
+                        recipeName: recipe['label'],
+                        imageUrl: recipe['images']['THUMBNAIL']['url'],
+                        sourceWebsite: recipe['source'],
+                        recipeUri: recipe['uri'],
+                      ),
+                    );
+                  }))
       ]),
     );
   }

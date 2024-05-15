@@ -59,10 +59,10 @@ sp_tastebud/
 
 -   add ingredients to query
 -   substitute recipe
+-   if nasa rejected recipes, di na dapat lumabas sa search results
 
 MINOR STUFF
 -   view recipe details polish styling
--   recipe collection container height
 -   nagrerefresh page sa recipe collection pag nagreremove, wag na sana refresh, updatelist na lang
 -   dialog styling + state for checkboxes
 -   move save changes button for ingredient mgmt and user profile
@@ -73,9 +73,6 @@ MINOR STUFF
 -   forgot password
 -   confirmation windows for:
     - saving changes when switching tabs
-    - removing saved recipe from collection
-    - restoring rejected recipe
-    - adding to rejected recipe
     - rejecting a favorited recipe
 
 SUGGESTIONS
