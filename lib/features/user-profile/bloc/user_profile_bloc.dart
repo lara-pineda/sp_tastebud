@@ -86,6 +86,8 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
   void _onUpdateUserProfile(
       UpdateUserProfile event, Emitter<UserProfileState> emit) async {
     var userId = FirebaseAuth.instance.currentUser?.uid;
+
+    print("updating user profile");
     print("UserID 1:");
     print(userId);
 
@@ -107,8 +109,12 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
         currentEmail = (state as UserProfileLoaded).email;
       }
 
+      print("values to passed to firestore");
+      print(
+          "${event.selectedDietPref}, ${event.selectedAllergies}, ${event.selectedMacro}, ${event.selectedMicro}, $currentEmail");
+
       // load again after updating to firestore
-      emit(UserProfileLoaded(event.selectedDietPref, event.selectedAllergies,
+      emit(UserProfileUpdated(event.selectedDietPref, event.selectedAllergies,
           event.selectedMacro, event.selectedMicro, currentEmail));
     } catch (e) {
       emit(UserProfileError(e.toString()));

@@ -25,9 +25,14 @@ class UserProfileRepository {
       List<String> allergies,
       List<String> macronutrients,
       List<String> micronutrients) async {
-    await _userProfileService.updateDietPref(userId, dietPref);
-    await _userProfileService.updateAllergies(userId, allergies);
-    await _userProfileService.updateMacronutrients(userId, macronutrients);
-    await _userProfileService.updateMicronutrients(userId, micronutrients);
+    try {
+      await _userProfileService.updateDietPref(userId, dietPref);
+      await _userProfileService.updateAllergies(userId, allergies);
+      await _userProfileService.updateMacronutrients(userId, macronutrients);
+      await _userProfileService.updateMicronutrients(userId, micronutrients);
+      print('update user profile success');
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

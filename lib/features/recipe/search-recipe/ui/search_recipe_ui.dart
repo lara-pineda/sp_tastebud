@@ -318,7 +318,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
                       ),
                     );
                   })),
-        SizedBox(height: (40.toVHLength).toPX()),
       ]),
     );
   }

@@ -53,27 +53,19 @@ class _UserProfileState extends State<UserProfile> {
 
   // These functions will be called whenever a checkbox state changes.
   void _onDietPrefSelectionChanged(List<bool> newSelections) {
-    setState(() {
-      selectedDietaryPreferences = newSelections;
-    });
+    selectedDietaryPreferences = newSelections;
   }
 
   void _onAllergiesSelectionChanged(List<bool> newSelections) {
-    setState(() {
-      selectedAllergies = newSelections;
-    });
+    selectedAllergies = newSelections;
   }
 
   void _onMacronutrientSelectionChanged(List<bool> newSelections) {
-    setState(() {
-      selectedMacronutrients = newSelections;
-    });
+    selectedMacronutrients = newSelections;
   }
 
   void _onMicronutrientSelectionChanged(List<bool> newSelections) {
-    setState(() {
-      selectedMicronutrients = newSelections;
-    });
+    selectedMicronutrients = newSelections;
   }
 
   // Maps checked indices to option label in list

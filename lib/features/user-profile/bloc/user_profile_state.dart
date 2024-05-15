@@ -16,7 +16,17 @@ class UserProfileLoaded extends UserProfileState {
       [this.email]);
 }
 
-class UserProfileUpdated extends UserProfileState {}
+class UserProfileUpdated extends UserProfileState {
+  late final List dietaryPreferences;
+  late final List allergies;
+  late final List macronutrients;
+  late final List micronutrients;
+  final String? email;
+
+  UserProfileUpdated(this.dietaryPreferences, this.allergies,
+      this.macronutrients, this.micronutrients,
+      [this.email]);
+}
 
 class UserProfileError extends UserProfileState {
   final String error;
