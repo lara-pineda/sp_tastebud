@@ -6,12 +6,14 @@ class CheckboxCard extends StatefulWidget {
   final List<String> allChoices;
   final List<bool> initialSelections;
   final ValueChanged<List<bool>> onSelectionChanged;
+  final String cardLabel;
 
   const CheckboxCard({
     super.key,
     required this.allChoices,
     required this.initialSelections,
     required this.onSelectionChanged,
+    required this.cardLabel,
   });
 
   @override
@@ -28,19 +30,6 @@ class _CheckboxCardState extends State<CheckboxCard> {
     selectedValues = widget.initialSelections;
   }
 
-  // @override
-  // void didUpdateWidget(covariant CheckboxCard oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   // Check if the list of choices has changed
-  //   if (oldWidget.allChoices != widget.allChoices) {
-  //     // Update selectedValues to match new list length and preserve current selections
-  //     selectedValues = List.generate(
-  //       widget.allChoices.length,
-  //       (index) =>
-  //           index < selectedValues.length ? selectedValues[index] : false,
-  //     );
-  //   }
-  // }
   @override
   void didUpdateWidget(covariant CheckboxCard oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -51,26 +40,53 @@ class _CheckboxCardState extends State<CheckboxCard> {
     }
   }
 
-  void _showFullList(BuildContext context, List<String> allChoices) {
-    showDialog(
+  void _showFullList(
+      BuildContext context, List<String> allChoices, String label) {
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (context) {
-        return AlertDialog(
-          content: Container(
-            height: MediaQuery.of(context).size.height / 3,
-            width: double.maxFinite,
-            child: ListView.builder(
-              itemCount: allChoices.length,
-              itemBuilder: (context, index) {
-                return CustomCheckboxListTile(
-                  title: allChoices[index],
-                  initialValue: false,
-                  // This should be set based on the item's selection state
-                  onChanged: (bool value) {
-                    // Handle the change
-                  },
-                );
-              },
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  widget.cardLabel,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Container(
+                  margin: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width / 12),
+                  child: GridView.count(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    childAspectRatio: MediaQuery.of(context).size.width /
+                        (MediaQuery.of(context).size.height / 9),
+                    children: List.generate(
+                      widget.allChoices.length,
+                      (index) => CustomCheckboxListTile(
+                        title: widget.allChoices[index],
+                        initialValue: selectedValues[index],
+                        onChanged: (bool value) {
+                          setState(() {
+                            selectedValues[index] = value;
+                          });
+                          widget.onSelectionChanged(selectedValues);
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -149,7 +165,8 @@ class _CheckboxCardState extends State<CheckboxCard> {
             child: IconButton(
               padding: EdgeInsets.zero,
               icon: Icon(Icons.chevron_right, color: Colors.white, size: 30),
-              onPressed: () => _showFullList(context, widget.allChoices),
+              onPressed: () =>
+                  _showFullList(context, widget.allChoices, widget.cardLabel),
             ),
           ),
         ],

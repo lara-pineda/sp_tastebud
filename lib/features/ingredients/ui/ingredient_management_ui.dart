@@ -189,6 +189,7 @@ class _IngredientsState extends State<IngredientManagement> {
                     allChoices: Options.pantryEssentials,
                     initialSelections: selectedPantryEssentials,
                     onSelectionChanged: _onPantryEssentialsSelectionChanged,
+                    cardLabel: 'Pantry Essentials',
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
 
@@ -207,6 +208,7 @@ class _IngredientsState extends State<IngredientManagement> {
                     allChoices: Options.meat,
                     initialSelections: selectedMeat,
                     onSelectionChanged: _onMeatSelectionChanged,
+                    cardLabel: 'Meat',
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
 
@@ -225,6 +227,7 @@ class _IngredientsState extends State<IngredientManagement> {
                     allChoices: Options.fishAndPoultry,
                     initialSelections: selectedFishAndPoultry,
                     onSelectionChanged: _onFishAndPoultrySelectionChanged,
+                    cardLabel: 'Fish and Poultry',
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
 
@@ -243,6 +246,7 @@ class _IngredientsState extends State<IngredientManagement> {
                     allChoices: Options.vegetablesAndGreens,
                     initialSelections: selectedVegetablesAndGreens,
                     onSelectionChanged: _onVegetablesAndGreensSelectionChanged,
+                    cardLabel: 'Vegetables and Greens',
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
 
@@ -261,6 +265,7 @@ class _IngredientsState extends State<IngredientManagement> {
                     allChoices: Options.baking,
                     initialSelections: selectedBaking,
                     onSelectionChanged: _onBakingSelectionChanged,
+                    cardLabel: 'Baking',
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
                 ],

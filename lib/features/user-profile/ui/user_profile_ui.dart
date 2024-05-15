@@ -153,7 +153,7 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                 );
               }
-              // Fallback widget
+              // Fallback widget.
               return Text("Page not found.");
             },
           );
@@ -247,6 +247,13 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   Widget buildUserProfileUI(UserProfileLoaded state) {
+    // // Initialize the lists with false values
+    // selectedDietaryPreferences =
+    //     List.filled(Options.dietaryPreferences.length, false);
+    // selectedAllergies = List.filled(Options.allergies.length, false);
+    // selectedMacronutrients = List.filled(Options.macronutrients.length, false);
+    // selectedMicronutrients = List.filled(Options.micronutrients.length, false);
+
     // Map the selected options to boolean values
     selectedDietaryPreferences = mapOptionsToBoolean(
         state.dietaryPreferences, Options.dietaryPreferences);
@@ -337,6 +344,7 @@ class _UserProfileState extends State<UserProfile> {
                     allChoices: Options.dietaryPreferences,
                     initialSelections: selectedDietaryPreferences,
                     onSelectionChanged: _onDietPrefSelectionChanged,
+                    cardLabel: 'Dietary Preferences',
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
                   Text(
@@ -353,6 +361,7 @@ class _UserProfileState extends State<UserProfile> {
                     allChoices: Options.allergies,
                     initialSelections: selectedAllergies,
                     onSelectionChanged: _onAllergiesSelectionChanged,
+                    cardLabel: 'Allergies',
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
                   Text(
@@ -369,6 +378,7 @@ class _UserProfileState extends State<UserProfile> {
                     allChoices: Options.macronutrients,
                     initialSelections: selectedMacronutrients,
                     onSelectionChanged: _onMacronutrientSelectionChanged,
+                    cardLabel: 'Macronutrients',
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
                   Text(
@@ -385,35 +395,15 @@ class _UserProfileState extends State<UserProfile> {
                     allChoices: Options.micronutrients,
                     initialSelections: selectedMicronutrients,
                     onSelectionChanged: _onMicronutrientSelectionChanged,
+                    cardLabel: 'Micronutrients',
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),
                 ],
               ),
             ),
-            // ElevatedButton(
-            //   onPressed: () => _onSaveButtonPressed(context),
-            //   child: Text('Save Changes'),
-            //   style: ElevatedButton.styleFrom(
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(10),
-            //     ),
-            //     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            //   ),
-            // ),
           ],
         ),
       ),
-
-      // logout button on upper right
-      // Positioned(
-      //   top: 40,
-      //   right: 20,
-      //   child: IconButton(
-      //     icon: Icon(Icons.logout),
-      //     onPressed: () => _logout(context),
-      //   ),
-      // ),
-
       // save changes button on lower right
       Positioned(
         bottom: 20,

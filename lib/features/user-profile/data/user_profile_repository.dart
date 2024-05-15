@@ -30,7 +30,6 @@ class UserProfileRepository {
       await _userProfileService.updateAllergies(userId, allergies);
       await _userProfileService.updateMacronutrients(userId, macronutrients);
       await _userProfileService.updateMicronutrients(userId, micronutrients);
-      print('update user profile success');
     } catch (e) {
       throw Exception(e);
     }

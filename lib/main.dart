@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/config/app_router.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
 import 'core/config/service_locator.dart';
@@ -77,17 +78,19 @@ class MyApp extends StatelessWidget {
 //         initialLocation: "/",
 //         routes: [
 //           GoRoute(
-//               name: "viewRecipe",
-//               path: "/",
-//               builder: (context, state) {
-//                 return BlocProvider<ViewRecipeBloc>(
-//                     create: (context) => getIt<ViewRecipeBloc>(),
-//                     child: Scaffold(
-//                       body: const ViewRecipe(
-//                         recipeId: '1b0095b7bff243e8a5176a0e5d5043e6',
-//                       ),
-//                     ));
-//               }),
+//             name: "viewRecipe",
+//             path: "/",
+//             builder: (context, state) => UserProfile(),
+//           ),
+//           // builder: (context, state) {
+//           //   return BlocProvider<ViewRecipeBloc>(
+//           //       create: (context) => getIt<ViewRecipeBloc>(),
+//           //       child: Scaffold(
+//           //         body: const ViewRecipe(
+//           //           recipeId: '1b0095b7bff243e8a5176a0e5d5043e6',
+//           //         ),
+//           //       ));
+//           // }),
 //         ],
 //       );
 // }

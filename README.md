@@ -58,7 +58,6 @@ sp_tastebud/
 ## Features TODO
 
 -   add ingredients to query
--   dialog styling + state for checkboxes
 -   substitute recipe
 -   if nasa rejected recipes, di na dapat lumabas sa search results
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients
