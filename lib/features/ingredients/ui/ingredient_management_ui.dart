@@ -7,6 +7,7 @@ import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
+import '../../../shared/custom_dialog.dart';
 import '../bloc/ingredients_bloc.dart';
 
 class IngredientManagement extends StatefulWidget {
@@ -110,6 +111,18 @@ class _IngredientsState extends State<IngredientManagement> {
     return allOptions
         .map((option) => selectedOptions.contains(option))
         .toList();
+  }
+
+  void _handleConfirmSave(BuildContext context) {
+    const confirmationMessage =
+        'Do you confirm to save the changes made for ingredient management page?';
+
+    openDialog(
+      context,
+      'Confirmation',
+      confirmationMessage,
+      onConfirm: () => _onSaveButtonPressed(context),
+    );
   }
 
   @override
@@ -277,7 +290,7 @@ class _IngredientsState extends State<IngredientManagement> {
         bottom: 20,
         right: 20,
         child: FloatingActionButton(
-          onPressed: () => _onSaveButtonPressed(context),
+          onPressed: () => _handleConfirmSave(context),
           backgroundColor: Colors.white,
           elevation: 4,
           child: const Icon(
