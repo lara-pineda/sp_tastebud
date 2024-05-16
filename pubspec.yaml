@@ -66,6 +66,7 @@ dependencies:
   cloud_firestore: ^4.16.1
   url_launcher: ^6.2.6
   flutter_svg: ^2.0.9
+  internet_connection_checker_plus: ^1.0.1
 
 
 dev_dependencies:
