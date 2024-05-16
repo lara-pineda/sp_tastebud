@@ -4,10 +4,12 @@ import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/core/utils/capitalize_first_letter.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/core/utils/load_svg.dart';
+import '../../../ingredients/bloc/ingredients_bloc.dart';
 import '../bloc/view_recipe_bloc.dart';
 import '../model/recipe_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,15 +28,20 @@ class _ViewRecipeState extends State<ViewRecipe>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  final IngredientsBloc _ingredientsBloc = GetIt.instance<IngredientsBloc>();
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
 
     // Ensure the bloc is accessed after the widget build process is complete
-    Future.microtask(() =>
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
         BlocProvider.of<ViewRecipeBloc>(context, listen: false)
-            .add(FetchRecipe(widget.recipeId)));
+            .add(FetchRecipe(widget.recipeId));
+      }
+    });
   }
 
   @override
@@ -51,7 +58,11 @@ class _ViewRecipeState extends State<ViewRecipe>
         if (state is RecipeLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (state is RecipeLoaded) {
-          return _buildRecipePage(state.recipe);
+          // Get all ingredients from IngredientsBloc
+          final allIngredients = _ingredientsBloc.allIngredients
+              .map((ingredient) => ingredient.toLowerCase());
+
+          return _buildRecipePage(state.recipe, allIngredients);
         } else if (state is RecipeError) {
           return Text('Error: ${state.error}');
         }
@@ -60,10 +71,11 @@ class _ViewRecipeState extends State<ViewRecipe>
     );
   }
 
-  Widget _buildRecipePage(Map<String, dynamic> recipeData) {
-    // print(recipeData);
+  Widget _buildRecipePage(
+      Map<String, dynamic> recipeData, Iterable<String> ingredients) {
     // Convert the map to a Recipe object right here within the method
     Recipe recipe = Recipe.fromJson(recipeData['recipe']);
+    print(ingredients);
 
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -132,7 +144,7 @@ class _ViewRecipeState extends State<ViewRecipe>
               controller: _tabController,
               children: <Widget>[
                 _buildOverviewTab(recipe),
-                _buildIngredientsTab(recipe),
+                _buildIngredientsTab(recipe, ingredients),
                 _buildNutritionTab(recipe),
               ],
             ),
@@ -314,41 +326,44 @@ class _ViewRecipeState extends State<ViewRecipe>
     );
   }
 
-  Widget _buildIngredientsTab(Recipe recipe) {
+  Widget _buildIngredientsTab(Recipe recipe, Iterable<String> allIngredients) {
     return SingleChildScrollView(
         child: Padding(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: recipe.ingredientLines
-            .map((line) => InfoRow(
-                  columns: [
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "> ",
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16.0,
-                              color: AppColors.purpleColor,
-                            ),
-                          ),
-                          TextSpan(
-                            text: line.replaceAll('Â', ''),
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ],
+        children: recipe.ingredients.map((line) {
+          bool containsIngredient = allIngredients.any((ingredient) =>
+              line.food.toLowerCase().contains(ingredient.toLowerCase()));
+          return InfoRow(
+            columns: [
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "> ",
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.0,
+                        color: AppColors.purpleColor,
+                      ),
+                    ),
+                    TextSpan(
+                      text: line.text.replaceAll('Â', ''),
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16.0,
+                        color: containsIngredient ? Colors.black : Colors.red,
                       ),
                     ),
                   ],
-                ))
-            .toList(),
+                ),
+              ),
+            ],
+          );
+        }).toList(),
       ),
     ));
   }
@@ -489,7 +504,10 @@ class _ViewRecipeState extends State<ViewRecipe>
     if (url != null && await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     } else {
-      throw 'Could not launch $url';
+      // Use Flutter's user interface libraries to show an error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not launch $url')),
+      );
     }
   }
 }

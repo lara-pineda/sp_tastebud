@@ -141,6 +141,7 @@ class Options {
     'Baking powder',
     'Baking soda',
     'Butter',
+    'Coconut milk',
     'Cooking oil',
     'Egg',
     'Flour',

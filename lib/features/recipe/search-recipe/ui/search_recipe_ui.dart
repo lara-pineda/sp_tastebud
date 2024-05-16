@@ -99,8 +99,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
     try {
       // Get all ingredients from IngredientsBloc
       final allIngredients = _ingredientsBloc.allIngredients;
-      print('in search recipe ui:');
-      print("ingredients: $allIngredients");
 
       final data = await RecipeSearchAPI.searchRecipes(
         searchKey: searchKey,
@@ -111,10 +109,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
       final newRecipes = data['hits'].map((hit) => hit['recipe']).toList();
       _nextUrl = data['_links']?['next']?['href'];
-
-      print('newrecipes:');
-      print(newRecipes);
-      print('Number of new recipes: ${newRecipes.length}');
 
       if (mounted) {
         setState(() {
@@ -203,7 +197,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
           current is UserProfileInitial,
       builder: (context, userProfileState) {
         if (userProfileState is UserProfileLoaded) {
-          print('userprofilestate is userprofileloaded');
+          // print('userprofilestate is userprofileloaded');
 
           return BlocListener<SearchRecipeBloc, SearchRecipeState>(
             listener: (context, state) {

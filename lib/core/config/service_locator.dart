@@ -72,7 +72,7 @@ void setupServices() {
       () => IngredientsBloc(getIt<IngredientsRepository>()));
   getIt.registerLazySingleton<SearchRecipeBloc>(() => SearchRecipeBloc(
       getIt<SearchRecipeRepository>(), getIt<RecipeCollectionBloc>()));
-  getIt.registerLazySingleton<ViewRecipeBloc>(
+  getIt.registerFactory<ViewRecipeBloc>(
       () => ViewRecipeBloc(getIt<ViewRecipeRepository>()));
   getIt.registerLazySingleton<RecipeCollectionBloc>(
       () => RecipeCollectionBloc(getIt<RecipeCollectionRepository>()));

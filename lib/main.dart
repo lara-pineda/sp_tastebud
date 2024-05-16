@@ -20,6 +20,9 @@ void main() async {
   // Set up dependency injection container before the app starts
   setupServices();
 
+  // log all transitions, including closures
+  Bloc.observer = SimpleBlocObserver();
+
   runApp(MyApp());
 }
 
@@ -70,6 +73,14 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onClose(BlocBase bloc) {
+    super.onClose(bloc);
+    print('${bloc.runtimeType} is closing');
   }
 }
 

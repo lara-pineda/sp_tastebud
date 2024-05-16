@@ -160,25 +160,19 @@ class _RecipeCardState extends State<RecipeCard> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ClipRRect(
-              //   borderRadius: BorderRadius.circular(8.0),
-              //   child: Image.network(widget.imageUrl, fit: BoxFit.cover),
-              // ),
               // Load the image and handle errors gracefully
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
                   widget.imageUrl,
                   fit: BoxFit.cover,
-                  // width: 100,
-                  // height: 100,
                   errorBuilder: (context, error, stackTrace) {
                     // Print error to console
                     print('Failed to load image: $error');
                     return Image.asset(
                       Assets.imagePlaceholder, // Use a local fallback image
-                      // width: 100,
-                      // height: 100,
+                      width: 100,
+                      height: 100,
                     );
                   },
                 ),
