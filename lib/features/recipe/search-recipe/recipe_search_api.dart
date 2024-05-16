@@ -30,8 +30,13 @@ class RecipeSearchAPI {
   // }
 
   static Future<Map<String, dynamic>> searchRecipes(
-      String searchKey, String queryParams,
-      {String? nextUrl}) async {
+      {required String searchKey,
+      required String queryParams,
+      required List<String> ingredients,
+      String? nextUrl}) async {
+    print('in search recipe api');
+    print("ingredients: $ingredients");
+
     final String url = nextUrl ??
         '$baseUrl/api/recipes/v2?q=$searchKey&app_id=$appId&app_key=$appKey&type=public$queryParams';
 

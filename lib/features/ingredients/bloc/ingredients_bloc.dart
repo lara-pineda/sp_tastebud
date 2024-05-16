@@ -13,6 +13,23 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
     on<UpdateIngredients>(_onUpdateIngredients);
   }
 
+  // get all ingredients as a list
+  List<String> get allIngredients {
+    if (state is IngredientsLoaded) {
+      final loadedState = state as IngredientsLoaded;
+      return [
+        ...loadedState.pantryEssentials,
+        ...loadedState.meat,
+        ...loadedState.vegetablesAndGreens,
+        ...loadedState.fishAndPoultry,
+        ...loadedState.baking,
+      ];
+    } else {
+      print('state is not ingredientsloaded');
+      return []; // Return an empty list if ingredients are not loaded
+    }
+  }
+
   void _onLoadIngredients(
       LoadIngredients event, Emitter<IngredientsState> emit) async {
     var userId = FirebaseAuth.instance.currentUser?.uid;
@@ -39,6 +56,8 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
 
         emit(IngredientsLoaded(fetchPantryEssentials, fetchMeat,
             fetchVegetablesAndGreens, fetchFishAndPoultry, fetchBaking));
+
+        print(state);
       } else {
         // // No user data found, defaulting to all unchecked.
         // emit(IngredientsLoaded(

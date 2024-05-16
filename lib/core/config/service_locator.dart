@@ -64,15 +64,15 @@ void setupServices() {
   getIt.registerLazySingleton<PreferencesService>(() => PreferencesService());
 
   // Register BLoCs
-  getIt.registerFactory<AuthBloc>(
+  getIt.registerLazySingleton<AuthBloc>(
       () => AuthBloc(getIt<UserRepository>(), getIt<PreferencesService>()));
-  getIt.registerFactory<UserProfileBloc>(
+  getIt.registerLazySingleton<UserProfileBloc>(
       () => UserProfileBloc(getIt<UserProfileRepository>()));
-  getIt.registerFactory<IngredientsBloc>(
+  getIt.registerLazySingleton<IngredientsBloc>(
       () => IngredientsBloc(getIt<IngredientsRepository>()));
-  getIt.registerFactory<SearchRecipeBloc>(() => SearchRecipeBloc(
+  getIt.registerLazySingleton<SearchRecipeBloc>(() => SearchRecipeBloc(
       getIt<SearchRecipeRepository>(), getIt<RecipeCollectionBloc>()));
-  getIt.registerFactory<ViewRecipeBloc>(
+  getIt.registerLazySingleton<ViewRecipeBloc>(
       () => ViewRecipeBloc(getIt<ViewRecipeRepository>()));
   getIt.registerLazySingleton<RecipeCollectionBloc>(
       () => RecipeCollectionBloc(getIt<RecipeCollectionRepository>()));

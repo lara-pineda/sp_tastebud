@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
+import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
 
 import '../../auth/bloc/auth_bloc.dart';
 
@@ -82,6 +83,12 @@ class RecipeCollection extends StatelessWidget {
   Widget _buildRecipeCard(String title) {
     String image =
         title == 'Saved Recipes' ? Assets.savedRecipe : Assets.rejectedRecipe;
+
+    // Get all ingredients from IngredientsBloc
+    final allIngredients = GetIt.instance<IngredientsBloc>().allIngredients;
+    print('in recipe collection ui:');
+    print("ingredients: $allIngredients");
+
     return Column(
       mainAxisSize:
           MainAxisSize.min, // Use the minimum space needed by the child widgets

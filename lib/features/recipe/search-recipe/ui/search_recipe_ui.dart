@@ -1,6 +1,7 @@
 import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/shared/search_bar/custom_search_bar.dart';
 import 'package:sp_tastebud/shared/recipe_card/recipe_card.dart';
@@ -11,6 +12,7 @@ import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
+import '../../../ingredients/bloc/ingredients_bloc.dart';
 import '../bloc/search_recipe_bloc.dart';
 import 'dart:async';
 
@@ -30,6 +32,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
   String _healthQuery = '';
   String _macroQuery = '';
   String _microQuery = '';
+
+  final IngredientsBloc _ingredientsBloc = GetIt.instance<IngredientsBloc>();
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -89,17 +93,20 @@ class _SearchRecipeState extends State<SearchRecipe> {
   }
 
   Future<void> _loadMoreRecipes(String searchKey) async {
-    print("Loading recipes for search key: $searchKey");
-
     if (_isLoading) return;
-
     _isLoading = true;
 
     try {
+      // Get all ingredients from IngredientsBloc
+      final allIngredients = _ingredientsBloc.allIngredients;
+      print('in search recipe ui:');
+      print("ingredients: $allIngredients");
+
       final data = await RecipeSearchAPI.searchRecipes(
-        searchKey,
-        _healthQuery + _macroQuery + _microQuery,
+        searchKey: searchKey,
+        queryParams: _healthQuery + _macroQuery + _microQuery,
         nextUrl: _nextUrl,
+        ingredients: allIngredients,
       );
 
       final newRecipes = data['hits'].map((hit) => hit['recipe']).toList();
@@ -131,10 +138,14 @@ class _SearchRecipeState extends State<SearchRecipe> {
         await Future.delayed(retryInterval);
         retryCount++;
         try {
+          // Get all ingredients from IngredientsBloc
+          final allIngredients = _ingredientsBloc.allIngredients;
+
           final data = await RecipeSearchAPI.searchRecipes(
-            searchKey,
-            _healthQuery + _macroQuery + _microQuery,
+            searchKey: searchKey,
+            queryParams: _healthQuery + _macroQuery + _microQuery,
             nextUrl: _nextUrl,
+            ingredients: allIngredients,
           );
 
           final newRecipes = data['hits'].map((hit) => hit['recipe']).toList();
