@@ -31,6 +31,9 @@ dependencies:
   path:
     any
 
+  openapi:
+    path: /home/lbpineda/Desktop/spoonacular-api-clients/dart/
+
   flutter:
     sdk: flutter
 
@@ -47,7 +50,6 @@ dependencies:
   go_router: ^13.2.2    # routing
 
   # for svg icons
-  flutter_svg: ^2.0.10+1
 
   # for using css units of measurement
   dimension: ^0.1.7
@@ -63,6 +65,7 @@ dependencies:
   firebase_auth: ^4.19.1
   cloud_firestore: ^4.16.1
   url_launcher: ^6.2.6
+  flutter_svg: ^2.0.9
 
 
 dev_dependencies:

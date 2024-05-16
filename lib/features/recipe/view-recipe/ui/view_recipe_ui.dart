@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/core/utils/capitalize_first_letter.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
@@ -85,34 +86,83 @@ class _ViewRecipeState extends State<ViewRecipe>
             floating: false,
             pinned: true,
             snap: false,
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.link),
-                onPressed: () => _launchURL(recipe.url),
-              )
+            leading: Container(
+              margin: EdgeInsets.only(
+                  left: 5, top: 4, bottom: 4), // Adjust the margin as needed
+              decoration: BoxDecoration(
+                color: Colors.white70,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () => context.pop(),
+              ),
+            ),
+            actions: [
+              Container(
+                  margin: EdgeInsets.only(right: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.white70,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.link),
+                    onPressed: () => _launchURL(recipe.url),
+                  ))
             ],
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              title: Text(
-                recipe.label ?? 'No Title',
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16.0,
-                  fontFamily: 'Poppins',
-                ),
-              ),
-              background: Image.network(
-                recipe.image ?? '',
-                height: 200,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  // Print error to console
-                  print('Failed to load image: $error');
-                  return Image.asset(
-                    Assets.imagePlaceholder, // Use a local fallback image
-                  );
-                },
-              ),
+            flexibleSpace: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                // Calculate opacity based on scroll
+                var top = constraints.biggest.height;
+                double visibleMainHeight =
+                    top - MediaQuery.of(context).padding.top;
+                double opacity = (visibleMainHeight - kToolbarHeight) /
+                    (200 - kToolbarHeight);
+                opacity = opacity.clamp(
+                    0.0, 1.0); // Ensure opacity is between 0 and 1
+
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.network(
+                      recipe.image ?? '',
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        // Fallback image if there is an error loading the network image
+                        return Image.asset(
+                          Assets.imagePlaceholder, // Use a local fallback image
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Opacity(
+                        opacity: opacity, // Use calculated opacity
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [Colors.transparent, Colors.black54],
+                            ),
+                          ),
+                          child: Text(
+                            recipe.label ?? 'No Title',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ];
@@ -122,21 +172,23 @@ class _ViewRecipeState extends State<ViewRecipe>
         children: <Widget>[
           TabBar(
             controller: _tabController,
+            indicatorColor: AppColors.seaGreenColor,
             labelStyle: TextStyle(
               fontSize: 18.0,
               fontFamily: 'Inter',
               fontWeight: FontWeight.w700,
             ),
-            labelColor: AppColors.orangeColor,
+            labelColor: AppColors.seaGreenColor,
             unselectedLabelStyle: TextStyle(
               fontSize: 16.0,
               fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
             ),
             tabs: const [
               Tab(text: "Overview"),
               Tab(text: "Ingredients"),
-              Tab(text: "Nutritional Information"),
+              Tab(text: "Nutrition"),
             ],
           ),
           Expanded(
@@ -175,6 +227,40 @@ class _ViewRecipeState extends State<ViewRecipe>
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.orangeDisabledColor,
+                    foregroundColor: AppColors.orangeDarkerColor,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.favorite_border),
+                      SizedBox(width: (10.toVWLength).toPX()),
+                      Text('Save Recipe'),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.grayColor,
+                    foregroundColor: Colors.black45,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.remove_circle_outline),
+                      SizedBox(width: (10.toVWLength).toPX()),
+                      Text('Reject Recipe'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: (10.toVHLength).toPX()),
             InfoRow(
               columns: [
                 Text(
@@ -255,7 +341,7 @@ class _ViewRecipeState extends State<ViewRecipe>
                 Text(
                   recipe.cuisineType
                       .map((type) {
-                        return capitalizeFirstLetter(type);
+                        return capitalizeFirstLetters(type);
                       })
                       .toList()
                       .join(', '),
@@ -282,7 +368,7 @@ class _ViewRecipeState extends State<ViewRecipe>
                 Text(
                   recipe.mealType
                       .map((type) {
-                        return capitalizeFirstLetter(type);
+                        return capitalizeFirstLetters(type);
                       })
                       .toList()
                       .join(', '),
@@ -307,7 +393,7 @@ class _ViewRecipeState extends State<ViewRecipe>
                   ),
                 ),
                 Text(
-                  recipe.tags.join(', '),
+                  recipe.tags.isNotEmpty ? recipe.tags.join(', ') : 'N/A',
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
@@ -332,38 +418,52 @@ class _ViewRecipeState extends State<ViewRecipe>
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: recipe.ingredients.map((line) {
-          bool containsIngredient = allIngredients.any((ingredient) =>
-              line.food.toLowerCase().contains(ingredient.toLowerCase()));
-          return InfoRow(
-            columns: [
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "> ",
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.0,
-                        color: AppColors.purpleColor,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(
+                'Note: Texts colored in red mean that the ingredient is missing from your inventory or it does not fit your preferences.',
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontFamily: 'Inter',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400)),
+          ),
+          ...recipe.ingredients.map((line) {
+            bool containsIngredient = allIngredients.any((ingredient) =>
+                // ingredient.toLowerCase().contains(line.food.toLowerCase()));
+                line.food.toLowerCase().contains(ingredient.toLowerCase()));
+
+            return InfoRow(
+              columns: [
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "> ",
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.0,
+                          color: AppColors.purpleColor,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: line.text.replaceAll('Â', ''),
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16.0,
-                        color: containsIngredient ? Colors.black : Colors.red,
+                      TextSpan(
+                        text: line.text.replaceAll('Â', ''),
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16.0,
+                          color: containsIngredient ? Colors.black : Colors.red,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          );
-        }).toList(),
+              ],
+            );
+          }).toList(),
+        ],
       ),
     ));
   }

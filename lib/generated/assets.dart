@@ -78,7 +78,7 @@ class Assets {
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesBackground = 'assets/images/Background.png';
   static const String imagesDefaultProfile = 'assets/images/DefaultProfile.jpg';
-  static const String imagesEdamamBadge = 'assets/images/Edamam_Badge.svg';
+  static const String imagesEdamamBadge = 'assets/images/Edamam_Badge.png';
   static const String imagesImagePlaceholder =
       'assets/images/ImagePlaceholder.png';
   static const String imagesLandingFruits = 'assets/images/LandingFruits.jpg';
@@ -91,6 +91,8 @@ class Assets {
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
   static const String libScratch = 'lib/scratch.dart';
+  static const String modelIngredientSubstituteResponseModel =
+      'lib/features/recipe/view-recipe/model/ingredient_substitute_response_model.dart';
   static const String modelRecipeModel =
       'lib/features/recipe/view-recipe/model/recipe_model.dart';
   static const String recipeCardRecipeCard =
