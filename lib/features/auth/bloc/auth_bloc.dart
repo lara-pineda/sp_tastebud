@@ -83,18 +83,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthFailure("User not logged in"));
     }
   }
-// USAGE
-// // Trigger another bloc with dependency injection for fetching user data
-// context.read<AuthWrapperBloc>().add(CheckLoginStatus());
-
-// REDIRECTION
-// BlocListener<AuthWrapperBloc, AuthWrapperState>(
-//   listener: (context, state) {
-//     if (state is AuthWrapperError && state.message == "User not logged in") {
-//       // Assuming you're using GoRouter or Navigator for routing
-//       GoRouter.of(context).go('/main-menu');  // Redirect to main menu or login page
-//     }
-//   },
-//   child: Container(), // Your UI elements here
-// )
 }

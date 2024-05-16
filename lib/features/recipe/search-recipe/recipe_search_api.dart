@@ -9,9 +9,6 @@ class RecipeSearchAPI {
   static final Map<String, CacheEntry> _cache = {};
   static const int cacheDuration = 3600;
 
-  // with ingredients
-  // https://api.edamam.com/api/recipes/v2?type=public&app_id=your_app_id&app_key=your_app_key&q=chicken,garlic,onion&random=true
-  // https://api.edamam.com/api/recipes/v2?type=public&q=onion%2C%20soy%20sauce%2C%20chicken%20breast&app_id=944184b7&app_key=32a51da0f5bf093de7b4cd19e2f55112
   static Future<Map<String, dynamic>> searchRecipes(
       {required String searchKey,
       required String queryParams,
