@@ -62,17 +62,17 @@ sp_tastebud/
 -   if nasa rejected recipes, di na dapat lumabas sa search results
 
 MINOR STUFF
+-   forgot password = page for entering email and code, then new password
+-   no checking if there are actual changes made sa ingredient mgmt and user profile
+-   no notif if save is successful sa ingredient mgmt and user profile
 -   implement debounce on recipe collection
 -   nagrerefresh page sa recipe collection pag nagreremove, wag na sana refresh, updatelist na lang
 -   check if wifi is on
 -   add more filters
--   forgot password
 -   confirmation windows for:
     - saving changes when switching tabs
     - rejecting a favorited recipe
--   center title sa view recipe ui on scroll up
--   no checking if there are actual changes made sa ingredient mgmt and user profile
--   no notif if save is successful sa ingredient mgmt and user profile
+- bakit sobrang laki ng circle loading indicator sa umpisa
 
 SUGGESTIONS
 -   manage equipments
