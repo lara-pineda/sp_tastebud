@@ -84,11 +84,6 @@ class RecipeCollection extends StatelessWidget {
     String image =
         title == 'Saved Recipes' ? Assets.savedRecipe : Assets.rejectedRecipe;
 
-    // Get all ingredients from IngredientsBloc
-    final allIngredients = GetIt.instance<IngredientsBloc>().allIngredients;
-    print('in recipe collection ui:');
-    print("ingredients: $allIngredients");
-
     return Column(
       mainAxisSize:
           MainAxisSize.min, // Use the minimum space needed by the child widgets

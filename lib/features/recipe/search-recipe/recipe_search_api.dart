@@ -11,34 +11,24 @@ class RecipeSearchAPI {
 
   // with ingredients
   // https://api.edamam.com/api/recipes/v2?type=public&app_id=your_app_id&app_key=your_app_key&q=chicken,garlic,onion&random=true
-
-  // Future<List<Recipe>> fetchRecipes(List<String> ingredients) async {
-  //   String ingredientQuery = ingredients.join(',');
-  //   var url = Uri.parse(
-  //       'https://api.edamam.com/api/recipes/v2?type=public&app_id=your_app_id&app_key=your_app_key&q=$ingredientQuery&random=true');
-  //
-  //   var response = await http.get(url);
-  //   if (response.statusCode == 200) {
-  //     var data = json.decode(response.body);
-  //     List<Recipe> recipes = data['hits']
-  //         .map<Recipe>((data) => Recipe.fromJson(data['recipe']))
-  //         .toList();
-  //     return recipes;
-  //   } else {
-  //     throw Exception('Failed to load recipes');
-  //   }
-  // }
-
+  // https://api.edamam.com/api/recipes/v2?type=public&q=onion%2C%20soy%20sauce%2C%20chicken%20breast&app_id=944184b7&app_key=32a51da0f5bf093de7b4cd19e2f55112
   static Future<Map<String, dynamic>> searchRecipes(
       {required String searchKey,
       required String queryParams,
       required List<String> ingredients,
       String? nextUrl}) async {
-    print('in search recipe api');
-    print("ingredients: $ingredients");
+    // Join the ingredients list into a single string with replacements
+    String formattedIngredients = ingredients
+        .map((ingredient) => ingredient
+            .toLowerCase()
+            .replaceAll(' ', '%20')) // Replace spaces with '%20'
+        .join('%2C'); // Join elements with '%2C'
+
+    // Joining search key with ingredients
+    String query = '$searchKey%2C$formattedIngredients';
 
     final String url = nextUrl ??
-        '$baseUrl/api/recipes/v2?q=$searchKey&app_id=$appId&app_key=$appKey&type=public$queryParams';
+        '$baseUrl/api/recipes/v2?q=$query&app_id=$appId&app_key=$appKey&type=public$queryParams';
 
     if (_cache.containsKey(url)) {
       CacheEntry entry = _cache[url]!;

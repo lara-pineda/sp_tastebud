@@ -25,7 +25,6 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
         ...loadedState.baking,
       ];
     } else {
-      print('state is not ingredientsloaded');
       return []; // Return an empty list if ingredients are not loaded
     }
   }
@@ -56,8 +55,6 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
 
         emit(IngredientsLoaded(fetchPantryEssentials, fetchMeat,
             fetchVegetablesAndGreens, fetchFishAndPoultry, fetchBaking));
-
-        print(state);
       } else {
         // // No user data found, defaulting to all unchecked.
         // emit(IngredientsLoaded(

@@ -336,7 +336,7 @@ class _ViewRecipeState extends State<ViewRecipe>
                             ),
                           ),
                           TextSpan(
-                            text: line,
+                            text: line.replaceAll('Â', ''),
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w400,
