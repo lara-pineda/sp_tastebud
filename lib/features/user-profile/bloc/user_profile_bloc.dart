@@ -67,7 +67,11 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
 
         // Update state with the loaded profile data
         emit(UserProfileLoaded(
-            fetchDietPref, fetchAllergies, fetchMacro, fetchMicro, email));
+            fetchDietPref.cast<String>(),
+            fetchAllergies.cast<String>(),
+            fetchMacro.cast<String>(),
+            fetchMicro.cast<String>(),
+            email));
       } else {
         // Return empty lists
         emit(UserProfileLoaded(

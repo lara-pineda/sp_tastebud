@@ -1,19 +1,15 @@
-import 'dart:convert';
-
 import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/core/utils/capitalize_first_letter.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
-import 'package:sp_tastebud/core/utils/load_svg.dart';
-import '../../../ingredients/bloc/ingredients_bloc.dart';
+import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
 import '../bloc/view_recipe_bloc.dart';
 import '../model/recipe_model.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'info_row.dart';
 
 class ViewRecipe extends StatefulWidget {
@@ -158,7 +154,10 @@ class _ViewRecipeState extends State<ViewRecipe>
                             gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: [Colors.transparent, Colors.black54],
+                              colors: const [
+                                Colors.transparent,
+                                Colors.black54
+                              ],
                             ),
                           ),
                           child: Text(
@@ -476,7 +475,7 @@ class _ViewRecipeState extends State<ViewRecipe>
                 ),
               ],
             );
-          }).toList(),
+          }),
         ],
       ),
     ));
@@ -489,17 +488,17 @@ class _ViewRecipeState extends State<ViewRecipe>
     Map<String, List<String>> nutrientMap = {};
 
     // Process totalNutrients entries
-    recipe.totalNutrients.nutrients.entries.forEach((entry) {
+    for (var entry in recipe.totalNutrients.nutrients.entries) {
       final String unit =
           entry.value.unit == 'Âµg' ? '\u00B5g' : entry.value.unit;
       nutrientMap[entry.value.label] = [
         '${(entry.value.quantity / servings).toStringAsFixed(2)} $unit',
         '',
       ];
-    });
+    }
 
     // Process totalDaily entries
-    recipe.totalDaily.nutrients.entries.forEach((entry) {
+    for (var entry in recipe.totalDaily.nutrients.entries) {
       if (nutrientMap.containsKey(entry.value.label)) {
         nutrientMap[entry.value.label]![1] =
             '${(entry.value.quantity / servings).toStringAsFixed(2)}%';
@@ -509,7 +508,7 @@ class _ViewRecipeState extends State<ViewRecipe>
           '${(entry.value.quantity / servings).toStringAsFixed(2)}%',
         ];
       }
-    });
+    }
 
     List<Widget> rows = [];
 

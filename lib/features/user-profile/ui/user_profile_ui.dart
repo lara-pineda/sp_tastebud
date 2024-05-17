@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dimension/dimension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,7 @@ import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
-import '../../../shared/custom_dialog.dart';
+import 'package:sp_tastebud/shared/custom_dialog.dart';
 import '../bloc/user_profile_bloc.dart';
 
 class UserProfile extends StatefulWidget {
@@ -19,11 +20,20 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  // used for updating user details
+  // lists to hold selected options
   List<bool> selectedDietaryPreferences = [];
   List<bool> selectedAllergies = [];
   List<bool> selectedMacronutrients = [];
   List<bool> selectedMicronutrients = [];
+
+  // lists to hold fetched data from firestore
+  List<bool> initialDietaryPreferences = [];
+  List<bool> initialAllergies = [];
+  List<bool> initialMacronutrients = [];
+  List<bool> initialMicronutrients = [];
+
+  // Track if changes are made
+  final ValueNotifier<bool> _isModified = ValueNotifier<bool>(false);
 
   // Retrieve blocs using GetIt
   final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
@@ -38,7 +48,6 @@ class _UserProfileState extends State<UserProfile> {
     super.initState();
 
     // Load the user profile data when the widget is initialized
-    // BlocProvider.of<UserProfileBloc>(context).add(LoadUserProfile());
     _userProfileBloc.add(LoadUserProfile());
   }
 
@@ -51,21 +60,51 @@ class _UserProfileState extends State<UserProfile> {
     super.dispose();
   }
 
+  // Handler for logout user
+  void _logout() {
+    _authBloc.add(LogoutRequested());
+    context.go('/');
+  }
+
+  // Handle change email functionality
+  void _changeEmail() {
+    _userProfileBloc.add(ChangeEmail(
+      _emailController.text,
+      _newEmailController.text,
+      _passwordController.text,
+    ));
+  }
+
   // These functions will be called whenever a checkbox state changes.
   void _onDietPrefSelectionChanged(List<bool> newSelections) {
     selectedDietaryPreferences = newSelections;
+    _checkIfModified();
   }
 
   void _onAllergiesSelectionChanged(List<bool> newSelections) {
     selectedAllergies = newSelections;
+    _checkIfModified();
   }
 
   void _onMacronutrientSelectionChanged(List<bool> newSelections) {
     selectedMacronutrients = newSelections;
+    _checkIfModified();
   }
 
   void _onMicronutrientSelectionChanged(List<bool> newSelections) {
     selectedMicronutrients = newSelections;
+    _checkIfModified();
+  }
+
+  // Check if any changes have been made
+  void _checkIfModified() {
+    bool checkIsModified =
+        !listEquals(selectedDietaryPreferences, initialDietaryPreferences) ||
+            !listEquals(selectedAllergies, initialAllergies) ||
+            !listEquals(selectedMacronutrients, initialMacronutrients) ||
+            !listEquals(selectedMicronutrients, initialMicronutrients);
+
+    _isModified.value = checkIsModified;
   }
 
   // Maps checked indices to option label in list
@@ -81,15 +120,8 @@ class _UserProfileState extends State<UserProfile> {
     return selectedOptions;
   }
 
-  void _logout(BuildContext context) {
-    _authBloc.add(LogoutRequested());
-    context.go('/');
-  }
-
-  // handler for save button
-  void _onSaveButtonPressed(BuildContext context) {
-    // final userProfileBloc = BlocProvider.of<UserProfileBloc>(context);
-
+  // Handler for save button
+  void _onSaveButtonPressed() {
     final updatedDietPref = getSelectedOptions(
       selectedDietaryPreferences,
       Options.dietaryPreferences,
@@ -113,6 +145,14 @@ class _UserProfileState extends State<UserProfile> {
     // dependency injection
     _userProfileBloc.add(UpdateUserProfile(updatedDietPref, updatedAllergies,
         updatedMacronutrients, updatedMicronutrients));
+
+    // Update initial values to reflect saved state
+    initialDietaryPreferences = List.from(selectedDietaryPreferences);
+    initialAllergies = List.from(selectedAllergies);
+    selectedMicronutrients = List.from(selectedMicronutrients);
+    selectedMacronutrients = List.from(selectedMacronutrients);
+
+    _isModified.value = false;
   }
 
   // Helper method to map selected options to boolean values
@@ -123,7 +163,8 @@ class _UserProfileState extends State<UserProfile> {
         .toList();
   }
 
-  void _handleConfirmSave(BuildContext context) {
+  // Handler for confirming to save changes
+  void _handleConfirmSave() {
     const confirmationMessage =
         'Do you confirm to save the changes made for user profile preferences?';
 
@@ -131,7 +172,7 @@ class _UserProfileState extends State<UserProfile> {
       context,
       'Confirmation',
       confirmationMessage,
-      onConfirm: () => _onSaveButtonPressed(context),
+      onConfirm: () => _onSaveButtonPressed(),
     );
   }
 
@@ -229,7 +270,7 @@ class _UserProfileState extends State<UserProfile> {
                         SizedBox(
                           width: (MediaQuery.of(context).size.width / 6) * 4.5,
                           child: ElevatedButton(
-                            onPressed: () => _changeEmail(context),
+                            onPressed: () => _changeEmail(),
                             style: OutlinedButton.styleFrom(
                               backgroundColor: AppColors.seaGreenColor,
                               foregroundColor: const Color(0xFFF7EBE8),
@@ -250,30 +291,20 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  void _changeEmail(BuildContext context) {
-    _userProfileBloc.add(ChangeEmail(
-      _emailController.text,
-      _newEmailController.text,
-      _passwordController.text,
-    ));
-  }
-
   Widget buildUserProfileUI(UserProfileLoaded state) {
-    // // Initialize the lists with false values
-    // selectedDietaryPreferences =
-    //     List.filled(Options.dietaryPreferences.length, false);
-    // selectedAllergies = List.filled(Options.allergies.length, false);
-    // selectedMacronutrients = List.filled(Options.macronutrients.length, false);
-    // selectedMicronutrients = List.filled(Options.micronutrients.length, false);
-
     // Map the selected options to boolean values
-    selectedDietaryPreferences = mapOptionsToBoolean(
+    initialDietaryPreferences = mapOptionsToBoolean(
         state.dietaryPreferences, Options.dietaryPreferences);
-    selectedAllergies = mapOptionsToBoolean(state.allergies, Options.allergies);
-    selectedMacronutrients =
+    initialAllergies = mapOptionsToBoolean(state.allergies, Options.allergies);
+    initialMacronutrients =
         mapOptionsToBoolean(state.macronutrients, Options.macronutrients);
-    selectedMicronutrients =
+    initialMicronutrients =
         mapOptionsToBoolean(state.micronutrients, Options.micronutrients);
+
+    selectedDietaryPreferences = List.from(initialDietaryPreferences);
+    selectedAllergies = List.from(initialAllergies);
+    selectedMacronutrients = List.from(initialMacronutrients);
+    selectedMicronutrients = List.from(initialMicronutrients);
 
     return Stack(children: [
       Padding(
@@ -301,7 +332,7 @@ class _UserProfileState extends State<UserProfile> {
                       // logout button on upper right
                       IconButton(
                         icon: Icon(Icons.logout),
-                        onPressed: () => _logout(context),
+                        onPressed: () => _logout(),
                         iconSize: 36,
                       ),
                     ],
@@ -427,14 +458,19 @@ class _UserProfileState extends State<UserProfile> {
       Positioned(
         bottom: 20,
         right: 20,
-        child: FloatingActionButton(
-          onPressed: () => _handleConfirmSave(context),
-          backgroundColor: Colors.white,
-          elevation: 4,
-          child: const Icon(
-            Icons.save_outlined,
-            color: Colors.black54,
-          ),
+        child: ValueListenableBuilder<bool>(
+          valueListenable: _isModified,
+          builder: (context, isModified, child) {
+            return FloatingActionButton(
+              onPressed: isModified ? _handleConfirmSave : null,
+              backgroundColor: isModified ? Colors.white : Colors.grey[100],
+              elevation: 4,
+              child: Icon(
+                Icons.save_outlined,
+                color: isModified ? Colors.black54 : Colors.grey[300],
+              ),
+            );
+          },
         ),
       ),
     ]);

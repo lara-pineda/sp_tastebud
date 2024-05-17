@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dimension/dimension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,11 +19,22 @@ class IngredientManagement extends StatefulWidget {
 }
 
 class _IngredientsState extends State<IngredientManagement> {
+  // lists to hold selected options
   List<bool> selectedPantryEssentials = [];
   List<bool> selectedMeat = [];
   List<bool> selectedVegetablesAndGreens = [];
   List<bool> selectedFishAndPoultry = [];
   List<bool> selectedBaking = [];
+
+  // lists to hold fetched data from firestore
+  List<bool> initialPantryEssentials = [];
+  List<bool> initialMeat = [];
+  List<bool> initialVegetablesAndGreens = [];
+  List<bool> initialFishAndPoultry = [];
+  List<bool> initialBaking = [];
+
+  // Track if changes are made
+  final ValueNotifier<bool> _isModified = ValueNotifier<bool>(false);
 
   // Retrieve AuthBloc using GetIt
   final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
@@ -39,22 +51,39 @@ class _IngredientsState extends State<IngredientManagement> {
   // These functions will be called whenever a checkbox state changes.
   void _onPantryEssentialsSelectionChanged(List<bool> newSelections) {
     selectedPantryEssentials = newSelections;
+    _checkIfModified();
   }
 
   void _onMeatSelectionChanged(List<bool> newSelections) {
     selectedMeat = newSelections;
+    _checkIfModified();
   }
 
   void _onVegetablesAndGreensSelectionChanged(List<bool> newSelections) {
     selectedVegetablesAndGreens = newSelections;
+    _checkIfModified();
   }
 
   void _onFishAndPoultrySelectionChanged(List<bool> newSelections) {
     selectedFishAndPoultry = newSelections;
+    _checkIfModified();
   }
 
   void _onBakingSelectionChanged(List<bool> newSelections) {
     selectedBaking = newSelections;
+    _checkIfModified();
+  }
+
+  // Check if any changes have been made
+  void _checkIfModified() {
+    bool checkIsModified = !listEquals(
+            selectedPantryEssentials, initialPantryEssentials) ||
+        !listEquals(selectedMeat, initialMeat) ||
+        !listEquals(selectedVegetablesAndGreens, initialVegetablesAndGreens) ||
+        !listEquals(selectedFishAndPoultry, initialFishAndPoultry) ||
+        !listEquals(selectedBaking, initialBaking);
+
+    _isModified.value = checkIsModified;
   }
 
   // maps checked indices to option label in list
@@ -71,7 +100,7 @@ class _IngredientsState extends State<IngredientManagement> {
   }
 
   // handler for save button
-  void _onSaveButtonPressed(BuildContext context) {
+  void _onSaveButtonPressed() {
     final updatedPantryEssentials = getSelectedOptions(
       selectedPantryEssentials,
       Options.pantryEssentials,
@@ -98,12 +127,17 @@ class _IngredientsState extends State<IngredientManagement> {
     );
 
     // dependency injection
-    context.read<IngredientsBloc>().add(UpdateIngredients(
-        updatedPantryEssentials,
-        updatedMeat,
-        updatedVegetables,
-        updatedFishAndPoultry,
-        updatedBaking));
+    _ingredientsBloc.add(UpdateIngredients(updatedPantryEssentials, updatedMeat,
+        updatedVegetables, updatedFishAndPoultry, updatedBaking));
+
+    // Update initial values to reflect saved state
+    initialPantryEssentials = List.from(selectedPantryEssentials);
+    initialMeat = List.from(selectedMeat);
+    initialVegetablesAndGreens = List.from(selectedVegetablesAndGreens);
+    initialFishAndPoultry = List.from(selectedFishAndPoultry);
+    initialBaking = List.from(selectedBaking);
+
+    _isModified.value = false;
   }
 
   // Helper method to map selected options to boolean values
@@ -114,15 +148,16 @@ class _IngredientsState extends State<IngredientManagement> {
         .toList();
   }
 
-  void _handleConfirmSave(BuildContext context) {
+  // Handler for confirming to save changes
+  void _handleConfirmSave() {
     const confirmationMessage =
-        'Do you confirm to save the changes made for ingredient management page?';
+        'Do you confirm to save the changes made for user profile preferences?';
 
     openDialog(
       context,
       'Confirmation',
       confirmationMessage,
-      onConfirm: () => _onSaveButtonPressed(context),
+      onConfirm: () => _onSaveButtonPressed(),
     );
   }
 
@@ -157,14 +192,20 @@ class _IngredientsState extends State<IngredientManagement> {
 
   Widget buildIngredientManagementUI(IngredientsLoaded state) {
     // Map the selected options to boolean values
-    selectedPantryEssentials =
+    initialPantryEssentials =
         mapOptionsToBoolean(state.pantryEssentials, Options.pantryEssentials);
-    selectedMeat = mapOptionsToBoolean(state.meat, Options.meat);
-    selectedVegetablesAndGreens = mapOptionsToBoolean(
+    initialMeat = mapOptionsToBoolean(state.meat, Options.meat);
+    initialVegetablesAndGreens = mapOptionsToBoolean(
         state.vegetablesAndGreens, Options.vegetablesAndGreens);
-    selectedFishAndPoultry =
+    initialFishAndPoultry =
         mapOptionsToBoolean(state.fishAndPoultry, Options.fishAndPoultry);
-    selectedBaking = mapOptionsToBoolean(state.baking, Options.baking);
+    initialBaking = mapOptionsToBoolean(state.baking, Options.baking);
+
+    selectedPantryEssentials = List.from(initialPantryEssentials);
+    selectedMeat = List.from(initialMeat);
+    selectedVegetablesAndGreens = List.from(initialVegetablesAndGreens);
+    selectedFishAndPoultry = List.from(initialFishAndPoultry);
+    selectedBaking = List.from(initialBaking);
 
     return Stack(children: [
       Padding(
@@ -290,14 +331,19 @@ class _IngredientsState extends State<IngredientManagement> {
       Positioned(
         bottom: 20,
         right: 20,
-        child: FloatingActionButton(
-          onPressed: () => _handleConfirmSave(context),
-          backgroundColor: Colors.white,
-          elevation: 4,
-          child: const Icon(
-            Icons.save_outlined,
-            color: Colors.black54,
-          ),
+        child: ValueListenableBuilder<bool>(
+          valueListenable: _isModified,
+          builder: (context, isModified, child) {
+            return FloatingActionButton(
+              onPressed: isModified ? _handleConfirmSave : null,
+              backgroundColor: isModified ? Colors.white : Colors.grey[100],
+              elevation: 4,
+              child: Icon(
+                Icons.save_outlined,
+                color: isModified ? Colors.black54 : Colors.grey[300],
+              ),
+            );
+          },
         ),
       ),
     ]);

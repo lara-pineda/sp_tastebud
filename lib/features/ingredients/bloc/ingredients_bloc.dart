@@ -53,15 +53,14 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
         print("fetchFishAndPoultry: $fetchFishAndPoultry");
         print("fetchBaking: $fetchBaking");
 
-        emit(IngredientsLoaded(fetchPantryEssentials, fetchMeat,
-            fetchVegetablesAndGreens, fetchFishAndPoultry, fetchBaking));
+        emit(IngredientsLoaded(
+          fetchPantryEssentials.cast<String>(),
+          fetchMeat.cast<String>(),
+          fetchVegetablesAndGreens.cast<String>(),
+          fetchFishAndPoultry.cast<String>(),
+          fetchBaking.cast<String>(),
+        ));
       } else {
-        // // No user data found, defaulting to all unchecked.
-        // emit(IngredientsLoaded(
-        //   List<bool>.filled(Options.pantryEssentials.length, false),
-        //   List<bool>.filled(Options.meat.length, false),
-        //   List<bool>.filled(Options.vegetables.length, false),
-
         // Return empty lists
         emit(IngredientsLoaded([], [], [], [], []));
       }
@@ -90,7 +89,6 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
       // load again after updating to firestore
       emit(IngredientsLoaded(event.pantryEssentials, event.meat,
           event.vegetablesAndGreens, event.fishAndPoultry, event.baking));
-      // emit(IngredientsUpdated());
     } catch (e) {
       emit(IngredientsError(e.toString()));
     }

@@ -62,7 +62,7 @@ sp_tastebud/
 -   if nasa rejected recipes, di na dapat lumabas sa search results
 
 MINOR STUFF
--   no checking if there are actual changes made sa ingredient mgmt and user profile
+-   update ingredients held in search recipe page if ingredients were updated para maupdate din yung default search
 -   no notif if save is successful sa ingredient mgmt and user profile
 -   implement debounce on recipe collection
 -   nagrerefresh page sa recipe collection pag nagreremove, wag na sana refresh, updatelist na lang
