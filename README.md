@@ -62,8 +62,6 @@ sp_tastebud/
 -   if nasa rejected recipes, di na dapat lumabas sa search results
 
 MINOR STUFF
--   view recipe scroll up half button
--   trigger user profile loading on successful authentication - main.dart
 -   no checking if there are actual changes made sa ingredient mgmt and user profile
 -   no notif if save is successful sa ingredient mgmt and user profile
 -   implement debounce on recipe collection
@@ -74,7 +72,22 @@ MINOR STUFF
     - saving changes when switching tabs
     - rejecting a favorited recipe
 - bakit sobrang laki ng circle loading indicator sa umpisa
+- getIt<IngredientsBloc> vs GetIt.instance<IngredientsBloc>()
 
 SUGGESTIONS
 -   manage equipments
 -   leave a review
+
+
+Functions to test:
+1. Sign up
+2. Login
+3. Forgot password
+4. Logout
+5. Change email
+6. Update User Profile
+7. Update Ingredients
+8. Save recipe
+9. Reject recipe
+10. Search recipe
+11. Filter recipe

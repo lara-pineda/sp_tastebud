@@ -72,6 +72,19 @@ class _ViewRecipeState extends State<ViewRecipe>
     );
   }
 
+  void _launchURL(String? url) async {
+    if (url != null && await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      // Check if the widget is still mounted
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not launch $url')),
+        );
+      }
+    }
+  }
+
   Widget _buildRecipePage(
       Map<String, dynamic> recipeData, Iterable<String> ingredients) {
     // Convert the map to a Recipe object right here within the method
@@ -170,6 +183,41 @@ class _ViewRecipeState extends State<ViewRecipe>
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          SizedBox(height: (8.toVHLength).toPX()),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.orangeDisabledColor,
+                  foregroundColor: AppColors.orangeDarkerColor,
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.favorite_border),
+                    SizedBox(width: (10.toVWLength).toPX()),
+                    Text('Save Recipe'),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.grayColor,
+                  foregroundColor: Colors.black45,
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.remove_circle_outline),
+                    SizedBox(width: (10.toVWLength).toPX()),
+                    Text('Reject Recipe'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: (8.toVHLength).toPX()),
           TabBar(
             controller: _tabController,
             indicatorColor: AppColors.seaGreenColor,
@@ -227,40 +275,6 @@ class _ViewRecipeState extends State<ViewRecipe>
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.orangeDisabledColor,
-                    foregroundColor: AppColors.orangeDarkerColor,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.favorite_border),
-                      SizedBox(width: (10.toVWLength).toPX()),
-                      Text('Save Recipe'),
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.grayColor,
-                    foregroundColor: Colors.black45,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.remove_circle_outline),
-                      SizedBox(width: (10.toVWLength).toPX()),
-                      Text('Reject Recipe'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: (10.toVHLength).toPX()),
             InfoRow(
               columns: [
                 Text(
@@ -598,16 +612,5 @@ class _ViewRecipeState extends State<ViewRecipe>
         ),
       ),
     );
-  }
-
-  void _launchURL(String? url) async {
-    if (url != null && await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      // Use Flutter's user interface libraries to show an error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not launch $url')),
-      );
-    }
   }
 }

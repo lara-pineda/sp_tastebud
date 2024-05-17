@@ -26,13 +26,14 @@ class _IngredientsState extends State<IngredientManagement> {
 
   // Retrieve AuthBloc using GetIt
   final AuthBloc _authBloc = GetIt.instance<AuthBloc>();
+  final IngredientsBloc _ingredientsBloc = GetIt.instance<IngredientsBloc>();
 
   @override
   void initState() {
     super.initState();
 
     // Load the user profile data when the widget is initialized
-    BlocProvider.of<IngredientsBloc>(context).add(LoadIngredients());
+    _ingredientsBloc.add(LoadIngredients());
   }
 
   // These functions will be called whenever a checkbox state changes.

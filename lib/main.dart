@@ -65,8 +65,9 @@ class MyApp extends StatelessWidget {
         builder: (context, child) => BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthSuccess) {
-              // Trigger user profile loading on successful authentication.
-              BlocProvider.of<UserProfileBloc>(context).add(LoadUserProfile());
+              // Trigger user profile and ingredients fetch upon successful authentication.
+              getIt<UserProfileBloc>().add(LoadUserProfile());
+              getIt<IngredientsBloc>().add(LoadIngredients());
             }
           },
           child: child!,
