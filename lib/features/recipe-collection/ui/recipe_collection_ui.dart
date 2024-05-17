@@ -29,7 +29,10 @@ class RecipeCollection extends StatelessWidget {
       bloc: _authBloc,
       builder: (context, AuthState loginState) {
         if (loginState is AuthFailure) {
-          context.go('/');
+          // Trigger navigation outside the build phase
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            context.go('/');
+          });
           // Return error text if login fails
           return Text("User not logged in.");
         } else {

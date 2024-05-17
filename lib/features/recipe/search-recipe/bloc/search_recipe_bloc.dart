@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/utils/extract_recipe_id.dart';
-import '../data/search_repository.dart';
 import 'package:sp_tastebud/features/recipe-collection/bloc/recipe_collection_bloc.dart';
+import '../data/search_repository.dart';
 
 part 'search_recipe_event.dart';
 part 'search_recipe_state.dart';
@@ -59,9 +58,9 @@ class SearchRecipeBloc extends Bloc<SearchRecipeEvent, SearchRecipeState> {
     try {
       await _recipeRepository.addToRejected(event.recipeName, event.image,
           event.sourceWebsite, event.recipeId, event.recipeUri);
-      emit(RejectedAdded(event.recipeUri)); // You need to define this state
+      emit(RejectedAdded(event.recipeUri));
     } catch (e) {
-      emit(RejectedError(e.toString())); // You need to define this state
+      emit(RejectedError(e.toString()));
     }
   }
 

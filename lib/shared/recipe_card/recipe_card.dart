@@ -34,6 +34,8 @@ class _RecipeCardState extends State<RecipeCard> {
   bool isInFavorites = false;
   bool isInRejected = false;
 
+  final SearchRecipeBloc _searchRecipeBloc = GetIt.instance<SearchRecipeBloc>();
+
   @override
   void initState() {
     super.initState();
@@ -84,7 +86,7 @@ class _RecipeCardState extends State<RecipeCard> {
           isInFavorites = !isInFavorites; // Toggle favorite state
         });
         if (isInFavorites) {
-          context.read<SearchRecipeBloc>().add(AddToFavorites(
+          _searchRecipeBloc.add(AddToFavorites(
               widget.recipeName,
               widget.imageUrl,
               widget.sourceWebsite,
@@ -96,7 +98,7 @@ class _RecipeCardState extends State<RecipeCard> {
             widget.onRemoveFromFavorites!();
           }
           // Ensure RemoveFromFavorites is called immediately after removal
-          context.read<SearchRecipeBloc>().add(RemoveFromFavorites(
+          _searchRecipeBloc.add(RemoveFromFavorites(
               extractRecipeIdUsingRegExp(widget.recipeUri)));
         }
       },
@@ -117,14 +119,14 @@ class _RecipeCardState extends State<RecipeCard> {
           isInRejected = !isInRejected;
         });
         if (isInRejected) {
-          context.read<SearchRecipeBloc>().add(AddToRejected(
+          _searchRecipeBloc.add(AddToRejected(
               widget.recipeName,
               widget.imageUrl,
               widget.sourceWebsite,
               extractRecipeIdUsingRegExp(widget.recipeUri),
               widget.recipeUri));
         } else {
-          context.read<SearchRecipeBloc>().add(
+          _searchRecipeBloc.add(
               RemoveFromRejected(extractRecipeIdUsingRegExp(widget.recipeUri)));
         }
       },

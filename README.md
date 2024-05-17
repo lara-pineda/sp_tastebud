@@ -73,6 +73,7 @@ MINOR STUFF
 - bakit sobrang laki ng circle loading indicator sa umpisa
 - getIt<IngredientsBloc> vs GetIt.instance<IngredientsBloc>()
 - add to favorites/reject recipe from view recipe page
+- page for empty collections
 
 SUGGESTIONS
 -   manage equipments

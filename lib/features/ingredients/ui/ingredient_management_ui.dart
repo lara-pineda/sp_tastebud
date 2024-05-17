@@ -8,7 +8,7 @@ import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
-import '../../../shared/custom_dialog.dart';
+import 'package:sp_tastebud/shared/custom_dialog.dart';
 import '../bloc/ingredients_bloc.dart';
 
 class IngredientManagement extends StatefulWidget {
@@ -167,7 +167,10 @@ class _IngredientsState extends State<IngredientManagement> {
       bloc: _authBloc,
       builder: (context, AuthState loginState) {
         if (loginState is AuthFailure) {
-          context.go('/');
+          // Trigger navigation outside the build phase
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            context.go('/');
+          });
           // Return error text if login fails
           return Text("User not logged in.");
         } else {

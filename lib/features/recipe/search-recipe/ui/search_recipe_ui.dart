@@ -93,6 +93,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     _debounce?.cancel();
+    _userProfileBloc.close();
+    // _recipeCollectionBloc.close();
     super.dispose();
   }
 

@@ -9,10 +9,13 @@ part 'recipe_collection_state.dart';
 class RecipeCollectionBloc
     extends Bloc<RecipeCollectionEvent, RecipeCollectionState> {
   final RecipeCollectionRepository _recipeCollectionRepository;
-  StreamSubscription? _subscription;
+
+  StreamSubscription<List<Map<String, dynamic>>>? _savedRecipesSubscription;
+  StreamSubscription<List<Map<String, dynamic>>>? _rejectedRecipesSubscription;
 
   RecipeCollectionBloc(this._recipeCollectionRepository)
       : super(RecipeCollectionInitial()) {
+    // Register event handlers
     on<FetchSavedRecipes>(_fetchSavedRecipes);
     on<FetchRejectedRecipes>(_fetchRejectedRecipes);
     on<SavedRecipesUpdated>(_onSavedRecipesUpdated);
@@ -21,7 +24,8 @@ class RecipeCollectionBloc
 
   @override
   Future<void> close() {
-    _subscription?.cancel();
+    _savedRecipesSubscription?.cancel();
+    _rejectedRecipesSubscription?.cancel();
     return super.close();
   }
 
@@ -29,11 +33,17 @@ class RecipeCollectionBloc
       FetchSavedRecipes event, Emitter<RecipeCollectionState> emit) async {
     emit(RecipeCollectionLoading());
     try {
-      await _subscription?.cancel();
-      _subscription =
-          _recipeCollectionRepository.getSavedRecipesStream().listen((recipes) {
-        add(SavedRecipesUpdated(recipes));
-      });
+      await _savedRecipesSubscription?.cancel();
+      _savedRecipesSubscription =
+          _recipeCollectionRepository.getSavedRecipesStream().listen(
+        (recipes) {
+          add(SavedRecipesUpdated(recipes));
+        },
+        onError: (error) {
+          emit(RecipeCollectionError(
+              'Failed to load saved recipes: ${error.toString()}'));
+        },
+      );
     } catch (e) {
       emit(RecipeCollectionError(
           'Failed to load saved recipes: ${e.toString()}'));
@@ -44,12 +54,17 @@ class RecipeCollectionBloc
       FetchRejectedRecipes event, Emitter<RecipeCollectionState> emit) async {
     emit(RecipeCollectionLoading());
     try {
-      await _subscription?.cancel();
-      _subscription = _recipeCollectionRepository
-          .getRejectedRecipesStream()
-          .listen((recipes) {
-        add(RejectedRecipesUpdated(recipes));
-      });
+      await _rejectedRecipesSubscription?.cancel();
+      _rejectedRecipesSubscription =
+          _recipeCollectionRepository.getRejectedRecipesStream().listen(
+        (recipes) {
+          add(RejectedRecipesUpdated(recipes));
+        },
+        onError: (error) {
+          emit(RecipeCollectionError(
+              'Failed to load rejected recipes: ${error.toString()}'));
+        },
+      );
     } catch (e) {
       emit(RecipeCollectionError(
           'Failed to load rejected recipes: ${e.toString()}'));

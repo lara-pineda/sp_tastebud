@@ -105,7 +105,7 @@ class Assets {
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';
   static const String themesAppTypography =
       'lib/core/themes/app_typography.dart';
-  static const String uiForgotPassword =
+  static const String uiForgotPasswordUi =
       'lib/features/auth/ui/forgot_password_ui.dart';
   static const String uiInfoRow =
       'lib/features/recipe/view-recipe/ui/info_row.dart';
