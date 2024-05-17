@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/config/service_locator.dart';
+import 'package:sp_tastebud/features/auth/ui/forgot_password_ui.dart';
 
 // UI widgets
 import 'package:sp_tastebud/features/auth/ui/login_ui.dart';
@@ -47,14 +48,19 @@ class AppRoutes {
                 const MainMenu(appName1: "Taste", appName2: "Bud"),
           ),
           GoRoute(
+            name: "signup",
+            path: "/signup",
+            builder: (context, state) => SignupPage(),
+          ),
+          GoRoute(
             name: "login",
             path: "/login",
             builder: (context, state) => LoginPage(),
           ),
           GoRoute(
-            name: "signup",
-            path: "/signup",
-            builder: (context, state) => SignupPage(),
+            name: "forgotPassword",
+            path: "/forgot-password",
+            builder: (context, state) => ForgotPassword(),
           ),
           StatefulShellRoute.indexedStack(
               builder: (context, state, navigationShell) {

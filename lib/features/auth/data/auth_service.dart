@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sp_tastebud/core/utils/user_not_found_exception.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth;
@@ -73,12 +74,40 @@ class AuthService {
     await _firebaseAuth.signOut();
   }
 
+  Future<bool> checkUserExists(String email) async {
+    // Build a query to find the document with the specific email:
+    Query queryByEmail =
+        _firestore.collection('users').where('email', isEqualTo: email);
+
+    try {
+      // Execute the query and check if the document exists:
+      QuerySnapshot querySnapshot = await queryByEmail.limit(1).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        print("User already exists.");
+        return true;
+      } else {
+        print("User doesn't exist.");
+        return false;
+      }
+    } catch (e) {
+      print("Error checking user existence: $e");
+      return false;
+    }
+  }
+
   // Password reset
   Future<void> sendPasswordResetEmail(String email) async {
-    try {
-      await _firebaseAuth.sendPasswordResetEmail(email: email.trim());
-    } on FirebaseAuthException catch (e) {
-      throw Exception(e.message);
+    bool userExists = await checkUserExists(email);
+    if (userExists) {
+      try {
+        // User exists, send password reset email
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+        print("Reset email sent!");
+      } on FirebaseAuthException catch (e) {
+        throw FirebaseAuthException(code: e.code, message: e.message);
+      }
+    } else {
+      throw UserNotFoundException();
     }
   }
 

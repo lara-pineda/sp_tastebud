@@ -14,7 +14,7 @@ class AuthLoading extends AuthState {}
 class AuthSuccess extends AuthState {
   final User user;
 
-  AuthSuccess(this.user);
+  const AuthSuccess(this.user);
 
   @override
   List<Object> get props => [user];
@@ -23,8 +23,26 @@ class AuthSuccess extends AuthState {
 class AuthFailure extends AuthState {
   final String error;
 
-  AuthFailure(this.error);
+  const AuthFailure(this.error);
 
   @override
   List<Object> get props => [error];
+}
+
+class AuthPasswordResetSuccess extends AuthState {
+  final String message;
+
+  const AuthPasswordResetSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class AuthEmailNotFound extends AuthState {
+  final String message;
+
+  const AuthEmailNotFound(this.message);
+
+  @override
+  List<Object> get props => [message];
 }

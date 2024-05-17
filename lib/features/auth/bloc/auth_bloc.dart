@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:equatable/equatable.dart';
+import 'package:sp_tastebud/core/utils/user_not_found_exception.dart';
 import '../data/preferences_service.dart';
 import '../data/user_repository.dart';
 
@@ -17,6 +18,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignUpRequested>(_onSignUpRequested);
     on<CheckLoginStatus>(_onCheckLoginStatus);
     on<LogoutRequested>(_onLogoutRequested);
+    on<PasswordResetRequested>(_onPasswordResetRequested);
   }
 
   Future<void> _onSignUpRequested(
@@ -69,9 +71,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _userRepository.signOut();
       await _preferencesService
           .setRememberMe(false); // Clear remember me preference
-      emit(AuthFailure("User not logged in"));
+      emit(AuthFailure("User not logged in."));
     } catch (e) {
-      emit(AuthFailure("An unknown error occurred"));
+      emit(AuthFailure("An unknown error occurred."));
+    }
+  }
+
+  Future<void> _onPasswordResetRequested(
+      PasswordResetRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      await _userRepository.sendPasswordResetEmail(event.email);
+      emit(AuthPasswordResetSuccess("Password reset email sent successfully."));
+    } on UserNotFoundException catch (e) {
+      emit(AuthEmailNotFound(e.message));
+    } on FirebaseAuthException catch (e) {
+      emit(AuthFailure("Failed to send password reset email: ${e.message}"));
+    } catch (e) {
+      emit(AuthFailure("An unknown error occurred.\nPlease try again later."));
     }
   }
 
@@ -80,7 +97,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (user != null) {
       emit(AuthSuccess(user));
     } else {
-      emit(AuthFailure("User not logged in"));
+      emit(AuthFailure("User not logged in."));
     }
   }
 }

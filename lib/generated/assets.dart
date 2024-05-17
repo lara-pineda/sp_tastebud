@@ -105,6 +105,8 @@ class Assets {
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';
   static const String themesAppTypography =
       'lib/core/themes/app_typography.dart';
+  static const String uiForgotPassword =
+      'lib/features/auth/ui/forgot_password_ui.dart';
   static const String uiInfoRow =
       'lib/features/recipe/view-recipe/ui/info_row.dart';
   static const String uiIngredientManagementUi =
@@ -134,6 +136,8 @@ class Assets {
       'lib/core/utils/get_current_route.dart';
   static const String utilsHexToColor = 'lib/core/utils/hex_to_color.dart';
   static const String utilsLoadSvg = 'lib/core/utils/load_svg.dart';
+  static const String utilsUserNotFoundException =
+      'lib/core/utils/user_not_found_exception.dart';
   static const String viewRecipeIngredientSubstitutionApi =
       'lib/features/recipe/view-recipe/ingredient_substitution_api.dart';
 }

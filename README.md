@@ -62,7 +62,8 @@ sp_tastebud/
 -   if nasa rejected recipes, di na dapat lumabas sa search results
 
 MINOR STUFF
--   forgot password = page for entering email and code, then new password
+-   view recipe scroll up half button
+-   trigger user profile loading on successful authentication - main.dart
 -   no checking if there are actual changes made sa ingredient mgmt and user profile
 -   no notif if save is successful sa ingredient mgmt and user profile
 -   implement debounce on recipe collection

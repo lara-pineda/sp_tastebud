@@ -9,6 +9,9 @@ class UserRepository {
 
   UserRepository(this._authService);
 
+  // Stream to listen to user authentication state changes
+  Stream<User?> get user => _authService.authStateChanges;
+
   // Method to create a user
   Future<User> createUser(String email, String password) async {
     try {
@@ -33,24 +36,37 @@ class UserRepository {
 
   // Method to sign out a user
   Future<void> signOut() async {
-    await _authService.signOut();
+    try {
+      await _authService.signOut();
+    } catch (e) {
+      rethrow;
+    }
   }
 
   // Method to send password reset email
   Future<void> sendPasswordResetEmail(String email) async {
-    await _authService.sendPasswordResetEmail(email);
+    try {
+      await _authService.sendPasswordResetEmail(email);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   // Method to fetch user data upon logging in
   Future<void> fetchUserDetails(String email) async {
-    await _authService.sendPasswordResetEmail(email);
+    try {
+      await _authService.sendPasswordResetEmail(email);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   // Method to fetch the current user
   User? getCurrentUser() {
-    return _authService.currentUser();
+    try {
+      return _authService.currentUser();
+    } catch (e) {
+      rethrow;
+    }
   }
-
-  // Stream to listen to user authentication state changes
-  Stream<User?> get user => _authService.authStateChanges;
 }

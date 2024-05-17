@@ -243,20 +243,28 @@ class _LoginState extends State<LoginPage> {
                 ),
 
                 // forgot password
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: const [
-                //     Padding(
-                //       padding: EdgeInsets.symmetric(vertical: 12),
-                //       child: Text(
-                //         'Forgot Password?',
-                //         style: TextStyle(
-                //           fontFamily: 'Inter',
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      child: Text.rich(
+                        TextSpan(
+                          text: "Forgot Password?",
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w400,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            // Navigate when tapped
+                            ..onTap = () {
+                              context.goNamed('forgotPassword');
+                            },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
 
                 const Spacer(),
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/config/app_router.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
 import 'core/config/service_locator.dart';
@@ -88,19 +89,19 @@ class SimpleBlocObserver extends BlocObserver {
 //         initialLocation: "/",
 //         routes: [
 //           GoRoute(
-//               name: "viewRecipe",
-//               path: "/",
-//               // builder: (context, state) => UserProfile(),
-//               // ),
-//               builder: (context, state) {
-//                 return BlocProvider<ViewRecipeBloc>(
-//                     create: (context) => getIt<ViewRecipeBloc>(),
-//                     child: Scaffold(
-//                       body: const ViewRecipe(
-//                         recipeId: '067f0b7be628ae847366e4f3e614b319',
-//                       ),
-//                     ));
-//               }),
+//             name: "forgotPassword",
+//             path: "/",
+//             builder: (context, state) => ForgotPassword(),
+//           ),
+//           // builder: (context, state) {
+//           //   return BlocProvider<ViewRecipeBloc>(
+//           //       create: (context) => getIt<ViewRecipeBloc>(),
+//           //       child: Scaffold(
+//           //         body: const ViewRecipe(
+//           //           recipeId: '067f0b7be628ae847366e4f3e614b319',
+//           //         ),
+//           //       ));
+//           // }),
 //         ],
 //       );
 // }
