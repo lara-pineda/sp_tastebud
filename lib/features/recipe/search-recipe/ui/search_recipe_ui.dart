@@ -2,7 +2,9 @@ import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'dart:async';
 import 'package:go_router/go_router.dart';
+import 'package:sp_tastebud/features/recipe-collection/bloc/recipe_collection_bloc.dart';
 import 'package:sp_tastebud/shared/search_bar/custom_search_bar.dart';
 import 'package:sp_tastebud/shared/recipe_card/recipe_card.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/recipe_search_api.dart';
@@ -12,9 +14,8 @@ import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
-import '../../../ingredients/bloc/ingredients_bloc.dart';
+import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
 import '../bloc/search_recipe_bloc.dart';
-import 'dart:async';
 
 class SearchRecipe extends StatefulWidget {
   const SearchRecipe({super.key});
@@ -34,6 +35,9 @@ class _SearchRecipeState extends State<SearchRecipe> {
   String _microQuery = '';
 
   final IngredientsBloc _ingredientsBloc = GetIt.instance<IngredientsBloc>();
+  final UserProfileBloc _userProfileBloc = GetIt.instance<UserProfileBloc>();
+  final RecipeCollectionBloc _recipeCollectionBloc =
+      GetIt.instance<RecipeCollectionBloc>();
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -52,13 +56,36 @@ class _SearchRecipeState extends State<SearchRecipe> {
     _searchController.addListener(_onSearchChanged);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final userProfileBloc = getIt<UserProfileBloc>();
-      if (userProfileBloc.state is UserProfileLoaded) {
+      if (_userProfileBloc.state is UserProfileLoaded) {
         _initializeQueriesAndLoadRecipes(
-            userProfileBloc.state as UserProfileLoaded);
+            _userProfileBloc.state as UserProfileLoaded);
         _loadMoreRecipes('');
       }
     });
+
+    // create streams to listen to changes to other pages
+    _userProfileBloc.stream.listen((state) {
+      if (state is UserProfileLoaded) {
+        _initializeQueriesAndLoadRecipes(state);
+        _recipes.clear();
+        _loadMoreRecipes(_searchKey);
+      }
+    });
+
+    _ingredientsBloc.stream.listen((state) {
+      if (state is IngredientsLoaded) {
+        _recipes.clear();
+        _loadMoreRecipes(_searchKey);
+      }
+    });
+
+    // _recipeCollectionBlocstream.listen((state) {
+    //  // Update realtime when collection has been modified
+    //   if (state is IngredientsLoaded) {
+    //     _recipes.clear();
+    //     _loadMoreRecipes(_searchKey);
+    //   }
+    // });
   }
 
   @override
@@ -197,8 +224,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
           current is UserProfileInitial,
       builder: (context, userProfileState) {
         if (userProfileState is UserProfileLoaded) {
-          // print('userprofilestate is userprofileloaded');
-
           return BlocListener<SearchRecipeBloc, SearchRecipeState>(
             listener: (context, state) {
               if (state is FavoritesError) {
@@ -228,7 +253,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
         } else if (userProfileState is UserProfileError) {
           return Center(child: Text(userProfileState.error));
         }
-        print('blocbuilder search recipe ui');
         return CircularProgressIndicator();
       },
     );
@@ -236,7 +260,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
   Widget _buildSearchRecipeUI(UserProfileLoaded state) {
     if (_recipes.isEmpty && !_isLoading && !_initialLoadComplete) {
-      print('initialize recipeee');
       _recipes.clear();
       _initializeQueriesAndLoadRecipes(state);
     }

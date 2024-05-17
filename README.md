@@ -62,7 +62,6 @@ sp_tastebud/
 -   if nasa rejected recipes, di na dapat lumabas sa search results
 
 MINOR STUFF
--   update ingredients held in search recipe page if ingredients were updated para maupdate din yung default search
 -   no notif if save is successful sa ingredient mgmt and user profile
 -   implement debounce on recipe collection
 -   nagrerefresh page sa recipe collection pag nagreremove, wag na sana refresh, updatelist na lang
@@ -73,6 +72,7 @@ MINOR STUFF
     - rejecting a favorited recipe
 - bakit sobrang laki ng circle loading indicator sa umpisa
 - getIt<IngredientsBloc> vs GetIt.instance<IngredientsBloc>()
+- add to favorites/reject recipe from view recipe page
 
 SUGGESTIONS
 -   manage equipments
