@@ -95,9 +95,9 @@ class _ViewRecipeState extends State<ViewRecipe>
             floating: false,
             pinned: true,
             snap: false,
+            // arrowback icon
             leading: Container(
-              margin: EdgeInsets.only(
-                  left: 5, top: 4, bottom: 4), // Adjust the margin as needed
+              margin: EdgeInsets.only(left: 5, top: 4, bottom: 4),
               decoration: BoxDecoration(
                 color: Colors.white70,
                 borderRadius: BorderRadius.circular(15),
@@ -107,6 +107,7 @@ class _ViewRecipeState extends State<ViewRecipe>
                 onPressed: () => context.pop(),
               ),
             ),
+            // webview icon
             actions: [
               Container(
                   margin: EdgeInsets.only(right: 5),

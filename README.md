@@ -63,16 +63,15 @@ MUST HAVE
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients?
 
 MINOR STUFF
--   back button for view collections page
 -   add definitions ano meaning ng like keto-friendly ganern
 -   check if wifi is on
 -   add more filters
 -   confirmation windows for:
     - saving changes when switching tabs
-r
+
 FIX
 -   bakit sobrang laki ng circle loading indicator sa umpisa
--   change email. nababago agad email sa firestore kahit di pa verified
+-   view recipe bloc closing after being used once. can no longer add new events
 
 SUGGESTIONS
 -   manage equipments

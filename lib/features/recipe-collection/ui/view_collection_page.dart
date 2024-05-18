@@ -94,52 +94,91 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
 
   Widget _buildCollectionPage(
       String collectionType, List<dynamic> recipes, RecipeCardState state) {
-    return Column(
-      children: [
-        SizedBox(height: (50.toVHLength).toPX()),
-        Text(
-          collectionType == 'saved' ? 'Saved Recipes' : 'Rejected Recipes',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: AppColors.purpleColor,
-          ),
-          textAlign: TextAlign.left,
-        ),
-        SizedBox(height: (20.toVHLength).toPX()),
-        // Recipe list or empty image
-        Expanded(
-          child: recipes.isEmpty
-              ? Center(
-                  child: Image.asset(Assets.emptyCollection),
-                )
-              : ListView.builder(
-                  itemCount: recipes.length,
-                  itemBuilder: (context, index) {
-                    final recipe = recipes[index];
-                    return GestureDetector(
-                      onTap: () {
-                        final recipeId =
-                            extractRecipeIdUsingRegExp(recipe['recipeUri']);
-                        context.goNamed('viewRecipeFromCollection',
-                            pathParameters: {
-                              'collectionType': collectionType,
-                              'recipeId': recipeId,
-                            });
-                      },
-                      child: RecipeCardCollection(
-                        recipeName: recipe['recipeName']!,
-                        imageUrl: recipe['image']!,
-                        sourceWebsite: recipe['source']!,
-                        recipeUri: recipe['recipeUri'],
-                      ),
-                    );
-                  },
+    return NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget>[
+          SliverAppBar(
+            expandedHeight: MediaQuery.of(context).size.height / 6,
+            floating: false,
+            pinned: true,
+            leading: Container(
+              margin: EdgeInsets.only(left: 5, top: 4, bottom: 4),
+              decoration: BoxDecoration(
+                color: Colors.white70,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black87,
                 ),
-        ),
-        SizedBox(height: (40.toVHLength).toPX()),
-      ],
+                onPressed: () => context.pop(),
+              ),
+            ),
+            flexibleSpace: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                var top = constraints.biggest.height;
+                var titleAlignment = top <= kToolbarHeight * 1.8
+                    ? Alignment.center
+                    : Alignment.bottomLeft;
+
+                return Container(
+                  // color: AppColors.orangeColor,
+                  color: Colors.transparent,
+                  padding: EdgeInsets.only(top: 15, left: 25.0, bottom: 16.0),
+                  alignment: titleAlignment,
+                  child: Text(
+                    collectionType == 'saved'
+                        ? 'Saved Recipes'
+                        : 'Rejected Recipes',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.purpleColor,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ];
+      },
+      body: Column(
+        children: [
+          SizedBox(height: (20.toVHLength).toPX()),
+          Expanded(
+            child: recipes.isEmpty
+                ? Center(
+                    child: Image.asset(Assets.emptyCollection),
+                  )
+                : ListView.builder(
+                    itemCount: recipes.length,
+                    itemBuilder: (context, index) {
+                      final recipe = recipes[index];
+                      return GestureDetector(
+                        onTap: () {
+                          final recipeId =
+                              extractRecipeIdUsingRegExp(recipe['recipeUri']);
+                          context.goNamed('viewRecipeFromCollection',
+                              pathParameters: {
+                                'collectionType': collectionType,
+                                'recipeId': recipeId,
+                              });
+                        },
+                        child: RecipeCardCollection(
+                          recipeName: recipe['recipeName']!,
+                          imageUrl: recipe['image']!,
+                          sourceWebsite: recipe['source']!,
+                          recipeUri: recipe['recipeUri'],
+                        ),
+                      );
+                    },
+                  ),
+          ),
+          // SizedBox(height: (20.toVHLength).toPX()),
+        ],
+      ),
     );
   }
 }
