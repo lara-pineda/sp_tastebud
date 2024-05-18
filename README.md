@@ -67,8 +67,6 @@ MUST HAVE
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients?
 
 MINOR STUFF
--   remove bg for empty collection
--   replace user image with app icon
 -   check if wifi is on
 -   add more filters
 -   confirmation windows for:

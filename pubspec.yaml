@@ -106,17 +106,18 @@ flutter:
         weight: 700
 
   assets:
-    - assets/images/LandingFruits.jpg
+    - assets/images/AppIcon.png
     - assets/images/Background.png
     - assets/images/DefaultProfile.jpg
-    - assets/images/StarIcon.svg
-    - assets/images/MiniStarIcon.svg
-    - assets/images/ImagePlaceholder.png
     - assets/images/Edamam_Badge.png
-    - assets/images/savedRecipe.png
-    - assets/images/rejectedRecipe.png
     - assets/images/emptyCollection.png
+    - assets/images/ImagePlaceholder.png
+    - assets/images/LandingFruits.jpg
+    - assets/images/MiniStarIcon.svg
     - assets/images/noMatchingRecipe.png
+    - assets/images/rejectedRecipe.png
+    - assets/images/savedRecipe.png
+    - assets/images/StarIcon.svg
     - lib/features/navigation/ui/
 
   # An image asset can refer to one or more resolution-specific "variants", see

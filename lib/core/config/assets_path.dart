@@ -4,6 +4,7 @@
 class Assets {
   Assets._();
 
+  static const String imagesAppIcon = 'assets/images/AppIcon.png';
   static const String imagesBackground = 'assets/images/Background.png';
   static const String imagesDefaultProfile = 'assets/images/DefaultProfile.jpg';
   static const String imagePlaceholder = 'assets/images/ImagePlaceholder.png';
@@ -12,7 +13,6 @@ class Assets {
   static const String imagesEdamamAttribution =
       'assets/images/Edamam_Badge.png';
   static const String imagesStarIcon = 'assets/images/StarIcon.svg';
-
   static const String savedRecipe = 'assets/images/savedRecipe.png';
   static const String rejectedRecipe = 'assets/images/rejectedRecipe.png';
   static const String noMatchingRecipe = 'assets/images/noMatchingRecipe.png';

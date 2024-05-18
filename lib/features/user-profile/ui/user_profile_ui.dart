@@ -394,20 +394,21 @@ class _UserProfileState extends State<UserProfile> {
                         icon: Icon(Icons.logout),
                         onPressed: () => _logout(),
                         iconSize: 36,
+                        color: AppColors.seaGreenColor,
                       ),
                     ],
                   ),
 
-                  SizedBox(height: (20.toVHLength).toPX()),
-                  // Adding a section for the user profile icon and editable email
-                  Image.asset(
-                    Assets.imagesDefaultProfile,
-                    width: 150,
-                    height: 150,
-                    fit: BoxFit.contain,
-                  ),
+                  // SizedBox(height: (10.toVHLength).toPX()),
+                  // // Adding a section for the user profile icon and editable email
+                  // Image.asset(
+                  //   Assets.imagesAppIcon,
+                  //   width: 150,
+                  //   height: 150,
+                  //   fit: BoxFit.contain,
+                  // ),
 
-                  SizedBox(height: (20.toVHLength).toPX()),
+                  SizedBox(height: (30.toVHLength).toPX()),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30),
                     child: Row(
@@ -435,6 +436,7 @@ class _UserProfileState extends State<UserProfile> {
 
                   Text(
                     'Click on the circle next to an option to check the option.\n\nOptions with asterisks mean that you can click on it to see what the option means.',
+                    // 'Click on the circle next to an option to check the option.\n\nOptions with asterisks mean that you can click on it to see what the option means.\n\nClicking the save button on the lower right will save your changes if any changes have been made on the page.',
                     style: TextStyle(
                       fontSize: 14,
                       fontFamily: 'Inter',
@@ -451,6 +453,7 @@ class _UserProfileState extends State<UserProfile> {
                       fontFamily: 'Inter',
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
+                      color: AppColors.purpleColor,
                     ),
                     textAlign: TextAlign.left,
                   ),
@@ -471,6 +474,7 @@ class _UserProfileState extends State<UserProfile> {
                       fontFamily: 'Inter',
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
+                      color: AppColors.purpleColor,
                     ),
                     textAlign: TextAlign.left,
                   ),
@@ -491,6 +495,7 @@ class _UserProfileState extends State<UserProfile> {
                       fontFamily: 'Inter',
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
+                      color: AppColors.purpleColor,
                     ),
                     textAlign: TextAlign.left,
                   ),
@@ -510,6 +515,7 @@ class _UserProfileState extends State<UserProfile> {
                       fontFamily: 'Inter',
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
+                      color: AppColors.purpleColor,
                     ),
                     textAlign: TextAlign.left,
                   ),
