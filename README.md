@@ -62,13 +62,14 @@ sp_tastebud/
 ## Features TODO
 
 MUST HAVE
+-   if nasa rejected recipe collection, wag na idisplay sa search results page.
 -   add to favorites/reject recipe from view recipe page
 -   substitute recipe
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients?
 
 MINOR STUFF
+-   check sa signup if okay lang bang invalid email ipasa
 -   check if wifi is on
--   add more filters
 -   confirmation windows for:
     - saving changes when switching tabs
 
@@ -77,17 +78,19 @@ FIX
 -   if sa drawer nagcheck ng checklist, hindi napapasa sa checkbox card yung state
 
 SUGGESTIONS
+-   add collection for rejected recipes (done)
+-   add more information regarding options (done)
+-   add more filters (in progress)
 -   manage equipments
 -   leave a review
 
-bit.ly/ReCAP2024_EvalForm
 
 Functions to test:
 1. Sign up
 2. Login
 3. Forgot password
 4. Logout
-5. Change email
+5. Change email (if kaya)
 6. Update User Profile
 7. Update Ingredients
 8. Save recipe
