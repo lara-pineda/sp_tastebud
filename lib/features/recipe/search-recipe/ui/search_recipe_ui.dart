@@ -71,6 +71,18 @@ class _SearchRecipeState extends State<SearchRecipe> {
         _loadMoreRecipes(_searchKey);
       }
     });
+
+    // listener to handle changes in the RecipeCardBloc
+    _recipeCardBloc.stream.listen((state) {
+      if (state is RecipeCardUpdated) {
+        setState(() {
+          _recipes.removeWhere((recipe) {
+            final recipeId = extractRecipeIdUsingRegExp(recipe['uri']);
+            return state.rejected.contains(recipeId);
+          });
+        });
+      }
+    });
   }
 
   @override
@@ -117,7 +129,13 @@ class _SearchRecipeState extends State<SearchRecipe> {
         ingredients: allIngredients,
       );
 
-      final newRecipes = data['hits'].map((hit) => hit['recipe']).toList();
+      final newRecipes =
+          data['hits'].map((hit) => hit['recipe']).where((recipe) {
+        final recipeId = extractRecipeIdUsingRegExp(recipe['uri']);
+        final currentState = _recipeCardBloc.state;
+        return currentState is! RecipeCardUpdated ||
+            !currentState.rejected.contains(recipeId);
+      }).toList();
       _nextUrl = data['_links']?['next']?['href'];
 
       if (mounted) {

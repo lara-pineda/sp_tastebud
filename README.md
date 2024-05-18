@@ -2,10 +2,10 @@
 
 Flutter Project for CMSC 190-2 (A.Y. 2023-2024)
 Author: Lara Patricia B. Pineda
-        lbpineda1@up.edu.ph
-        Institute of Computer Science,
-        College of Arts and Sciences,
-        University of the Philippines Los Baños
+lbpineda1@up.edu.ph
+Institute of Computer Science,
+College of Arts and Sciences,
+University of the Philippines Los Baños
 
 ## 📌 File Structure
 ```
@@ -62,20 +62,21 @@ sp_tastebud/
 ## Features TODO
 
 MUST HAVE
--   if nasa rejected recipe collection, wag na idisplay sa search results page.
+-   if tinanggal sa rejected recipes collection, hindi babalik agad sa ui (reasonable use case?)
 -   add to favorites/reject recipe from view recipe page
+-   success/error dialog sa pag-add/remove from collection
 -   substitute recipe
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients?
 
 MINOR STUFF
--   check sa signup if okay lang bang invalid email ipasa
 -   check if wifi is on
 -   confirmation windows for:
     - saving changes when switching tabs
 
 FIX
 -   bakit sobrang laki ng circle loading indicator sa umpisa
--   if sa drawer nagcheck ng checklist, hindi napapasa sa checkbox card yung state
+-   if sa drawer nagcheck ng checklist, hindi napapasa sa checkbox card yung state (in progress)
+-   mali yung query string on search recipe and di agad nag-uupdate if may changes sa user profile
 
 SUGGESTIONS
 -   add collection for rejected recipes (done)
