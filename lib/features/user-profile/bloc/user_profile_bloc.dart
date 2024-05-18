@@ -107,10 +107,12 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       String? currentEmail;
       if (state is UserProfileLoaded) {
         currentEmail = (state as UserProfileLoaded).email;
+      } else if (state is UserProfileUpdated) {
+        currentEmail = (state as UserProfileUpdated).email;
       }
 
       // load again after updating to firestore
-      emit(UserProfileLoaded(event.selectedDietPref, event.selectedAllergies,
+      emit(UserProfileUpdated(event.selectedDietPref, event.selectedAllergies,
           event.selectedMacro, event.selectedMicro, currentEmail));
     } catch (e) {
       emit(UserProfileError(e.toString()));

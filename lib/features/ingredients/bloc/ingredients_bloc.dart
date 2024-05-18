@@ -87,7 +87,7 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
           event.baking);
 
       // load again after updating to firestore
-      emit(IngredientsLoaded(event.pantryEssentials, event.meat,
+      emit(IngredientsUpdated(event.pantryEssentials, event.meat,
           event.vegetablesAndGreens, event.fishAndPoultry, event.baking));
     } catch (e) {
       emit(IngredientsError(e.toString()));

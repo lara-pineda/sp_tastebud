@@ -38,6 +38,7 @@ class _RecipeCardSearchState extends State<RecipeCardSearch> {
       'Confirmation',
       confirmationMessage,
       onConfirm: onConfirm,
+      showCancelButton: true,
     );
   }
 

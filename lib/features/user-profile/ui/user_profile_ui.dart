@@ -176,49 +176,100 @@ class _UserProfileState extends State<UserProfile> {
       'Confirmation',
       confirmationMessage,
       onConfirm: () => _onSaveButtonPressed(),
+      showCancelButton: true,
     );
+  }
+
+  // Method to show success dialog
+  void _showSuccessDialog() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      openDialog(
+        context,
+        'Success',
+        'Changes have been successfully saved!',
+        onConfirm: () {},
+        showCancelButton: false,
+      );
+    });
+  }
+
+  // Method to show error dialog
+  void _showErrorDialog(String error) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      openDialog(
+        context,
+        'Error',
+        error,
+        onConfirm: () {},
+        showCancelButton: false,
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
-      bloc: _authBloc,
-      builder: (context, AuthState loginState) {
-        if (loginState is AuthFailure) {
-          // Trigger navigation outside the build phase
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            context.go('/');
-          });
-          // Return error text if login fails
-          return Text("User not logged in.");
-        } else {
-          // If login is successful, proceed with UserProfileBloc
-          return BlocBuilder<UserProfileBloc, UserProfileState>(
-            builder: (context, userProfileState) {
-              if (userProfileState is UserProfileLoaded) {
-                // Use the state values to build the UI
-                _emailController.text =
-                    userProfileState.email ?? ''; // Set the fetched email
+    return BlocListener<UserProfileBloc, UserProfileState>(
+        bloc: _userProfileBloc,
+        listener: (context, state) {
+          print(state);
+          if (state is UserProfileUpdated) {
+            _showSuccessDialog();
+          } else if (state is UserProfileError) {
+            _showErrorDialog(state.error);
+          }
+        },
+        child: BlocBuilder<AuthBloc, AuthState>(
+          bloc: _authBloc,
+          builder: (context, AuthState loginState) {
+            if (loginState is AuthFailure) {
+              // Trigger navigation outside the build phase
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context.go('/');
+              });
+              // Return error text if login fails
+              return Text("User not logged in.");
+            } else {
+              // If login is successful, proceed with UserProfileBloc
+              return BlocBuilder<UserProfileBloc, UserProfileState>(
+                builder: (context, userProfileState) {
+                  if (userProfileState is UserProfileLoaded) {
+                    // Use the state values to build the UI
+                    _emailController.text =
+                        userProfileState.email ?? ''; // Set the fetched email
 
-                return buildUserProfileUI(userProfileState);
-              } else if (userProfileState is UserProfileError) {
-                // Show error message if loading fails
-                return Text(userProfileState.error);
-              } else if (userProfileState is UserProfileChangeEmailError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(userProfileState.error),
-                    // backgroundColor: Colors.red,
-                  ),
-                );
-              }
-              // Fallback widget.
-              return Text("State is not as expected.");
-            },
-          );
-        }
-      },
-    );
+                    return buildUserProfileUI(
+                        userProfileState.dietaryPreferences,
+                        userProfileState.allergies,
+                        userProfileState.macronutrients,
+                        userProfileState.micronutrients);
+                  } else if (userProfileState is UserProfileUpdated) {
+                    _emailController.text =
+                        userProfileState.email ?? ''; // Set the fetched email
+
+                    return buildUserProfileUI(
+                        userProfileState.dietaryPreferences,
+                        userProfileState.allergies,
+                        userProfileState.macronutrients,
+                        userProfileState.micronutrients);
+                  } else if (userProfileState is UserProfileError) {
+                    // Show error message if loading fails
+                    return Text(userProfileState.error);
+                  } else if (userProfileState is UserProfileChangeEmailError) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(userProfileState.error),
+                        // backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                  // Fallback widget.
+                  print(userProfileState);
+                  return Text("State is not as expected.");
+                },
+              );
+            }
+          },
+        ));
   }
 
   Future<void> _showEditEmailBottomSheet() async {
@@ -297,15 +348,19 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  Widget buildUserProfileUI(UserProfileLoaded state) {
+  Widget buildUserProfileUI(
+      List<dynamic> dietaryPreferences,
+      List<dynamic> allergies,
+      List<dynamic> macronutrients,
+      List<dynamic> micronutrients) {
     // Map the selected options to boolean values
-    initialDietaryPreferences = mapOptionsToBoolean(
-        state.dietaryPreferences, Options.dietaryPreferences);
-    initialAllergies = mapOptionsToBoolean(state.allergies, Options.allergies);
+    initialDietaryPreferences =
+        mapOptionsToBoolean(dietaryPreferences, Options.dietaryPreferences);
+    initialAllergies = mapOptionsToBoolean(allergies, Options.allergies);
     initialMacronutrients =
-        mapOptionsToBoolean(state.macronutrients, Options.macronutrients);
+        mapOptionsToBoolean(macronutrients, Options.macronutrients);
     initialMicronutrients =
-        mapOptionsToBoolean(state.micronutrients, Options.micronutrients);
+        mapOptionsToBoolean(micronutrients, Options.micronutrients);
 
     selectedDietaryPreferences = List.from(initialDietaryPreferences);
     selectedAllergies = List.from(initialAllergies);

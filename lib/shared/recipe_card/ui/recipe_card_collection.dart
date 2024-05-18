@@ -38,6 +38,7 @@ class _RecipeCardCollectionState extends State<RecipeCardCollection> {
       'Confirmation',
       confirmationMessage,
       onConfirm: onConfirm,
+      showCancelButton: true,
     );
   }
 

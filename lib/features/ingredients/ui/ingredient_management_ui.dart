@@ -158,51 +158,104 @@ class _IngredientsState extends State<IngredientManagement> {
       'Confirmation',
       confirmationMessage,
       onConfirm: () => _onSaveButtonPressed(),
+      showCancelButton: true,
     );
+  }
+
+  // Method to show success dialog
+  void _showSuccessDialog() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      openDialog(
+        context,
+        'Success',
+        'Changes have been successfully saved!',
+        onConfirm: () {},
+        showCancelButton: false,
+      );
+    });
+  }
+
+  // Method to show error dialog
+  void _showErrorDialog(String error) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      openDialog(
+        context,
+        'Error',
+        error,
+        onConfirm: () {},
+        showCancelButton: false,
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
-      bloc: _authBloc,
-      builder: (context, AuthState loginState) {
-        if (loginState is AuthFailure) {
-          // Trigger navigation outside the build phase
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            context.go('/');
-          });
-          // Return error text if login fails
-          return Text("User not logged in.");
-        } else {
-          // If login is successful, proceed with IngredientsBloc
-          return BlocBuilder<IngredientsBloc, IngredientsState>(
-            builder: (context, ingredientsState) {
-              if (ingredientsState is IngredientsLoaded) {
-                // Use the state values to build your UI
-                return buildIngredientManagementUI(ingredientsState);
-              } else if (ingredientsState is IngredientsError) {
-                // Show error message if loading fails
-                return Text(ingredientsState.error);
-              }
-              // Show loading indicator while loading
-              return CircularProgressIndicator();
-            },
-          );
-        }
-      },
-    );
+    return BlocListener<IngredientsBloc, IngredientsState>(
+        bloc: _ingredientsBloc,
+        listener: (context, state) {
+          if (state is IngredientsUpdated) {
+            _showSuccessDialog();
+          } else if (state is IngredientsError) {
+            _showErrorDialog(state.error);
+          }
+        },
+        child: BlocBuilder<AuthBloc, AuthState>(
+          bloc: _authBloc,
+          builder: (context, AuthState loginState) {
+            if (loginState is AuthFailure) {
+              // Trigger navigation outside the build phase
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context.go('/');
+              });
+              // Return error text if login fails
+              return Text("User not logged in.");
+            } else {
+              // If login is successful, proceed with IngredientsBloc
+              return BlocBuilder<IngredientsBloc, IngredientsState>(
+                builder: (context, ingredientsState) {
+                  if (ingredientsState is IngredientsLoaded) {
+                    // Use the state values to build your UI
+                    return buildIngredientManagementUI(
+                        ingredientsState.pantryEssentials,
+                        ingredientsState.meat,
+                        ingredientsState.vegetablesAndGreens,
+                        ingredientsState.fishAndPoultry,
+                        ingredientsState.baking);
+                  } else if (ingredientsState is IngredientsUpdated) {
+                    return buildIngredientManagementUI(
+                        ingredientsState.pantryEssentials,
+                        ingredientsState.meat,
+                        ingredientsState.vegetablesAndGreens,
+                        ingredientsState.fishAndPoultry,
+                        ingredientsState.baking);
+                  } else if (ingredientsState is IngredientsError) {
+                    // Show error message if loading fails
+                    return Text(ingredientsState.error);
+                  }
+                  // Show loading indicator while loading
+                  return CircularProgressIndicator();
+                },
+              );
+            }
+          },
+        ));
   }
 
-  Widget buildIngredientManagementUI(IngredientsLoaded state) {
+  Widget buildIngredientManagementUI(
+      List<dynamic> pantryEssentials,
+      List<dynamic> meat,
+      List<dynamic> vegetablesAndGreens,
+      List<dynamic> fishAndPoultry,
+      List<dynamic> baking) {
     // Map the selected options to boolean values
     initialPantryEssentials =
-        mapOptionsToBoolean(state.pantryEssentials, Options.pantryEssentials);
-    initialMeat = mapOptionsToBoolean(state.meat, Options.meat);
-    initialVegetablesAndGreens = mapOptionsToBoolean(
-        state.vegetablesAndGreens, Options.vegetablesAndGreens);
+        mapOptionsToBoolean(pantryEssentials, Options.pantryEssentials);
+    initialMeat = mapOptionsToBoolean(meat, Options.meat);
+    initialVegetablesAndGreens =
+        mapOptionsToBoolean(vegetablesAndGreens, Options.vegetablesAndGreens);
     initialFishAndPoultry =
-        mapOptionsToBoolean(state.fishAndPoultry, Options.fishAndPoultry);
-    initialBaking = mapOptionsToBoolean(state.baking, Options.baking);
+        mapOptionsToBoolean(fishAndPoultry, Options.fishAndPoultry);
+    initialBaking = mapOptionsToBoolean(baking, Options.baking);
 
     selectedPantryEssentials = List.from(initialPantryEssentials);
     selectedMeat = List.from(initialMeat);

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 void openDialog(BuildContext context, String windowTitle, String content,
-    {required VoidCallback onConfirm}) {
+    {required VoidCallback onConfirm, required bool showCancelButton}) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
@@ -32,29 +31,30 @@ void openDialog(BuildContext context, String windowTitle, String content,
 
       // Buttons
       actions: [
-        // Cancel Button
-        TextButton(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all(
-              const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8.0),
+        if (showCancelButton)
+          TextButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(
+                const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8.0),
+                  ),
                 ),
               ),
+              overlayColor: MaterialStatePropertyAll(
+                Colors.grey.withOpacity(0.15),
+              ),
             ),
-            overlayColor:
-                MaterialStatePropertyAll(Colors.grey.withOpacity(0.15)),
-          ),
-          child: const Text(
-            'Cancel',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              color: Colors.black87,
+            child: const Text(
+              'Cancel',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w400,
+                color: Colors.black87,
+              ),
             ),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
 
         // Confirm Button
         TextButton(

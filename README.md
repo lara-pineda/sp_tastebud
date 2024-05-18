@@ -57,22 +57,28 @@ sp_tastebud/
 
 ## Features TODO
 
--   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients
+MUST HAVE
+-   add to favorites/reject recipe from view recipe page
 -   substitute recipe
+-   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients?
 
 MINOR STUFF
-- add to favorites/reject recipe from view recipe page
-- add notif if save is successful sa ingredient mgmt and user profile
+-   back button for view collections page
+-   add definitions ano meaning ng like keto-friendly ganern
 -   check if wifi is on
 -   add more filters
 -   confirmation windows for:
     - saving changes when switching tabs
-- bakit sobrang laki ng circle loading indicator sa umpisa
+r
+FIX
+-   bakit sobrang laki ng circle loading indicator sa umpisa
+-   change email. nababago agad email sa firestore kahit di pa verified
 
 SUGGESTIONS
 -   manage equipments
 -   leave a review
 
+bit.ly/ReCAP2024_EvalForm
 
 Functions to test:
 1. Sign up

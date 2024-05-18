@@ -120,7 +120,7 @@ class Options {
     'Cholesterol',
     'Calcium',
     'Iron',
-    'Folate (Equivalent)',
+    'Folate',
     'Magnesium',
     'Niacin (B3)',
     'Phosphorus',
