@@ -17,9 +17,6 @@ class RecipeCollection extends StatelessWidget {
 
   void navigateToRecipePage(BuildContext context, String type) {
     String collectionType = type == 'Saved Recipes' ? 'saved' : 'rejected';
-
-    print("collectionType: $collectionType");
-
     context.go('/recipe-collection/collection/$collectionType');
   }
 

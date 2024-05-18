@@ -19,12 +19,8 @@ import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
 import 'package:sp_tastebud/features/recipe/view-recipe/ui/view_recipe_ui.dart';
 
 //BLoCs
-import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
-import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
-import 'package:sp_tastebud/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
-import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
-
-import '../../features/navigation/bloc/app_navigation_bloc.dart';
+import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
+import 'package:sp_tastebud/features/navigation/bloc/app_navigation_bloc.dart';
 
 class AppRoutes {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -79,9 +75,9 @@ class AppRoutes {
                         name: "search",
                         path: "/search",
                         builder: (context, state) =>
-                            BlocProvider<SearchRecipeBloc>(
-                          create: (context) => getIt<SearchRecipeBloc>(),
-                          child: const SearchRecipe(),
+                            BlocProvider<RecipeCardBloc>(
+                          create: (context) => getIt<RecipeCardBloc>(),
+                          child: SearchRecipe(),
                         ),
                         routes: [
                           GoRoute(
@@ -132,8 +128,9 @@ class AppRoutes {
                                 BlocProvider<RecipeCollectionBloc>.value(
                                   value: getIt<RecipeCollectionBloc>(),
                                 ),
-                                BlocProvider<SearchRecipeBloc>.value(
-                                  value: getIt<SearchRecipeBloc>(),
+                                BlocProvider<RecipeCardBloc>(
+                                  create: (context) => getIt<RecipeCardBloc>(),
+                                  child: SearchRecipe(),
                                 ),
                               ],
                               child: ViewCollectionPage(

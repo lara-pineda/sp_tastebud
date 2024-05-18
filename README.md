@@ -59,21 +59,15 @@ sp_tastebud/
 
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients
 -   substitute recipe
--   if nasa rejected recipes, di na dapat lumabas sa search results
 
 MINOR STUFF
--   no notif if save is successful sa ingredient mgmt and user profile
--   implement debounce on recipe collection
--   nagrerefresh page sa recipe collection pag nagreremove, wag na sana refresh, updatelist na lang
+- add to favorites/reject recipe from view recipe page
+- add notif if save is successful sa ingredient mgmt and user profile
 -   check if wifi is on
 -   add more filters
 -   confirmation windows for:
     - saving changes when switching tabs
-    - rejecting a favorited recipe
 - bakit sobrang laki ng circle loading indicator sa umpisa
-- getIt<IngredientsBloc> vs GetIt.instance<IngredientsBloc>()
-- add to favorites/reject recipe from view recipe page
-- page for empty collections
 
 SUGGESTIONS
 -   manage equipments

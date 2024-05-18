@@ -7,24 +7,23 @@ import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/features/auth/data/preferences_service.dart';
 import 'package:sp_tastebud/features/recipe/view-recipe/bloc/view_recipe_bloc.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
-import 'package:sp_tastebud/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
+import 'package:sp_tastebud/features/recipe-collection/bloc/recipe_collection_bloc.dart';
+import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
 
 // services
 import 'package:sp_tastebud/features/auth/data/auth_service.dart';
 import 'package:sp_tastebud/features/user-profile/data/user_profile_services.dart';
 import 'package:sp_tastebud/features/ingredients/data/ingredients_services.dart';
+import 'package:sp_tastebud/features/recipe-collection/data/recipe_collection_services.dart';
 
 // repositories
 import 'package:sp_tastebud/features/auth/data/user_repository.dart';
 import 'package:sp_tastebud/features/user-profile/data/user_profile_repository.dart';
 import 'package:sp_tastebud/features/ingredients/data/ingredients_repository.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/data/search_repository.dart';
-
-import '../../features/recipe-collection/bloc/recipe_collection_bloc.dart';
-import '../../features/recipe-collection/data/recipe_collection_repository.dart';
-import '../../features/recipe-collection/data/recipe_collection_services.dart';
-import '../../features/recipe/view-recipe/data/view_recipe_repository.dart';
+import 'package:sp_tastebud/features/recipe-collection/data/recipe_collection_repository.dart';
+import 'package:sp_tastebud/features/recipe/view-recipe/data/view_recipe_repository.dart';
 
 // instantiate get_it
 final getIt = GetIt.instance;
@@ -61,6 +60,9 @@ void setupServices() {
   // Register PreferencesService
   getIt.registerLazySingleton<PreferencesService>(() => PreferencesService());
 
+  // Recipe Card-specific
+  getIt.registerLazySingleton<RecipeCardBloc>(() => RecipeCardBloc());
+
   // Register BLoCs
   getIt.registerLazySingleton<AuthBloc>(
       () => AuthBloc(getIt<UserRepository>(), getIt<PreferencesService>()));
@@ -68,9 +70,7 @@ void setupServices() {
       () => UserProfileBloc(getIt<UserProfileRepository>()));
   getIt.registerLazySingleton<IngredientsBloc>(
       () => IngredientsBloc(getIt<IngredientsRepository>()));
-  getIt.registerLazySingleton<SearchRecipeBloc>(() => SearchRecipeBloc(
-      getIt<SearchRecipeRepository>(), getIt<RecipeCollectionBloc>()));
-  getIt.registerFactory<ViewRecipeBloc>(
+  getIt.registerLazySingleton<ViewRecipeBloc>(
       () => ViewRecipeBloc(getIt<ViewRecipeRepository>()));
   getIt.registerLazySingleton<RecipeCollectionBloc>(
       () => RecipeCollectionBloc(getIt<RecipeCollectionRepository>()));

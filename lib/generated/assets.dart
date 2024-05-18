@@ -17,18 +17,18 @@ class Assets {
       'lib/features/ingredients/bloc/ingredients_event.dart';
   static const String blocIngredientsState =
       'lib/features/ingredients/bloc/ingredients_state.dart';
+  static const String blocRecipeBloc =
+      'lib/shared/recipe_card/bloc/recipe_bloc.dart';
   static const String blocRecipeCollectionBloc =
       'lib/features/recipe-collection/bloc/recipe_collection_bloc.dart';
   static const String blocRecipeCollectionEvent =
       'lib/features/recipe-collection/bloc/recipe_collection_event.dart';
   static const String blocRecipeCollectionState =
       'lib/features/recipe-collection/bloc/recipe_collection_state.dart';
-  static const String blocSearchRecipeBloc =
-      'lib/features/recipe/search-recipe/bloc/search_recipe_bloc.dart';
-  static const String blocSearchRecipeEvent =
-      'lib/features/recipe/search-recipe/bloc/search_recipe_event.dart';
-  static const String blocSearchRecipeState =
-      'lib/features/recipe/search-recipe/bloc/search_recipe_state.dart';
+  static const String blocRecipeEvent =
+      'lib/shared/recipe_card/bloc/recipe_event.dart';
+  static const String blocRecipeState =
+      'lib/shared/recipe_card/bloc/recipe_state.dart';
   static const String blocUserProfileBloc =
       'lib/features/user-profile/bloc/user_profile_bloc.dart';
   static const String blocUserProfileEvent =
@@ -95,8 +95,6 @@ class Assets {
       'lib/features/recipe/view-recipe/model/ingredient_substitute_response_model.dart';
   static const String modelRecipeModel =
       'lib/features/recipe/view-recipe/model/recipe_model.dart';
-  static const String recipeCardRecipeCard =
-      'lib/shared/recipe_card/recipe_card.dart';
   static const String searchBarCustomSearchBar =
       'lib/shared/search_bar/custom_search_bar.dart';
   static const String searchRecipeRecipeSearchApi =
@@ -117,6 +115,10 @@ class Assets {
       'lib/features/navigation/ui/navigation_bar_items.dart';
   static const String uiNavigationBarUi =
       'lib/features/navigation/ui/navigation_bar_ui.dart';
+  static const String uiRecipeCardCollection =
+      'lib/shared/recipe_card/ui/recipe_card_collection.dart';
+  static const String uiRecipeCardSearch =
+      'lib/shared/recipe_card/ui/recipe_card_search.dart';
   static const String uiRecipeCollectionUi =
       'lib/features/recipe-collection/ui/recipe_collection_ui.dart';
   static const String uiSearchRecipeUi =

@@ -115,6 +115,7 @@ flutter:
     - assets/images/Edamam_Badge.png
     - assets/images/savedRecipe.png
     - assets/images/rejectedRecipe.png
+    - assets/images/emptyCollection.png
     - assets/images/noMatchingRecipe.png
     - lib/features/navigation/ui/
 

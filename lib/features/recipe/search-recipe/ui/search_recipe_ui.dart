@@ -4,18 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'dart:async';
 import 'package:go_router/go_router.dart';
-import 'package:sp_tastebud/features/recipe-collection/bloc/recipe_collection_bloc.dart';
+import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
 import 'package:sp_tastebud/shared/search_bar/custom_search_bar.dart';
-import 'package:sp_tastebud/shared/recipe_card/recipe_card.dart';
+import 'package:sp_tastebud/shared/recipe_card/ui/recipe_card_search.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/recipe_search_api.dart';
-import 'package:sp_tastebud/core/config/service_locator.dart';
 import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
-import '../bloc/search_recipe_bloc.dart';
 
 class SearchRecipe extends StatefulWidget {
   const SearchRecipe({super.key});
@@ -25,19 +23,13 @@ class SearchRecipe extends StatefulWidget {
 }
 
 class _SearchRecipeState extends State<SearchRecipe> {
-  List<bool> selectedDietaryPreferences = [];
-  List<bool> selectedAllergies = [];
-  List<bool> selectedMacronutrients = [];
-  List<bool> selectedMicronutrients = [];
+  final IngredientsBloc _ingredientsBloc = GetIt.instance<IngredientsBloc>();
+  final UserProfileBloc _userProfileBloc = GetIt.instance<UserProfileBloc>();
+  final RecipeCardBloc _recipeCardBloc = GetIt.instance<RecipeCardBloc>();
 
   String _healthQuery = '';
   String _macroQuery = '';
   String _microQuery = '';
-
-  final IngredientsBloc _ingredientsBloc = GetIt.instance<IngredientsBloc>();
-  final UserProfileBloc _userProfileBloc = GetIt.instance<UserProfileBloc>();
-  final RecipeCollectionBloc _recipeCollectionBloc =
-      GetIt.instance<RecipeCollectionBloc>();
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -54,6 +46,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
     super.initState();
 
     _searchController.addListener(_onSearchChanged);
+    _recipeCardBloc.add(LoadInitialData());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_userProfileBloc.state is UserProfileLoaded) {
@@ -78,14 +71,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
         _loadMoreRecipes(_searchKey);
       }
     });
-
-    // _recipeCollectionBlocstream.listen((state) {
-    //  // Update realtime when collection has been modified
-    //   if (state is IngredientsLoaded) {
-    //     _recipes.clear();
-    //     _loadMoreRecipes(_searchKey);
-    //   }
-    // });
   }
 
   @override
@@ -93,8 +78,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     _debounce?.cancel();
-    _userProfileBloc.close();
-    // _recipeCollectionBloc.close();
     super.dispose();
   }
 
@@ -117,8 +100,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
         state.macronutrients, Options.macronutrients, Options.nutrientTag1);
     _microQuery = mapNutrients(
         state.micronutrients, Options.micronutrients, Options.nutrientTag2);
-
-    print(_healthQuery + _microQuery + _macroQuery);
   }
 
   Future<void> _loadMoreRecipes(String searchKey) async {
@@ -152,52 +133,56 @@ class _SearchRecipeState extends State<SearchRecipe> {
       }
     } catch (e) {
       print('Error: $e');
-      // Retry logic
-      int retryCount = 0;
-      const int maxRetries = 3;
-      const Duration retryInterval = Duration(seconds: 2);
+      _retryLoadRecipes(searchKey);
+    }
+  }
 
-      while (retryCount < maxRetries) {
-        await Future.delayed(retryInterval);
-        retryCount++;
-        try {
-          // Get all ingredients from IngredientsBloc
-          final allIngredients = _ingredientsBloc.allIngredients;
+  // Retry logic
+  Future<void> _retryLoadRecipes(String searchKey) async {
+    int retryCount = 0;
+    const int maxRetries = 3;
+    const Duration retryInterval = Duration(seconds: 2);
 
-          final data = await RecipeSearchAPI.searchRecipes(
-            searchKey: searchKey,
-            queryParams: _healthQuery + _macroQuery + _microQuery,
-            nextUrl: _nextUrl,
-            ingredients: allIngredients,
-          );
+    while (retryCount < maxRetries) {
+      await Future.delayed(retryInterval);
+      retryCount++;
+      try {
+        // Get all ingredients from IngredientsBloc
+        final allIngredients = _ingredientsBloc.allIngredients;
 
-          final newRecipes = data['hits'].map((hit) => hit['recipe']).toList();
-          _nextUrl = data['_links']?['next']?['href']; // Update the next URL
+        final data = await RecipeSearchAPI.searchRecipes(
+          searchKey: searchKey,
+          queryParams: _healthQuery + _macroQuery + _microQuery,
+          nextUrl: _nextUrl,
+          ingredients: allIngredients,
+        );
 
-          if (mounted) {
-            setState(() {
-              if (newRecipes.isNotEmpty) {
-                _recipes.addAll(newRecipes);
-              } else {
-                print("SEARCH RESULTS LIST EMPTY!");
-              }
-              _isLoading = false;
-              _initialLoadComplete = true; // Mark initial load as complete
-            });
-          }
-          return; // Exit the retry loop if successful
-        } catch (e) {
-          print('Retry $retryCount failed: $e');
+        final newRecipes = data['hits'].map((hit) => hit['recipe']).toList();
+        _nextUrl = data['_links']?['next']?['href']; // Update the next URL
+
+        if (mounted) {
+          setState(() {
+            if (newRecipes.isNotEmpty) {
+              _recipes.addAll(newRecipes);
+            } else {
+              print("SEARCH RESULTS LIST EMPTY!");
+            }
+            _isLoading = false;
+            _initialLoadComplete = true; // Mark initial load as complete
+          });
         }
+        return; // Exit the retry loop if successful
+      } catch (e) {
+        print('Retry $retryCount failed: $e');
       }
+    }
 
-      // reset loading state on final error
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _initialLoadComplete = true; // Mark initial load as complete
-        });
-      }
+    // reset loading state on final error
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+        _initialLoadComplete = true; // Mark initial load as complete
+      });
     }
   }
 
@@ -226,32 +211,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
           current is UserProfileInitial,
       builder: (context, userProfileState) {
         if (userProfileState is UserProfileLoaded) {
-          return BlocListener<SearchRecipeBloc, SearchRecipeState>(
-            listener: (context, state) {
-              if (state is FavoritesError) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content:
-                        Text("Error adding to saved recipes collection.")));
-              } else if (state is FavoritesAdded) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Added to saved recipe collection!")));
-              } else if (state is FavoritesRemoved) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Removed from saved recipe collection!")));
-              } else if (state is RejectedAdded) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Added to rejected recipes!")));
-              } else if (state is RejectedRemoved) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Removed from rejected recipes!")));
-              } else if (state is RejectedError) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content:
-                        Text("Error adding to rejected recipes collection.")));
-              }
-            },
-            child: _buildSearchRecipeUI(userProfileState),
-          );
+          return _buildSearchRecipeUI(userProfileState);
         } else if (userProfileState is UserProfileError) {
           return Center(child: Text(userProfileState.error));
         }
@@ -286,8 +246,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
         Container(
           width:
               double.infinity, // Ensures the container takes up the full width
-          padding: EdgeInsets.symmetric(
-              horizontal: 22.0), // Adjust padding as needed
+          padding: EdgeInsets.symmetric(horizontal: 22.0),
           child: Text(
             'Recommended\nfor You',
             style: TextStyle(
@@ -325,22 +284,30 @@ class _SearchRecipeState extends State<SearchRecipe> {
                           _searchKey.isEmpty) {
                         // Only load default results if searchKey is empty and there are no more next URLs
                         _loadMoreRecipes('');
-                      } else if (_nextUrl == null) {
-                        return Padding(
+                      } else if (_nextUrl == null && _initialLoadComplete) {
+                        return const Padding(
                             padding: EdgeInsets.symmetric(vertical: 10),
                             child: Center(child: Text("End of results.")));
                       }
                       return Center(child: CircularProgressIndicator());
                     }
                     final recipe = _recipes[index];
+                    final recipeId = extractRecipeIdUsingRegExp(recipe['uri']);
+
+                    // Check if the recipe is in the rejected collection
+                    if ((_recipeCardBloc.state as RecipeCardUpdated)
+                        .rejected
+                        .contains(recipeId)) {
+                      // Return an empty container if the recipe is rejected
+                      return Container();
+                    }
+
                     return GestureDetector(
                       onTap: () {
-                        final recipeId =
-                            extractRecipeIdUsingRegExp(recipe['uri']);
                         context.goNamed('viewRecipe',
                             pathParameters: {'recipeId': recipeId});
                       },
-                      child: RecipeCard(
+                      child: RecipeCardSearch(
                         recipeName: recipe['label'],
                         imageUrl: recipe['images']['THUMBNAIL']['url'],
                         sourceWebsite: recipe['source'],
