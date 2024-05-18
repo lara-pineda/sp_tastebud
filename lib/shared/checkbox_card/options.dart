@@ -1,6 +1,7 @@
 // options to display inside checkbox cards
 
 class Options {
+  // FILTERS=================================================================
   static const List<String> dietTags = [
     'balanced',
     'high-fiber',
@@ -9,38 +10,67 @@ class Options {
     'low-fat',
     'low-sodium',
   ];
-
-  // static const List<String> healthTags = [
-  //   'alcohol-free',
-  //   'celery-free',
-  //   'crustacean-free',
-  //   'dairy-free',
-  //   'egg-free',
-  //   'fish-free',
-  //   'gluten-free',
-  //   'keto-friendly',
-  //   'kosher',
-  //   'low-potassium',
-  //   'low-sugar',
-  //   'mollusk-free',
-  //   'mustard-free',
-  //   'no-oil-added',
-  //   'paleo',
-  //   'peanut-free',
-  //   'pescatarian',
-  //   'pork-free',
-  //   'red-meat-free',
-  //   'soy-free',
-  //   'sugar-conscious',
-  //   'vegan',
-  //   'vegetarian',
-  //   'wheat-free',
-  // ];
-
-  static const List<String> kitchenEquipments = [
-    // Choices for another card
+  static const List<String> mealType = [
+    'breakfast',
+    'brunch',
+    'breakfast',
+    'lunch/dinner',
+    'snack',
+    'teatime',
+  ];
+  static const List<String> cuisineType = [
+    'american',
+    'asian',
+    'british',
+    'caribbean',
+    'central europe',
+    'chinese',
+    'eastern europe',
+    'french',
+    'american',
+    'greek',
+    'indian',
+    'italian',
+    'japanese',
+    'korean',
+    'kosher',
+    'mediterranean',
+    'mexican',
+    'middle eastern',
+    'nordic',
+    'south american',
+    'south east asian',
+    'world',
+  ];
+  static const List<String> dishType = [
+    'alcohol cocktail',
+    'biscuits and cookies',
+    'bread',
+    'cereals',
+    'condiments and sauces',
+    'desserts',
+    'drinks',
+    'egg',
+    'ice cream and custard',
+    'main course',
+    'pancake',
+    'pasta',
+    'pastry',
+    'pies and tarts',
+    'pizza',
+    'preps',
+    'preserve',
+    'salad',
+    'sandwiches',
+    'seafood',
+    'side dish',
+    'soup',
+    'special occasions',
+    'starter',
+    'sweets',
   ];
 
+  // USER PROFILE=============================================================
   static const List<String> dietaryPreferences = [
     'Keto-friendly',
     'Kosher',
@@ -53,7 +83,6 @@ class Options {
     'Vegan',
     'Vegetarian',
   ];
-
   static const List<String> allergies = [
     'Alcohol-free',
     'Celery-free',
@@ -70,7 +99,6 @@ class Options {
     'Soy-free',
     'Wheat-free',
   ];
-
   static const List<String> nutrientTag1 = [
     'FAT', // total lipid (fat)
     'FASAT', // saturated
@@ -82,7 +110,6 @@ class Options {
     'SUGAR',
     'PROCNT',
   ];
-
   static const List<String> macronutrients = [
     'Fat',
     'Saturated',
@@ -94,7 +121,6 @@ class Options {
     'Sugars',
     'Protein',
   ];
-
   static const List<String> nutrientTag2 = [
     'CHOLE',
     'CA',
@@ -115,7 +141,6 @@ class Options {
     'TOPCHA',
     'VITK1'
   ];
-
   static const List<String> micronutrients = [
     'Cholesterol',
     'Calcium',
@@ -137,6 +162,45 @@ class Options {
     'Vitamin K'
   ];
 
+  // INFO TEXTS==============================================================
+  static const List<String> dietInfoText = [
+    'Protein/Fat/Carb values in 15/35/50 ratio',
+    'More than 5g fiber per serving',
+    'More than 50% of total calories from proteins',
+    'Less than 20% of total calories from carbs',
+    'Less than 15% of total calories from fat',
+    'Less than 140mg sodium per serving'
+  ];
+  static const List<String> dietaryPreferencesInfoText = [
+    'Maximum 7 grams of net carbs per serving.',
+    'Contains only ingredients allowed by the kosher diet. However it does not guarantee kosher preparation of the ingredients themselves.',
+    'Less than 150mg per serving.',
+    'No simple sugars – glucose, dextrose, galactose, fructose, sucrose, lactose, maltose.',
+    'No oil added except to what is contained in the basic ingredients',
+    'Excludes what are perceived to be agricultural products; grains, legumes, dairy products, potatoes, refined salt, refined sugar, and processed oils.',
+    'Does not contain meat or meat based products, can contain dairy and fish.',
+    'Less than 4g of sugar per serving.',
+    'No meat, poultry, fish, dairy, eggs or honey.',
+    'No meat, poultry, or fish.',
+  ];
+  static const List<String> allergiesInfoText = [
+    'No alcohol used or contained.',
+    'Does not contain celery or derivatives.',
+    'Does not contain crustaceans (shrimp, lobster etc.) or derivatives.',
+    'No dairy; no lactose.',
+    'No eggs or products containing eggs.',
+    'No fish or fish derivatives.',
+    'No ingredients containing gluten.',
+    'No mollusks',
+    'Does not contain mustard or derivatives.',
+    'No peanuts or products containing peanuts.',
+    'Does not contain pork or derivatives,',
+    'Does not contain beef, lamb, pork, duck, goose, game, horse, and other types of red meat or products containing red meat.',
+    'No soy or products containing soy.',
+    'No wheat, can have gluten though.',
+  ];
+
+  // INGREDIENTS=============================================================
   static const List<String> pantryEssentials = [
     'Baking powder',
     'Baking soda',
@@ -157,7 +221,6 @@ class Options {
     'Vanilla',
     'Vegetable oil',
   ];
-
   static const List<String> meat = [
     'Bacon',
     'Bacon bits',
@@ -174,7 +237,6 @@ class Options {
     'Roast beef',
     'Salami',
   ];
-
   static const List<String> fishAndPoultry = [
     'Bangus',
     'Chicken breast',
@@ -190,7 +252,6 @@ class Options {
     'Tuna',
     'Whole chicken',
   ];
-
   static const List<String> vegetablesAndGreens = [
     'Avocado',
     'Bell pepper',
@@ -207,7 +268,6 @@ class Options {
     'Spinach',
     'Tomato',
   ];
-
   static const List<String> baking = [
     'Buttermilk',
     'Cornstarch',

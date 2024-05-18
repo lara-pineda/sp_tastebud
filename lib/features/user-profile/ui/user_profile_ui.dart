@@ -433,6 +433,17 @@ class _UserProfileState extends State<UserProfile> {
 
                   SizedBox(height: (30.toVHLength).toPX()),
 
+                  Text(
+                    'Click on the circle next to an option to check the option.\n\nOptions with asterisks mean that you can click on it to see what the option means.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  SizedBox(height: (30.toVHLength).toPX()),
+
                   // DIETARY PREFERENCES
                   Text(
                     'Dietary Preferences',
@@ -448,6 +459,7 @@ class _UserProfileState extends State<UserProfile> {
                     allChoices: Options.dietaryPreferences,
                     initialSelections: selectedDietaryPreferences,
                     onSelectionChanged: _onDietPrefSelectionChanged,
+                    infoTexts: Options.dietaryPreferencesInfoText,
                     cardLabel: 'Dietary Preferences',
                   ),
 
@@ -467,6 +479,7 @@ class _UserProfileState extends State<UserProfile> {
                     allChoices: Options.allergies,
                     initialSelections: selectedAllergies,
                     onSelectionChanged: _onAllergiesSelectionChanged,
+                    infoTexts: Options.allergiesInfoText,
                     cardLabel: 'Allergies',
                   ),
                   SizedBox(height: (40.toVHLength).toPX()),

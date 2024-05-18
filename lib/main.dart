@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/config/app_router.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
+import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
+import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import 'core/config/service_locator.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/user-profile/bloc/user_profile_bloc.dart';
@@ -27,6 +30,13 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
+
+  List<bool> selectedDietaryPreferences =
+      List<bool>.filled(Options.dietaryPreferences.length, false);
+
+  void _onDietPrefSelectionChanged(List<bool> newSelections) {
+    selectedDietaryPreferences = newSelections;
+  }
 
   // This widget is the root of the application.
   @override
@@ -91,7 +101,12 @@ class SimpleBlocObserver extends BlocObserver {
 //           GoRoute(
 //             name: "forgotPassword",
 //             path: "/",
-//             builder: (context, state) => ForgotPassword(),
+//             builder: (context, state) => CheckboxCard(
+//               allChoices: Options.dietaryPreferences,
+//               initialSelections: selectedDietaryPreferences,
+//               onSelectionChanged: _onDietPrefSelectionChanged,
+//               cardLabel: 'Dietary Preferences',
+//             ),
 //           ),
 //           // builder: (context, state) {
 //           //   return BlocProvider<ViewRecipeBloc>(

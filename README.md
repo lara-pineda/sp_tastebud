@@ -67,7 +67,8 @@ MUST HAVE
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients?
 
 MINOR STUFF
--   add definitions ano meaning ng like keto-friendly ganern
+-   remove bg for empty collection
+-   replace user image with app icon
 -   check if wifi is on
 -   add more filters
 -   confirmation windows for:
@@ -75,6 +76,7 @@ MINOR STUFF
 
 FIX
 -   bakit sobrang laki ng circle loading indicator sa umpisa
+-   if sa drawer nagcheck ng checklist, hindi napapasa sa checkbox card yung state
 
 SUGGESTIONS
 -   manage equipments
@@ -94,3 +96,4 @@ Functions to test:
 9. Reject recipe
 10. Search recipe
 11. Filter recipe
+12. Try magpalabas ng errors

@@ -7,6 +7,7 @@ class CheckboxCard extends StatefulWidget {
   final List<bool> initialSelections;
   final ValueChanged<List<bool>> onSelectionChanged;
   final String cardLabel;
+  final List<String?>? infoTexts;
 
   const CheckboxCard({
     super.key,
@@ -14,6 +15,7 @@ class CheckboxCard extends StatefulWidget {
     required this.initialSelections,
     required this.onSelectionChanged,
     required this.cardLabel,
+    this.infoTexts,
   });
 
   @override
@@ -41,7 +43,8 @@ class _CheckboxCardState extends State<CheckboxCard> {
   }
 
   void _showFullList(
-      BuildContext context, List<String> allChoices, String label) {
+      BuildContext context, List<String> allChoices, String label,
+      [infoTexts]) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -61,7 +64,9 @@ class _CheckboxCardState extends State<CheckboxCard> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 5),
+                Divider(),
+                SizedBox(height: 5),
                 Container(
                   margin: EdgeInsets.only(
                       left: MediaQuery.of(context).size.width / 12),
@@ -76,6 +81,7 @@ class _CheckboxCardState extends State<CheckboxCard> {
                       (index) => CustomCheckboxListTile(
                         title: widget.allChoices[index],
                         initialValue: selectedValues[index],
+                        infoText: infoTexts[index],
                         onChanged: (bool value) {
                           setState(() {
                             selectedValues[index] = value;
@@ -100,7 +106,7 @@ class _CheckboxCardState extends State<CheckboxCard> {
         : widget.allChoices.length; // Display up to 10 options
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.only(left: 10),
       height: 200,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -139,6 +145,10 @@ class _CheckboxCardState extends State<CheckboxCard> {
                       (index) => CustomCheckboxListTile(
                         title: widget.allChoices[index], // choices to display
                         initialValue: selectedValues[index],
+                        infoText: widget.infoTexts != null &&
+                                widget.infoTexts!.length > index
+                            ? widget.infoTexts![index]
+                            : null,
                         onChanged: (bool value) {
                           setState(() {
                             selectedValues[index] = value;
@@ -165,8 +175,8 @@ class _CheckboxCardState extends State<CheckboxCard> {
             child: IconButton(
               padding: EdgeInsets.zero,
               icon: Icon(Icons.chevron_right, color: Colors.white, size: 30),
-              onPressed: () =>
-                  _showFullList(context, widget.allChoices, widget.cardLabel),
+              onPressed: () => _showFullList(context, widget.allChoices,
+                  widget.cardLabel, widget.infoTexts),
             ),
           ),
         ],
