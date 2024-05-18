@@ -24,7 +24,7 @@ class ViewRecipe extends StatefulWidget {
 class _ViewRecipeState extends State<ViewRecipe>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
+  late final ViewRecipeBloc _viewRecipeBloc = GetIt.instance<ViewRecipeBloc>();
   final IngredientsBloc _ingredientsBloc = GetIt.instance<IngredientsBloc>();
 
   @override
@@ -35,8 +35,7 @@ class _ViewRecipeState extends State<ViewRecipe>
     // Ensure the bloc is accessed after the widget build process is complete
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        BlocProvider.of<ViewRecipeBloc>(context, listen: false)
-            .add(FetchRecipe(widget.recipeId));
+        _viewRecipeBloc.add(FetchRecipe(widget.recipeId));
       }
     });
   }
@@ -51,6 +50,7 @@ class _ViewRecipeState extends State<ViewRecipe>
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ViewRecipeBloc, ViewRecipeState>(
+      bloc: _viewRecipeBloc,
       builder: (context, state) {
         if (state is RecipeLoading) {
           return Center(child: CircularProgressIndicator());

@@ -8,7 +8,7 @@ import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
-import 'package:sp_tastebud/shared/custom_dialog.dart';
+import 'package:sp_tastebud/shared/custom_dialog/custom_dialog.dart';
 import '../bloc/ingredients_bloc.dart';
 
 class IngredientManagement extends StatefulWidget {

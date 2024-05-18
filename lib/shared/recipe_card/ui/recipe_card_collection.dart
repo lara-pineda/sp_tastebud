@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
-import 'package:sp_tastebud/shared/custom_dialog.dart';
+import 'package:sp_tastebud/shared/custom_dialog/custom_dialog.dart';
 import '../bloc/recipe_bloc.dart';
 
 class RecipeCardCollection extends StatefulWidget {

@@ -53,6 +53,8 @@ class Assets {
   static const String configAssetsPath = 'lib/core/config/assets_path.dart';
   static const String configServiceLocator =
       'lib/core/config/service_locator.dart';
+  static const String customDialogCustomDialog =
+      'lib/shared/custom_dialog/custom_dialog.dart';
   static const String dataAuthService =
       'lib/features/auth/data/auth_service.dart';
   static const String dataIngredientsRepository =
@@ -79,6 +81,8 @@ class Assets {
   static const String imagesBackground = 'assets/images/Background.png';
   static const String imagesDefaultProfile = 'assets/images/DefaultProfile.jpg';
   static const String imagesEdamamBadge = 'assets/images/Edamam_Badge.png';
+  static const String imagesEmptyCollection =
+      'assets/images/emptyCollection.png';
   static const String imagesImagePlaceholder =
       'assets/images/ImagePlaceholder.png';
   static const String imagesLandingFruits = 'assets/images/LandingFruits.jpg';
@@ -99,7 +103,6 @@ class Assets {
       'lib/shared/search_bar/custom_search_bar.dart';
   static const String searchRecipeRecipeSearchApi =
       'lib/features/recipe/search-recipe/recipe_search_api.dart';
-  static const String sharedCustomDialog = 'lib/shared/custom_dialog.dart';
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';
   static const String themesAppTypography =
       'lib/core/themes/app_typography.dart';

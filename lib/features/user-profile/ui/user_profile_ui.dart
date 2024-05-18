@@ -9,7 +9,7 @@ import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
-import 'package:sp_tastebud/shared/custom_dialog.dart';
+import 'package:sp_tastebud/shared/custom_dialog/custom_dialog.dart';
 import '../bloc/user_profile_bloc.dart';
 
 class UserProfile extends StatefulWidget {

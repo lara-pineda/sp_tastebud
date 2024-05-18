@@ -44,7 +44,7 @@ void setupServices() {
       () => SearchRecipeRepository(getIt(), getIt()));
   getIt.registerLazySingleton<ViewRecipeRepository>(
       () => ViewRecipeRepository(getIt(), getIt()));
-  getIt.registerFactory<RecipeCollectionServices>(
+  getIt.registerLazySingleton<RecipeCollectionServices>(
       () => RecipeCollectionServices(getIt(), getIt()));
 
   // Register repositories

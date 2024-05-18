@@ -14,7 +14,7 @@ sp_tastebud/
 ├── .dart_tool/
 ├── .idea/
 ├── android/
-├── assets/                                 # Non-code resources like images, fonts, etc.
+├── assets/                                     # Non-code resources like images, fonts, etc.
 │   ├── google_fonts/
 │   ├── images/
 │   └── wireframe/
@@ -22,21 +22,24 @@ sp_tastebud/
 ├── ios/
 └── lib/
     ├── core/
-    │   ├── config/                         # Essential for the app
-    │   │   ├── app_router.dart             # Defines routes for navigation
-    │   │   ├── assets_path.dart            # Resource path for assets
-    │   │   └── service_locator.dart        # Dependency injection
+    │   ├── config/                             # Essential for the app
+    │   │   ├── app_router.dart                 # Defines routes for navigation
+    │   │   ├── assets_path.dart                # Resource path for assets
+    │   │   └── service_locator.dart            # Dependency injection
     │   │
-    │   ├── themes/                         # Custom app theme
+    │   ├── themes/                             # Custom app theme
     │   │   ├── app_palette.dart
     │   │   └── app_typography.dart
     │   │
-    │   └── utils/                          # Holds utility/helper functions shared across the app
-    │       ├── extract_recipe_id.dart      # Extracts the recipe id from a string
-    │       ├── get_current_route.dart      # Gets route path of a widget
-    │       └── hex_to_color.dart           # Converts hex to dart color
+    │   └── utils/                              # Holds utility/helper functions shared across the app
+    │       ├── capitalize_first_letter.dart    # Capitalizes the first letter of all words in a string
+    │       ├── extract_recipe_id.dart          # Extracts the recipe id from a string
+    │       ├── get_current_route.dart          # Gets route path of a widget
+    │       ├── hex_to_color.dart               # Converts hex to dart color
+    │       ├── load_svg.dart                   # Loads a given svg file to UI layer
+    │       └── user_not_found_exception.dart   # Custom exception to throw
     │
-    ├── features/                           # App features
+    ├── features/                               # App features
     │   ├── auth/
     │   ├── ingredients/
     │   ├── navigation/
@@ -48,6 +51,7 @@ sp_tastebud/
     │
     ├── shared/                             # Reusable small, custom widgets used in the pages
     │   ├── checkbox_card/
+    │   ├── custom_dialog/
     │   ├── recipe_card/
     │   └── search_bar/
     │
@@ -71,7 +75,6 @@ MINOR STUFF
 
 FIX
 -   bakit sobrang laki ng circle loading indicator sa umpisa
--   view recipe bloc closing after being used once. can no longer add new events
 
 SUGGESTIONS
 -   manage equipments
