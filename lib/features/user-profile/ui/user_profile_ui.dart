@@ -258,7 +258,6 @@ class _UserProfileState extends State<UserProfile> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(userProfileState.error),
-                        // backgroundColor: Colors.red,
                       ),
                     );
                   }

@@ -45,6 +45,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
   void _onLoadUserProfile(
       LoadUserProfile event, Emitter<UserProfileState> emit) async {
     var userId = FirebaseAuth.instance.currentUser?.uid;
+    var userEmail = FirebaseAuth.instance.currentUser?.email;
     if (userId == null) {
       emit(UserProfileError("User not logged in"));
       return;
@@ -57,13 +58,12 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
         var fetchAllergies = data['allergies'] as List<dynamic>;
         var fetchMacro = data['macronutrients'] as List<dynamic>;
         var fetchMicro = data['micronutrients'] as List<dynamic>;
-        var email = data['email'] as String;
 
         print("fetchDietPref: $fetchDietPref");
         print("fetchAllergies: $fetchAllergies");
         print("fetchMacro: $fetchMacro");
         print("fetchMicro: $fetchMicro");
-        print("email: $email");
+        print("email: $userEmail");
 
         // Update state with the loaded profile data
         emit(UserProfileLoaded(
@@ -71,7 +71,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
             fetchAllergies.cast<String>(),
             fetchMacro.cast<String>(),
             fetchMicro.cast<String>(),
-            email));
+            userEmail));
       } else {
         // Return empty lists
         emit(UserProfileLoaded(
@@ -90,6 +90,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
   void _onUpdateUserProfile(
       UpdateUserProfile event, Emitter<UserProfileState> emit) async {
     var userId = FirebaseAuth.instance.currentUser?.uid;
+    var userEmail = FirebaseAuth.instance.currentUser?.email;
 
     if (userId == null) {
       emit(UserProfileError("User not logged in"));
@@ -103,17 +104,9 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
           event.selectedMacro,
           event.selectedMicro);
 
-      // Get current email from state if available
-      String? currentEmail;
-      if (state is UserProfileLoaded) {
-        currentEmail = (state as UserProfileLoaded).email;
-      } else if (state is UserProfileUpdated) {
-        currentEmail = (state as UserProfileUpdated).email;
-      }
-
       // load again after updating to firestore
       emit(UserProfileUpdated(event.selectedDietPref, event.selectedAllergies,
-          event.selectedMacro, event.selectedMicro, currentEmail));
+          event.selectedMacro, event.selectedMicro, userEmail));
     } catch (e) {
       emit(UserProfileError(e.toString()));
     }
