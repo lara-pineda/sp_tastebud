@@ -31,6 +31,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
   String _healthQuery = '';
   String _macroQuery = '';
   String _microQuery = '';
+  List<String> _allIngredients = [];
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -54,8 +55,9 @@ class _SearchRecipeState extends State<SearchRecipe> {
       if (_userProfileBloc.state is UserProfileLoaded) {
         if (_ingredientsBloc.state is IngredientsLoaded) {
           if (_recipeCardBloc.state is RecipeCardUpdated) {
-            _initializeQueriesAndLoadRecipes(
-                _userProfileBloc.state as UserProfileLoaded);
+            print('111111');
+            _getAllIngredients(_ingredientsBloc);
+            _initializeQueries(_userProfileBloc.state as UserProfileLoaded);
             _loadMoreRecipes('');
           }
         }
@@ -65,16 +67,19 @@ class _SearchRecipeState extends State<SearchRecipe> {
     // create streams to listen to changes to other pages
     _userProfileBloc.stream.listen((state) {
       if (state is UserProfileLoaded) {
-        _initializeQueriesAndLoadRecipes(state);
+        print('22222');
+        _initializeQueries(state);
         _recipes.clear();
         _loadMoreRecipes(_searchKey);
       }
     });
 
     _ingredientsBloc.stream.listen((state) {
-      if (state is IngredientsLoaded) {
+      if (state is IngredientsLoaded || state is IngredientsUpdated) {
+        print('33333');
+        _getAllIngredients(_ingredientsBloc);
         _recipes.clear();
-        _loadMoreRecipes(_searchKey);
+        _loadMoreRecipes(_searchKey, forceUpdate: true);
       }
     });
 
@@ -104,6 +109,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       setState(() {
+        print('4444');
         _searchKey = _searchController.text;
         _recipes.clear();
         _nextUrl = null;
@@ -112,7 +118,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
     });
   }
 
-  void _initializeQueriesAndLoadRecipes(UserProfileLoaded state) {
+  void _initializeQueries(UserProfileLoaded state) {
     _healthQuery = buildHealthTags(state.dietaryPreferences) +
         buildHealthTags(state.allergies);
     _macroQuery = mapNutrients(
@@ -121,20 +127,26 @@ class _SearchRecipeState extends State<SearchRecipe> {
         state.micronutrients, Options.micronutrients, Options.nutrientTag2);
   }
 
-  Future<void> _loadMoreRecipes(String searchKey) async {
+  // Get all ingredients from IngredientsBloc
+  void _getAllIngredients(IngredientsBloc ingredientsBloc) {
+    _allIngredients = ingredientsBloc.allIngredients;
+    print('ingredients fetched: $_allIngredients');
+  }
+
+  Future<void> _loadMoreRecipes(String searchKey,
+      {bool forceUpdate = false}) async {
     if (_isLoading) return;
     _isLoading = true;
 
     try {
-      // Get all ingredients from IngredientsBloc
-      final allIngredients = _ingredientsBloc.allIngredients;
-      print('ingredients: $allIngredients');
+      print("all ingredients: $_allIngredients");
 
       final data = await RecipeSearchAPI.searchRecipes(
         searchKey: searchKey,
         queryParams: _healthQuery + _macroQuery + _microQuery,
         nextUrl: _nextUrl,
-        ingredients: allIngredients,
+        ingredients: _allIngredients,
+        forceUpdate: forceUpdate,
       );
 
       final newRecipes =
@@ -160,12 +172,13 @@ class _SearchRecipeState extends State<SearchRecipe> {
       }
     } catch (e) {
       print('Error: $e');
-      _retryLoadRecipes(searchKey);
+      _retryLoadRecipes(searchKey, forceUpdate: forceUpdate);
     }
   }
 
   // Retry logic
-  Future<void> _retryLoadRecipes(String searchKey) async {
+  Future<void> _retryLoadRecipes(String searchKey,
+      {bool forceUpdate = false}) async {
     int retryCount = 0;
     const int maxRetries = 3;
     const Duration retryInterval = Duration(seconds: 2);
@@ -175,13 +188,14 @@ class _SearchRecipeState extends State<SearchRecipe> {
       retryCount++;
       try {
         // Get all ingredients from IngredientsBloc
-        final allIngredients = _ingredientsBloc.allIngredients;
+        // final allIngredients = _ingredientsBloc.allIngredients;
 
         final data = await RecipeSearchAPI.searchRecipes(
           searchKey: searchKey,
           queryParams: _healthQuery + _macroQuery + _microQuery,
           nextUrl: _nextUrl,
-          ingredients: allIngredients,
+          ingredients: _allIngredients,
+          forceUpdate: forceUpdate,
         );
 
         final newRecipes = data['hits'].map((hit) => hit['recipe']).toList();
@@ -250,7 +264,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
   Widget _buildSearchRecipeUI(UserProfileLoaded state) {
     if (_recipes.isEmpty && !_isLoading && !_initialLoadComplete) {
       _recipes.clear();
-      _initializeQueriesAndLoadRecipes(state);
+      _getAllIngredients(_ingredientsBloc);
+      _initializeQueries(state);
     }
     return _buildRecipeList();
   }
@@ -320,8 +335,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
                     }
                     final recipe = _recipes[index];
                     final recipeId = extractRecipeIdUsingRegExp(recipe['uri']);
-
-                    print(_recipeCardBloc.state);
 
                     // Check if the recipe is in the rejected collection
                     if ((_recipeCardBloc.state as RecipeCardUpdated)

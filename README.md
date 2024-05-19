@@ -72,7 +72,7 @@ MINOR STUFF
 FIX
 -   bakit sobrang laki ng circle loading indicator sa umpisa
 -   if sa drawer nagcheck ng checklist, hindi napapasa sa checkbox card yung state (in progress)
--   hindi kasama ingredients sa initial query upon logging in
+-   malaking image ginagamit if view recipe ui to collection
 
 REASONABLE
 -   if tinanggal sa rejected recipes collection, hindi babalik agad sa ui (reasonable use case?)

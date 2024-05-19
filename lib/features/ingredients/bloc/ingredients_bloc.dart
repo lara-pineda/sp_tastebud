@@ -24,6 +24,15 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
         ...loadedState.fishAndPoultry,
         ...loadedState.baking,
       ];
+    } else if (state is IngredientsUpdated) {
+      final updatedState = state as IngredientsUpdated;
+      return [
+        ...updatedState.pantryEssentials,
+        ...updatedState.meat,
+        ...updatedState.vegetablesAndGreens,
+        ...updatedState.fishAndPoultry,
+        ...updatedState.baking,
+      ];
     } else {
       return []; // Return an empty list if ingredients are not loaded
     }

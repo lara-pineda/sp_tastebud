@@ -13,19 +13,41 @@ class RecipeSearchAPI {
       {required String searchKey,
       required String queryParams,
       required List<String> ingredients,
-      String? nextUrl}) async {
-    // Join the ingredients list into a single string with replacements
-    String formattedIngredients = ingredients
-        .map((ingredient) => ingredient
-            .toLowerCase()
-            .replaceAll(' ', '%20')) // Replace spaces with '%20'
-        .join('%2C'); // Join elements with '%2C'
+      String? nextUrl,
+      bool forceUpdate = false // for clearing cache
+      }) async {
+    String query;
 
-    // Joining search key with ingredients
-    String query = '$searchKey%2C$formattedIngredients';
+    if (forceUpdate) {
+      print('force update !!');
+      print(searchKey);
+      print(ingredients);
+      print(queryParams);
+      print('end of force update.');
+    }
+    if (ingredients.isNotEmpty) {
+      // Join the ingredients list into a single string with replacements
+      String formattedIngredients = ingredients
+          .map((ingredient) => ingredient
+              .toLowerCase()
+              .replaceAll(' ', '%20')) // Replace spaces with '%20'
+          .join('%2C'); // Join elements with '%2C'
+
+      // Joining search key with ingredients
+      query = '$searchKey%2C$formattedIngredients';
+    } else {
+      query = '$searchKey';
+    }
+
+    print('query: $query');
 
     final String url = nextUrl ??
         '$baseUrl/api/recipes/v2?q=$query&app_id=$appId&app_key=$appKey&type=public$queryParams';
+
+    // Clear the cache if forceUpdate is true
+    if (forceUpdate) {
+      _cache.clear();
+    }
 
     if (_cache.containsKey(url)) {
       CacheEntry entry = _cache[url]!;
@@ -38,6 +60,7 @@ class RecipeSearchAPI {
       }
     }
 
+    print('received ingredients: $ingredients');
     print('Fetching from API: $url');
     try {
       final response = await http.get(Uri.parse(url));
