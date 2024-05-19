@@ -38,6 +38,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
   List<dynamic> _recipes = [];
   bool _isLoading = false;
   bool _initialLoadComplete = false;
+  bool _appRefresh = false;
   String? _nextUrl;
   String _searchKey = '';
 
@@ -56,6 +57,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
         if (_ingredientsBloc.state is IngredientsLoaded) {
           if (_recipeCardBloc.state is RecipeCardUpdated) {
             print('111111');
+            _appRefresh = true;
+            _nextUrl = null; // Reset next URL here
             _getAllIngredients(_ingredientsBloc);
             _initializeQueries(_userProfileBloc.state as UserProfileLoaded);
             _loadMoreRecipes('');
@@ -70,6 +73,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
         print('22222');
         _initializeQueries(state);
         _recipes.clear();
+        _appRefresh = true;
+        _nextUrl = null; // reset if there are updates
         _loadMoreRecipes(_searchKey);
       }
     });
@@ -79,6 +84,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
         print('33333');
         _getAllIngredients(_ingredientsBloc);
         _recipes.clear();
+        _appRefresh = true;
+        _nextUrl = null; // reset if there are updates
         _loadMoreRecipes(_searchKey, forceUpdate: true);
       }
     });
@@ -326,7 +333,9 @@ class _SearchRecipeState extends State<SearchRecipe> {
                           _searchKey.isEmpty) {
                         // Only load default results if searchKey is empty and there are no more next URLs
                         _loadMoreRecipes('');
-                      } else if (_nextUrl == null && _initialLoadComplete) {
+                      } else if (_nextUrl == null &&
+                          _initialLoadComplete &&
+                          !_appRefresh) {
                         return const Padding(
                             padding: EdgeInsets.symmetric(vertical: 10),
                             child: Center(child: Text("End of results.")));

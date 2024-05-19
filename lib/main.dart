@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/config/app_router.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
-import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
-import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
-import 'package:sp_tastebud/shared/recipe_card/ui/recipe_card_collection.dart';
 import 'core/config/service_locator.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/user-profile/bloc/user_profile_bloc.dart';
@@ -32,13 +28,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-
-  List<bool> selectedDietaryPreferences =
-      List<bool>.filled(Options.dietaryPreferences.length, false);
-
-  void _onDietPrefSelectionChanged(List<bool> newSelections) {
-    selectedDietaryPreferences = newSelections;
-  }
 
   // This widget is the root of the application.
   @override
@@ -74,9 +63,6 @@ class MyApp extends StatelessWidget {
         ),
 
         routerConfig: AppRoutes.router,
-        // routeInformationParser: AppRoutes.router.routeInformationParser,
-        // routerDelegate: AppRoutes.router.routerDelegate,
-
         builder: (context, child) => BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthSuccess) {
@@ -100,30 +86,3 @@ class SimpleBlocObserver extends BlocObserver {
     print('${bloc.runtimeType} is closing');
   }
 }
-
-// class AppRoutes {
-//   static GoRouter get router => GoRouter(
-//         initialLocation: "/",
-//         routes: [
-//           GoRoute(
-//             name: "forgotPassword",
-//             path: "/",
-//             builder: (context, state) => CheckboxCard(
-//               allChoices: Options.dietaryPreferences,
-//               initialSelections: selectedDietaryPreferences,
-//               onSelectionChanged: _onDietPrefSelectionChanged,
-//               cardLabel: 'Dietary Preferences',
-//             ),
-//           ),
-//           // builder: (context, state) {
-//           //   return BlocProvider<ViewRecipeBloc>(
-//           //       create: (context) => getIt<ViewRecipeBloc>(),
-//           //       child: Scaffold(
-//           //         body: const ViewRecipe(
-//           //           recipeId: '067f0b7be628ae847366e4f3e614b319',
-//           //         ),
-//           //       ));
-//           // }),
-//         ],
-//       );
-// }
