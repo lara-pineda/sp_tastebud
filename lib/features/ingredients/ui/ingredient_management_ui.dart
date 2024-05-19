@@ -235,7 +235,7 @@ class _IngredientsState extends State<IngredientManagement> {
                         return Text(ingredientsState.error);
                       }
                       // Show loading indicator while loading
-                      return CircularProgressIndicator();
+                      return Center(child: CircularProgressIndicator());
                     },
                   );
                 }

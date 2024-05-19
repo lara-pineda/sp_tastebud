@@ -264,7 +264,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
         } else if (userProfileState is UserProfileError) {
           return Center(child: Text(userProfileState.error));
         }
-        return CircularProgressIndicator();
+        return Center(child: CircularProgressIndicator());
       },
     ));
   }

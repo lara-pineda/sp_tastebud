@@ -87,7 +87,7 @@ class _ViewRecipeState extends State<ViewRecipe>
       bloc: _viewRecipeBloc,
       builder: (context, state) {
         if (state is RecipeLoading) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         } else if (state is RecipeLoaded) {
           // Get all ingredients from IngredientsBloc
           final allIngredients = _ingredientsBloc.allIngredients

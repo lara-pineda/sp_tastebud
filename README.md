@@ -67,9 +67,6 @@ TODO
 -   add more filters (in progress)
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients?
 -   confirmation windows for saving changes when switching tabs
-
-FIX
--   bakit sobrang laki ng circle loading indicator sa umpisa
 -   if sa drawer nagcheck ng checklist, hindi napapasa sa checkbox card yung state (in progress)
 
 REASONABLE
