@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'dart:async';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
+import 'package:sp_tastebud/shared/recipe_card/ui/recipe_card_collection.dart';
 import 'package:sp_tastebud/shared/search_bar/custom_search_bar.dart';
 import 'package:sp_tastebud/shared/recipe_card/ui/recipe_card_search.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/recipe_search_api.dart';
@@ -48,11 +49,16 @@ class _SearchRecipeState extends State<SearchRecipe> {
     _searchController.addListener(_onSearchChanged);
     _recipeCardBloc.add(LoadInitialData());
 
+    // load user profile and ingredients upon component mount
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_userProfileBloc.state is UserProfileLoaded) {
-        _initializeQueriesAndLoadRecipes(
-            _userProfileBloc.state as UserProfileLoaded);
-        _loadMoreRecipes('');
+        if (_ingredientsBloc.state is IngredientsLoaded) {
+          if (_recipeCardBloc.state is RecipeCardUpdated) {
+            _initializeQueriesAndLoadRecipes(
+                _userProfileBloc.state as UserProfileLoaded);
+            _loadMoreRecipes('');
+          }
+        }
       }
     });
 
@@ -74,7 +80,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
     // listener to handle changes in the RecipeCardBloc
     _recipeCardBloc.stream.listen((state) {
-      if (state is RecipeCardUpdated) {
+      if (state is RecipeCardUpdated && mounted) {
+        // Check first if mounted
         setState(() {
           _recipes.removeWhere((recipe) {
             final recipeId = extractRecipeIdUsingRegExp(recipe['uri']);
@@ -121,6 +128,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
     try {
       // Get all ingredients from IngredientsBloc
       final allIngredients = _ingredientsBloc.allIngredients;
+      print('ingredients: $allIngredients');
 
       final data = await RecipeSearchAPI.searchRecipes(
         searchKey: searchKey,
@@ -139,6 +147,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
       _nextUrl = data['_links']?['next']?['href'];
 
       if (mounted) {
+        // mounted check
         setState(() {
           if (newRecipes.isNotEmpty) {
             _recipes.addAll(newRecipes);
@@ -311,6 +320,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
                     }
                     final recipe = _recipes[index];
                     final recipeId = extractRecipeIdUsingRegExp(recipe['uri']);
+
+                    print(_recipeCardBloc.state);
 
                     // Check if the recipe is in the rejected collection
                     if ((_recipeCardBloc.state as RecipeCardUpdated)

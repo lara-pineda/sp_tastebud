@@ -6,6 +6,8 @@ import 'package:sp_tastebud/core/config/app_router.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
+import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
+import 'package:sp_tastebud/shared/recipe_card/ui/recipe_card_collection.dart';
 import 'core/config/service_locator.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/user-profile/bloc/user_profile_bloc.dart';
@@ -55,6 +57,10 @@ class MyApp extends StatelessWidget {
           create: (context) => getIt<IngredientsBloc>(),
           lazy: false,
         ),
+        BlocProvider<RecipeCardBloc>(
+          create: (context) => getIt<RecipeCardBloc>(),
+          lazy: false,
+        ),
       ],
       child: MaterialApp.router(
         // removes debug tag when running app test
@@ -77,6 +83,7 @@ class MyApp extends StatelessWidget {
               // Trigger user profile and ingredients fetch upon successful authentication.
               getIt<UserProfileBloc>().add(LoadUserProfile());
               getIt<IngredientsBloc>().add(LoadIngredients());
+              getIt<RecipeCardBloc>().add(LoadInitialData());
             }
           },
           child: child!,

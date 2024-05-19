@@ -78,6 +78,7 @@ class Assets {
   static const String dataViewRecipeRepository =
       'lib/features/recipe/view-recipe/data/view_recipe_repository.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
+  static const String imagesAppIcon = 'assets/images/AppIcon.png';
   static const String imagesBackground = 'assets/images/Background.png';
   static const String imagesDefaultProfile = 'assets/images/DefaultProfile.jpg';
   static const String imagesEdamamBadge = 'assets/images/Edamam_Badge.png';
@@ -103,13 +104,19 @@ class Assets {
       'lib/shared/search_bar/custom_search_bar.dart';
   static const String searchRecipeRecipeSearchApi =
       'lib/features/recipe/search-recipe/recipe_search_api.dart';
+  static const String tabsInfoRow =
+      'lib/features/recipe/view-recipe/ui/tabs/info_row.dart';
+  static const String tabsIngredientsTab =
+      'lib/features/recipe/view-recipe/ui/tabs/ingredients_tab.dart';
+  static const String tabsNutritionTab =
+      'lib/features/recipe/view-recipe/ui/tabs/nutrition_tab.dart';
+  static const String tabsOverviewTab =
+      'lib/features/recipe/view-recipe/ui/tabs/overview_tab.dart';
   static const String themesAppPalette = 'lib/core/themes/app_palette.dart';
   static const String themesAppTypography =
       'lib/core/themes/app_typography.dart';
   static const String uiForgotPasswordUi =
       'lib/features/auth/ui/forgot_password_ui.dart';
-  static const String uiInfoRow =
-      'lib/features/recipe/view-recipe/ui/info_row.dart';
   static const String uiIngredientManagementUi =
       'lib/features/ingredients/ui/ingredient_management_ui.dart';
   static const String uiLoginUi = 'lib/features/auth/ui/login_ui.dart';

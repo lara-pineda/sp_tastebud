@@ -62,21 +62,21 @@ sp_tastebud/
 ## Features TODO
 
 MUST HAVE
--   if tinanggal sa rejected recipes collection, hindi babalik agad sa ui (reasonable use case?)
--   add to favorites/reject recipe from view recipe page
--   success/error dialog sa pag-add/remove from collection
 -   substitute recipe
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients?
 
 MINOR STUFF
 -   check if wifi is on
--   confirmation windows for:
-    - saving changes when switching tabs
+-   confirmation windows for saving changes when switching tabs
 
 FIX
 -   bakit sobrang laki ng circle loading indicator sa umpisa
 -   if sa drawer nagcheck ng checklist, hindi napapasa sa checkbox card yung state (in progress)
--   mali yung query string on search recipe and di agad nag-uupdate if may changes sa user profile
+-   hindi kasama ingredients sa initial query upon logging in
+
+REASONABLE
+-   if tinanggal sa rejected recipes collection, hindi babalik agad sa ui (reasonable use case?)
+-   success/error dialog sa pag-add/remove from collection (di na need, may confirmation naman and ui change if successful)
 
 SUGGESTIONS
 -   add collection for rejected recipes (done)
