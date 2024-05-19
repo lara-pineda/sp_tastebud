@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
@@ -81,7 +82,8 @@ class _ViewRecipeState extends State<ViewRecipe>
   // Ensures the recipe is loaded before building the UI
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ViewRecipeBloc, ViewRecipeState>(
+    return ConnectivityListenerWidget(
+        child: BlocBuilder<ViewRecipeBloc, ViewRecipeState>(
       bloc: _viewRecipeBloc,
       builder: (context, state) {
         if (state is RecipeLoading) {
@@ -97,7 +99,7 @@ class _ViewRecipeState extends State<ViewRecipe>
         }
         return Center(child: Text("Recipe Null"));
       },
-    );
+    ));
   }
 
   void _launchURL(String? url) async {

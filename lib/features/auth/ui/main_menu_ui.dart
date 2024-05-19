@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
-
+import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
 import '../bloc/auth_bloc.dart';
 import '../data/preferences_service.dart';
 
@@ -54,7 +54,8 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ConnectivityListenerWidget(
+        child: Scaffold(
       body: Stack(children: <Widget>[
         // fruits image
         Container(
@@ -174,6 +175,6 @@ class _MainMenuState extends State<MainMenu> {
           ],
         )),
       ]),
-    );
+    ));
   }
 }

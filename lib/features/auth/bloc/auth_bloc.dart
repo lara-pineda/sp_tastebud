@@ -56,11 +56,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthFailure('User not found.'));
       } else if (e.code == 'too-many-requests') {
         emit(AuthFailure('Too many failed attempts. Try again later.'));
+      } else if (e.code == 'network-request-failed') {
+        emit(AuthFailure("Cannot connect to the internet."));
       } else {
-        emit(AuthFailure("An unknown error occurred,"));
+        emit(AuthFailure("An unknown error occurred."));
       }
     } catch (e) {
-      emit(AuthFailure("An unknown error occurred"));
+      emit(AuthFailure("An unknown error occurred."));
     }
   }
 

@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
-import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
+import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
 import 'package:sp_tastebud/shared/custom_dialog/custom_dialog.dart';
 import '../bloc/user_profile_bloc.dart';
 
@@ -208,67 +208,69 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<UserProfileBloc, UserProfileState>(
-        bloc: _userProfileBloc,
-        listener: (context, state) {
-          print(state);
-          if (state is UserProfileUpdated) {
-            _showSuccessDialog();
-          } else if (state is UserProfileError) {
-            _showErrorDialog(state.error);
-          }
-        },
-        child: BlocBuilder<AuthBloc, AuthState>(
-          bloc: _authBloc,
-          builder: (context, AuthState loginState) {
-            if (loginState is AuthFailure) {
-              // Trigger navigation outside the build phase
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                context.go('/');
-              });
-              // Return error text if login fails
-              return Text("User not logged in.");
-            } else {
-              // If login is successful, proceed with UserProfileBloc
-              return BlocBuilder<UserProfileBloc, UserProfileState>(
-                builder: (context, userProfileState) {
-                  if (userProfileState is UserProfileLoaded) {
-                    // Use the state values to build the UI
-                    _emailController.text =
-                        userProfileState.email ?? ''; // Set the fetched email
+    return ConnectivityListenerWidget(
+        child: BlocListener<UserProfileBloc, UserProfileState>(
+            bloc: _userProfileBloc,
+            listener: (context, state) {
+              print(state);
+              if (state is UserProfileUpdated) {
+                _showSuccessDialog();
+              } else if (state is UserProfileError) {
+                _showErrorDialog(state.error);
+              }
+            },
+            child: BlocBuilder<AuthBloc, AuthState>(
+              bloc: _authBloc,
+              builder: (context, AuthState loginState) {
+                if (loginState is AuthFailure) {
+                  // Trigger navigation outside the build phase
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    context.go('/');
+                  });
+                  // Return error text if login fails
+                  return Text("User not logged in.");
+                } else {
+                  // If login is successful, proceed with UserProfileBloc
+                  return BlocBuilder<UserProfileBloc, UserProfileState>(
+                    builder: (context, userProfileState) {
+                      if (userProfileState is UserProfileLoaded) {
+                        // Use the state values to build the UI
+                        _emailController.text = userProfileState.email ??
+                            ''; // Set the fetched email
 
-                    return buildUserProfileUI(
-                        userProfileState.dietaryPreferences,
-                        userProfileState.allergies,
-                        userProfileState.macronutrients,
-                        userProfileState.micronutrients);
-                  } else if (userProfileState is UserProfileUpdated) {
-                    _emailController.text =
-                        userProfileState.email ?? ''; // Set the fetched email
+                        return buildUserProfileUI(
+                            userProfileState.dietaryPreferences,
+                            userProfileState.allergies,
+                            userProfileState.macronutrients,
+                            userProfileState.micronutrients);
+                      } else if (userProfileState is UserProfileUpdated) {
+                        _emailController.text = userProfileState.email ??
+                            ''; // Set the fetched email
 
-                    return buildUserProfileUI(
-                        userProfileState.dietaryPreferences,
-                        userProfileState.allergies,
-                        userProfileState.macronutrients,
-                        userProfileState.micronutrients);
-                  } else if (userProfileState is UserProfileError) {
-                    // Show error message if loading fails
-                    return Text(userProfileState.error);
-                  } else if (userProfileState is UserProfileChangeEmailError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(userProfileState.error),
-                      ),
-                    );
-                  }
-                  // Fallback widget.
-                  print(userProfileState);
-                  return Text("State is not as expected.");
-                },
-              );
-            }
-          },
-        ));
+                        return buildUserProfileUI(
+                            userProfileState.dietaryPreferences,
+                            userProfileState.allergies,
+                            userProfileState.macronutrients,
+                            userProfileState.micronutrients);
+                      } else if (userProfileState is UserProfileError) {
+                        // Show error message if loading fails
+                        return Text(userProfileState.error);
+                      } else if (userProfileState
+                          is UserProfileChangeEmailError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(userProfileState.error),
+                          ),
+                        );
+                      }
+                      // Fallback widget.
+                      print(userProfileState);
+                      return Text("State is not as expected.");
+                    },
+                  );
+                }
+              },
+            )));
   }
 
   Future<void> _showEditEmailBottomSheet() async {

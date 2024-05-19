@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
+import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
 import '../data/preferences_service.dart';
 
 class SignupPage extends StatefulWidget {
@@ -156,7 +157,8 @@ class _SignupState extends State<SignupPage> {
     // final signupBloc = getIt<AuthBloc>();
     final signupBloc = BlocProvider.of<AuthBloc>(context);
 
-    return Scaffold(
+    return ConnectivityListenerWidget(
+        child: Scaffold(
       // make widgets fixed even when keyboard appears
       resizeToAvoidBottomInset: false,
 
@@ -519,6 +521,6 @@ class _SignupState extends State<SignupPage> {
           ],
         ),
       ),
-    );
+    ));
   }
 }

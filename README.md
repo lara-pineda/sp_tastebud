@@ -25,6 +25,7 @@ sp_tastebud/
     │   ├── config/                             # Essential for the app
     │   │   ├── app_router.dart                 # Defines routes for navigation
     │   │   ├── assets_path.dart                # Resource path for assets
+    │   │   ├── connectivity_service.dart       # Checker for internet connection on device
     │   │   └── service_locator.dart            # Dependency injection
     │   │
     │   ├── themes/                             # Custom app theme
@@ -61,12 +62,10 @@ sp_tastebud/
 
 ## Features TODO
 
-MUST HAVE
+TODO
 -   substitute recipe
+-   add more filters (in progress)
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients?
-
-MINOR STUFF
--   check if wifi is on
 -   confirmation windows for saving changes when switching tabs
 
 FIX
@@ -80,7 +79,7 @@ REASONABLE
 SUGGESTIONS
 -   add collection for rejected recipes (done)
 -   add more information regarding options (done)
--   add more filters (in progress)
+-   add more filters
 -   manage equipments
 -   leave a review
 

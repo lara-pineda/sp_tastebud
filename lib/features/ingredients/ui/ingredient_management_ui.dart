@@ -8,6 +8,7 @@ import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
 import 'package:sp_tastebud/shared/checkbox_card/options.dart';
+import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
 import 'package:sp_tastebud/shared/custom_dialog/custom_dialog.dart';
 import '../bloc/ingredients_bloc.dart';
 
@@ -190,55 +191,56 @@ class _IngredientsState extends State<IngredientManagement> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<IngredientsBloc, IngredientsState>(
-        bloc: _ingredientsBloc,
-        listener: (context, state) {
-          if (state is IngredientsUpdated) {
-            _showSuccessDialog();
-          } else if (state is IngredientsError) {
-            _showErrorDialog(state.error);
-          }
-        },
-        child: BlocBuilder<AuthBloc, AuthState>(
-          bloc: _authBloc,
-          builder: (context, AuthState loginState) {
-            if (loginState is AuthFailure) {
-              // Trigger navigation outside the build phase
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                context.go('/');
-              });
-              // Return error text if login fails
-              return Text("User not logged in.");
-            } else {
-              // If login is successful, proceed with IngredientsBloc
-              return BlocBuilder<IngredientsBloc, IngredientsState>(
-                builder: (context, ingredientsState) {
-                  if (ingredientsState is IngredientsLoaded) {
-                    // Use the state values to build your UI
-                    return buildIngredientManagementUI(
-                        ingredientsState.pantryEssentials,
-                        ingredientsState.meat,
-                        ingredientsState.vegetablesAndGreens,
-                        ingredientsState.fishAndPoultry,
-                        ingredientsState.baking);
-                  } else if (ingredientsState is IngredientsUpdated) {
-                    return buildIngredientManagementUI(
-                        ingredientsState.pantryEssentials,
-                        ingredientsState.meat,
-                        ingredientsState.vegetablesAndGreens,
-                        ingredientsState.fishAndPoultry,
-                        ingredientsState.baking);
-                  } else if (ingredientsState is IngredientsError) {
-                    // Show error message if loading fails
-                    return Text(ingredientsState.error);
-                  }
-                  // Show loading indicator while loading
-                  return CircularProgressIndicator();
-                },
-              );
-            }
-          },
-        ));
+    return ConnectivityListenerWidget(
+        child: BlocListener<IngredientsBloc, IngredientsState>(
+            bloc: _ingredientsBloc,
+            listener: (context, state) {
+              if (state is IngredientsUpdated) {
+                _showSuccessDialog();
+              } else if (state is IngredientsError) {
+                _showErrorDialog(state.error);
+              }
+            },
+            child: BlocBuilder<AuthBloc, AuthState>(
+              bloc: _authBloc,
+              builder: (context, AuthState loginState) {
+                if (loginState is AuthFailure) {
+                  // Trigger navigation outside the build phase
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    context.go('/');
+                  });
+                  // Return error text if login fails
+                  return Text("User not logged in.");
+                } else {
+                  // If login is successful, proceed with IngredientsBloc
+                  return BlocBuilder<IngredientsBloc, IngredientsState>(
+                    builder: (context, ingredientsState) {
+                      if (ingredientsState is IngredientsLoaded) {
+                        // Use the state values to build your UI
+                        return buildIngredientManagementUI(
+                            ingredientsState.pantryEssentials,
+                            ingredientsState.meat,
+                            ingredientsState.vegetablesAndGreens,
+                            ingredientsState.fishAndPoultry,
+                            ingredientsState.baking);
+                      } else if (ingredientsState is IngredientsUpdated) {
+                        return buildIngredientManagementUI(
+                            ingredientsState.pantryEssentials,
+                            ingredientsState.meat,
+                            ingredientsState.vegetablesAndGreens,
+                            ingredientsState.fishAndPoultry,
+                            ingredientsState.baking);
+                      } else if (ingredientsState is IngredientsError) {
+                        // Show error message if loading fails
+                        return Text(ingredientsState.error);
+                      }
+                      // Show loading indicator while loading
+                      return CircularProgressIndicator();
+                    },
+                  );
+                }
+              },
+            )));
   }
 
   Widget buildIngredientManagementUI(

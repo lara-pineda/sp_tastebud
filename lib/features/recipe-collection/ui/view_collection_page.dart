@@ -1,10 +1,10 @@
 import 'dart:async';
-
 import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
 import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
 import 'package:sp_tastebud/shared/recipe_card/ui/recipe_card_collection.dart';
 import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
@@ -60,7 +60,8 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RecipeCollectionBloc, RecipeCollectionState>(
+    return ConnectivityListenerWidget(
+        child: BlocBuilder<RecipeCollectionBloc, RecipeCollectionState>(
       builder: (context, state) {
         if (state is RecipeCollectionLoading) {
           return Center(child: CircularProgressIndicator());
@@ -89,7 +90,7 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
           return Container();
         }
       },
-    );
+    ));
   }
 
   Widget _buildCollectionPage(

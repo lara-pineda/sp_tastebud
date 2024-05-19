@@ -6,6 +6,7 @@ import 'package:dimension/dimension.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
+import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
 import '../bloc/auth_bloc.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -75,36 +76,37 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthPasswordResetSuccess) {
-            // Show success message
-            setState(() {
-              _isLoading = false;
-              _successMessage =
-                  "Verification link sent!\nPlease check your email for the link.\n\nRedirecting to main menu in 10 seconds...";
-            });
-            notifyAndRedirect(context);
-          } else if (state is AuthEmailNotFound) {
-            // Show error message
-            setState(() {
-              _isLoading = false;
-              _errorMessage = state.message;
-            });
-          } else if (state is AuthFailure) {
-            // Show error message
-            setState(() {
-              _isLoading = false;
-              _errorMessage = state.error;
-            });
-          } else if (state is AuthLoading) {
-            // Show loading state
-            setState(() {
-              _isLoading = true;
-            });
-          }
-        },
-        child: _buildResetPasswordUI());
+    return ConnectivityListenerWidget(
+        child: BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) {
+              if (state is AuthPasswordResetSuccess) {
+                // Show success message
+                setState(() {
+                  _isLoading = false;
+                  _successMessage =
+                      "Verification link sent!\nPlease check your email for the link.\n\nRedirecting to main menu in 10 seconds...";
+                });
+                notifyAndRedirect(context);
+              } else if (state is AuthEmailNotFound) {
+                // Show error message
+                setState(() {
+                  _isLoading = false;
+                  _errorMessage = state.message;
+                });
+              } else if (state is AuthFailure) {
+                // Show error message
+                setState(() {
+                  _isLoading = false;
+                  _errorMessage = state.error;
+                });
+              } else if (state is AuthLoading) {
+                // Show loading state
+                setState(() {
+                  _isLoading = true;
+                });
+              }
+            },
+            child: _buildResetPasswordUI()));
   }
 
   Widget _buildResetPasswordUI() {

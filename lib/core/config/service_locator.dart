@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../shared/connectivity/connectivity_service.dart';
 
 //BLoCs
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
@@ -62,6 +63,13 @@ void setupServices() {
 
   // Recipe Card-specific
   getIt.registerLazySingleton<RecipeCardBloc>(() => RecipeCardBloc());
+
+  // Register ConnectivityService
+  getIt.registerLazySingleton<ConnectivityService>(() => ConnectivityService());
+
+  // Register ConnectivityCubit
+  getIt.registerLazySingleton<ConnectivityCubit>(
+      () => ConnectivityCubit(getIt<ConnectivityService>()));
 
   // Register BLoCs
   getIt.registerLazySingleton<AuthBloc>(

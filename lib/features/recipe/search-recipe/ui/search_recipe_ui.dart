@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 import 'dart:async';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
-import 'package:sp_tastebud/shared/recipe_card/ui/recipe_card_collection.dart';
 import 'package:sp_tastebud/shared/search_bar/custom_search_bar.dart';
 import 'package:sp_tastebud/shared/recipe_card/ui/recipe_card_search.dart';
 import 'package:sp_tastebud/features/recipe/search-recipe/recipe_search_api.dart';
@@ -15,6 +14,7 @@ import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
+import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
 
 class SearchRecipe extends StatefulWidget {
   const SearchRecipe({super.key});
@@ -252,7 +252,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserProfileBloc, UserProfileState>(
+    return ConnectivityListenerWidget(
+        child: BlocBuilder<UserProfileBloc, UserProfileState>(
       buildWhen: (previous, current) =>
           current is UserProfileLoaded ||
           current is UserProfileError ||
@@ -265,7 +266,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
         }
         return CircularProgressIndicator();
       },
-    );
+    ));
   }
 
   Widget _buildSearchRecipeUI(UserProfileLoaded state) {

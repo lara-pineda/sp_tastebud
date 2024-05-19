@@ -53,6 +53,10 @@ class Assets {
   static const String configAssetsPath = 'lib/core/config/assets_path.dart';
   static const String configServiceLocator =
       'lib/core/config/service_locator.dart';
+  static const String connectivityConnectivityListenerWidget =
+      'lib/shared/connectivity/connectivity_listener_widget.dart';
+  static const String connectivityConnectivityService =
+      'lib/shared/connectivity/connectivity_service.dart';
   static const String customDialogCustomDialog =
       'lib/shared/custom_dialog/custom_dialog.dart';
   static const String dataAuthService =

@@ -5,8 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
-import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
-
+import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
 import '../../auth/bloc/auth_bloc.dart';
 
 class RecipeCollection extends StatelessWidget {
@@ -22,7 +21,8 @@ class RecipeCollection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
+    return ConnectivityListenerWidget(
+        child: BlocBuilder<AuthBloc, AuthState>(
       bloc: _authBloc,
       builder: (context, AuthState loginState) {
         if (loginState is AuthFailure) {
@@ -36,7 +36,7 @@ class RecipeCollection extends StatelessWidget {
           return _buildCollectionScreen(context);
         }
       },
-    );
+    ));
   }
 
   Widget _buildCollectionScreen(BuildContext context) {
