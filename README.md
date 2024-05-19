@@ -72,7 +72,6 @@ MINOR STUFF
 FIX
 -   bakit sobrang laki ng circle loading indicator sa umpisa
 -   if sa drawer nagcheck ng checklist, hindi napapasa sa checkbox card yung state (in progress)
--   malaking image ginagamit if view recipe ui to collection
 
 REASONABLE
 -   if tinanggal sa rejected recipes collection, hindi babalik agad sa ui (reasonable use case?)
@@ -94,8 +93,9 @@ Functions to test:
 5. Change email (if kaya)
 6. Update User Profile
 7. Update Ingredients
-8. Save recipe
-9. Reject recipe
-10. Search recipe
-11. Filter recipe
-12. Try magpalabas ng errors
+8. Save recipe from search, view
+9. Reject recipe from search, view
+10. Remove recipe from collection from search, view, collection page
+11. Search recipe
+12. Filter recipe
+13. Try magpalabas ng errors

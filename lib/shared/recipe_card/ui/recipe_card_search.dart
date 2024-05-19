@@ -27,11 +27,12 @@ class RecipeCardSearch extends StatefulWidget {
 class _RecipeCardSearchState extends State<RecipeCardSearch> {
   final RecipeCardBloc _recipeCardBloc = GetIt.instance<RecipeCardBloc>();
 
-  void _handleActionConfirmation(
-      BuildContext context, String actionType, VoidCallback onConfirm) {
-    final action = actionType == 'favorite' ? 'saved' : 'rejected';
+  void _handleActionConfirmation(BuildContext context, String collectionType,
+      bool isInCollection, VoidCallback onConfirm) {
+    final type = collectionType == 'favorite' ? 'saved' : 'rejected';
+    final action = isInCollection == false ? 'add' : 'remove';
     final confirmationMessage =
-        'Are you sure you want to add this recipe from your $action recipe collection?';
+        'Are you sure you want to $action this recipe from your $type recipe collection?';
 
     openDialog(
       context,
@@ -147,7 +148,8 @@ class _RecipeCardSearchState extends State<RecipeCardSearch> {
                       if (!isInRejected)
                         GestureDetector(
                           onTap: () {
-                            _handleActionConfirmation(context, 'favorite', () {
+                            _handleActionConfirmation(
+                                context, 'favorite', isInFavorites, () {
                               _recipeCardBloc.add(ToggleFavorite(
                                 recipeName: widget.recipeName,
                                 imageUrl: widget.imageUrl,
@@ -169,7 +171,8 @@ class _RecipeCardSearchState extends State<RecipeCardSearch> {
                       if (!isInFavorites)
                         GestureDetector(
                           onTap: () {
-                            _handleActionConfirmation(context, 'reject', () {
+                            _handleActionConfirmation(
+                                context, 'reject', isInRejected, () {
                               _recipeCardBloc.add(ToggleReject(
                                 recipeName: widget.recipeName,
                                 imageUrl: widget.imageUrl,

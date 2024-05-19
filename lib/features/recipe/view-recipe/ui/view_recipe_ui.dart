@@ -8,6 +8,7 @@ import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
 import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
+import 'package:sp_tastebud/shared/custom_dialog/custom_dialog.dart';
 import '../bloc/view_recipe_bloc.dart';
 import '../model/recipe_model.dart';
 import 'tabs/overview_tab.dart';
@@ -59,6 +60,22 @@ class _ViewRecipeState extends State<ViewRecipe>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _handleActionConfirmation(BuildContext context, String collectionType,
+      bool isInCollection, VoidCallback onConfirm) {
+    final type = collectionType == 'favorite' ? 'saved' : 'rejected';
+    final action = isInCollection == false ? 'add' : 'remove';
+    final confirmationMessage =
+        'Are you sure you want to $action this recipe from your $type recipe collection?';
+
+    openDialog(
+      context,
+      'Confirmation',
+      confirmationMessage,
+      onConfirm: onConfirm,
+      showCancelButton: true,
+    );
   }
 
   // Ensures the recipe is loaded before building the UI
@@ -220,13 +237,15 @@ class _ViewRecipeState extends State<ViewRecipe>
                     if (!isInRejected)
                       ElevatedButton(
                         onPressed: () {
-                          // add/remove from favorites
-                          _recipeCardBloc.add(ToggleFavorite(
-                            recipeName: recipe.label ?? 'No Title',
-                            imageUrl: recipe.image ?? '',
-                            sourceWebsite: recipe.source,
-                            recipeUri: recipe.uri,
-                          ));
+                          _handleActionConfirmation(
+                              context, 'favorite', isInFavorites, () {
+                            _recipeCardBloc.add(ToggleFavorite(
+                              recipeName: recipe.label ?? 'No Title',
+                              imageUrl: recipe.images['THUMBNAIL']?.url ?? '',
+                              sourceWebsite: recipe.source,
+                              recipeUri: recipe.uri,
+                            ));
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.orangeDisabledColor,
@@ -247,13 +266,16 @@ class _ViewRecipeState extends State<ViewRecipe>
                     if (!isInFavorites)
                       ElevatedButton(
                         onPressed: () {
-                          // add/remove from rejected
-                          _recipeCardBloc.add(ToggleReject(
-                            recipeName: recipe.label ?? 'No Title',
-                            imageUrl: recipe.image ?? '',
-                            sourceWebsite: recipe.source,
-                            recipeUri: recipe.uri,
-                          ));
+                          _handleActionConfirmation(
+                              context, 'favorite', isInFavorites, () {
+                            // add/remove from rejected
+                            _recipeCardBloc.add(ToggleReject(
+                              recipeName: recipe.label ?? 'No Title',
+                              imageUrl: recipe.images['THUMBNAIL']?.url ?? '',
+                              sourceWebsite: recipe.source,
+                              recipeUri: recipe.uri,
+                            ));
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.grayColor,
