@@ -11,7 +11,7 @@ class ConnectivityListenerWidget extends StatelessWidget {
   void _showNoInternetDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: false, // make it uncloseable
+      // barrierDismissible: false, // make it uncloseable
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('No Internet Connection',

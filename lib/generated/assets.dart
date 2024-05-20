@@ -45,6 +45,8 @@ class Assets {
       'lib/shared/checkbox_card/checkbox_card.dart';
   static const String checkboxCardCheckboxListTile =
       'lib/shared/checkbox_card/checkbox_list_tile.dart';
+  static const String checkboxCardCheckboxListTileModalsheet =
+      'lib/shared/checkbox_card/checkbox_list_tile_modalsheet.dart';
   static const String checkboxCardCustomCheckboxIcon =
       'lib/shared/checkbox_card/custom_checkbox_icon.dart';
   static const String checkboxCardOptions =

@@ -52,6 +52,7 @@ sp_tastebud/
     │
     ├── shared/                             # Reusable small, custom widgets used in the pages
     │   ├── checkbox_card/
+    │   ├── connectivity/
     │   ├── custom_dialog/
     │   ├── recipe_card/
     │   └── search_bar/
@@ -63,15 +64,11 @@ sp_tastebud/
 ## Features TODO
 
 TODO
+-   confirmation windows for saving changes when switching tabs
 -   substitute recipe
 -   add more filters (in progress)
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients?
--   confirmation windows for saving changes when switching tabs
 -   if sa drawer nagcheck ng checklist, hindi napapasa sa checkbox card yung state (in progress)
-
-REASONABLE
--   if tinanggal sa rejected recipes collection, hindi babalik agad sa ui (reasonable use case?)
--   success/error dialog sa pag-add/remove from collection (di na need, may confirmation naman and ui change if successful)
 
 SUGGESTIONS
 -   add collection for rejected recipes (done)
@@ -81,17 +78,26 @@ SUGGESTIONS
 -   leave a review
 
 
-Functions to test:
-1. Sign up
-2. Login
-3. Forgot password
-4. Logout
-5. Change email (if kaya)
-6. Update User Profile
-7. Update Ingredients
-8. Save recipe from search, view
-9. Reject recipe from search, view
-10. Remove recipe from collection from search, view, collection page
-11. Search recipe
-12. Filter recipe
-13. Try magpalabas ng errors
+Features:
+1. User Authentication
+   - Sign up
+   - Login
+   - Forgot password
+   - Logout
+   - Remember Me
+   - Change email
+2. Update User Profile 
+3. Update Ingredients
+4. Search Recipe
+5. Filter Recipe
+6. Recipe Collection
+   - Saved Recipes
+        > Add from search recipe page, view recipe page
+        > Remove from search recipe page, view recipe page, saved recipe collection page
+   - Rejected Recipes
+        > Add from search recipe page, view recipe page
+        > Remove from view recipe page, saved recipe collection page
+
+> Error handling:
+- User authentication
+- Internet connectivity
