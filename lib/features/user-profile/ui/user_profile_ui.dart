@@ -212,7 +212,6 @@ class _UserProfileState extends State<UserProfile> {
         child: BlocListener<UserProfileBloc, UserProfileState>(
             bloc: _userProfileBloc,
             listener: (context, state) {
-              print(state);
               if (state is UserProfileUpdated) {
                 _showSuccessDialog();
               } else if (state is UserProfileError) {
@@ -233,7 +232,6 @@ class _UserProfileState extends State<UserProfile> {
                   // If login is successful, proceed with UserProfileBloc
                   return BlocBuilder<UserProfileBloc, UserProfileState>(
                     builder: (context, userProfileState) {
-                      print('reloaded');
                       if (userProfileState is UserProfileLoaded) {
                         // Use the state values to build the UI
                         _emailController.text = userProfileState.email ??
@@ -265,7 +263,6 @@ class _UserProfileState extends State<UserProfile> {
                         );
                       }
                       // Fallback widget.
-                      print(userProfileState);
                       return Text("State is not as expected.");
                     },
                   );
@@ -543,7 +540,6 @@ class _UserProfileState extends State<UserProfile> {
         child: ValueListenableBuilder<bool>(
           valueListenable: _isModified,
           builder: (context, isModified, child) {
-            // print(selectedDietaryPreferences);
             return FloatingActionButton(
               onPressed: isModified ? _handleConfirmSave : null,
               backgroundColor: isModified ? Colors.white : Colors.grey[100],

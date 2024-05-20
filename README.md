@@ -68,7 +68,6 @@ TODO
 -   substitute recipe
 -   add more filters (in progress)
 -   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients?
--   if sa drawer nagcheck ng checklist, hindi napapasa sa checkbox card yung state (in progress)
 
 SUGGESTIONS
 -   add collection for rejected recipes (done)

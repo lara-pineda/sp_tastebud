@@ -22,9 +22,6 @@ class IconCheckbox extends StatelessWidget {
     return ValueListenableBuilder<bool>(
       valueListenable: valueNotifier,
       builder: (context, value, child) {
-        if (title == 'Keto-friendly') {
-          print('$index, $type, $title, $value');
-        }
         return GestureDetector(
           onTap: () {
             valueNotifier.value = !valueNotifier.value;

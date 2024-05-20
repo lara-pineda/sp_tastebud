@@ -85,8 +85,6 @@ class _CheckboxCardState extends State<CheckboxCard> {
                         (index) => ValueListenableBuilder<bool>(
                             valueListenable: valueNotifiers[index],
                             builder: (context, isChecked, child) {
-                              print(
-                                  'modal sheet: ${valueNotifiers}, ${valueNotifiers[index]}');
                               return CustomCheckboxListTile(
                                 title: widget.allChoices[index],
                                 valueNotifier: valueNotifiers[index],
@@ -115,7 +113,6 @@ class _CheckboxCardState extends State<CheckboxCard> {
   }
 
   Widget expansionCard(BuildContext context) {
-    // print(selectedValues);
     return Container(
       margin: const EdgeInsets.only(left: 10),
       height: 200,
@@ -156,8 +153,6 @@ class _CheckboxCardState extends State<CheckboxCard> {
                         (index) => ValueListenableBuilder<bool>(
                             valueListenable: valueNotifiers[index],
                             builder: (context, isChecked, child) {
-                              print('checkbox card: ${valueNotifiers[index]}');
-
                               return CustomCheckboxListTile(
                                 title: widget.allChoices[index],
                                 valueNotifier: valueNotifiers[index],

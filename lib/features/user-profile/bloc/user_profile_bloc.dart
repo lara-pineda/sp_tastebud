@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sp_tastebud/features/user-profile/data/user_profile_repository.dart';
-import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 
 part 'user_profile_event.dart';
 part 'user_profile_state.dart';
