@@ -6,35 +6,34 @@ class CustomCheckboxListTile extends StatefulWidget {
   const CustomCheckboxListTile({
     super.key,
     required this.title,
-    required this.initialValue,
+    required this.valueNotifier,
     this.infoText,
     this.onChanged,
+    required this.type,
+    required this.index,
   });
 
   final String title;
-  final bool initialValue;
+  final ValueNotifier<bool> valueNotifier;
   final String? infoText;
   final ValueChanged<bool>? onChanged;
+  final String type;
+  final int index;
 
   @override
   State<CustomCheckboxListTile> createState() => _CustomCheckboxListTileState();
 }
 
 class _CustomCheckboxListTileState extends State<CustomCheckboxListTile> {
-  late bool value;
-
   @override
   void initState() {
     super.initState();
-    value = widget.initialValue;
   }
 
   void _onChanged(bool? newValue) {
     if (newValue != null) {
-      setState(() {
-        value = newValue;
-        widget.onChanged?.call(value);
-      });
+      widget.valueNotifier.value = newValue;
+      widget.onChanged?.call(newValue);
     }
   }
 
@@ -71,38 +70,26 @@ class _CustomCheckboxListTileState extends State<CustomCheckboxListTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        IconCheckbox(
-          value: value,
-          onChanged: (newValue) {
-            _onChanged(newValue);
-          },
-        ),
-        Expanded(
-            child: Row(
+    return ValueListenableBuilder<bool>(
+      valueListenable: widget.valueNotifier,
+      builder: (context, value, child) {
+        return Row(
           children: [
-            widget.infoText != null
-                ? GestureDetector(
-                    onTap: () => _showInfoDialog(widget.infoText!),
-                    child: RichText(
-                      text: TextSpan(
-                          // text: widget.title,
-                          // style: TextStyle(
-                          //   fontSize: 14,
-                          //   color: Colors.black87,
-                          //   decoration: TextDecoration.underline,
-                          //   decorationColor: Colors.blue,
-                          //   decorationThickness: 3,
-                          //   height: 1, // Adjust height to control spacing
-                          // ),
-                          // children: const [
-                          //   // spacing between text and underline
-                          //   WidgetSpan(
-                          //     child: SizedBox(width: 8),
-                          //   ),
-                          // ],
-                          children: [
+            IconCheckbox(
+              valueNotifier: widget.valueNotifier,
+              title: widget.title,
+              type: widget.type,
+              index: widget.index,
+              onChanged: _onChanged,
+            ),
+            Expanded(
+                child: Row(
+              children: [
+                widget.infoText != null
+                    ? GestureDetector(
+                        onTap: () => _showInfoDialog(widget.infoText!),
+                        child: RichText(
+                          text: TextSpan(children: [
                             TextSpan(
                               text: widget.title,
                               style: TextStyle(
@@ -116,17 +103,20 @@ class _CustomCheckboxListTileState extends State<CustomCheckboxListTile> {
                                 style: TextStyle(
                                     fontSize: 18, color: AppColors.redColor))
                           ]),
-                    ),
-                  )
+                        ),
+                      )
 
-                // info text parameter is null, display as normal text
-                : Text(
-                    widget.title,
-                    style: const TextStyle(fontSize: 14, color: Colors.black87),
-                  ),
+                    // info text parameter is null, display as normal text
+                    : Text(
+                        widget.title,
+                        style: const TextStyle(
+                            fontSize: 14, color: Colors.black87),
+                      ),
+              ],
+            )),
           ],
-        )),
-      ],
+        );
+      },
     );
   }
 }

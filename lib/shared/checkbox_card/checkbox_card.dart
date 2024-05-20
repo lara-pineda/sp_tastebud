@@ -24,12 +24,14 @@ class CheckboxCard extends StatefulWidget {
 
 class _CheckboxCardState extends State<CheckboxCard> {
   late List<bool> selectedValues;
+  late List<ValueNotifier<bool>> valueNotifiers;
 
   @override
   void initState() {
     super.initState();
-
-    selectedValues = widget.initialSelections;
+    selectedValues = List.from(widget.initialSelections);
+    valueNotifiers =
+        selectedValues.map((value) => ValueNotifier<bool>(value)).toList();
   }
 
   @override
@@ -38,6 +40,8 @@ class _CheckboxCardState extends State<CheckboxCard> {
     if (oldWidget.initialSelections != widget.initialSelections) {
       setState(() {
         selectedValues = widget.initialSelections;
+        valueNotifiers =
+            selectedValues.map((value) => ValueNotifier<bool>(value)).toList();
       });
     }
   }
@@ -77,19 +81,26 @@ class _CheckboxCardState extends State<CheckboxCard> {
                     childAspectRatio: MediaQuery.of(context).size.width /
                         (MediaQuery.of(context).size.height / 9),
                     children: List.generate(
-                      widget.allChoices.length,
-                      (index) => CustomCheckboxListTile(
-                        title: widget.allChoices[index],
-                        initialValue: selectedValues[index],
-                        infoText: infoTexts[index],
-                        onChanged: (bool value) {
-                          setState(() {
-                            selectedValues[index] = value;
-                          });
-                          widget.onSelectionChanged(selectedValues);
-                        },
-                      ),
-                    ),
+                        widget.allChoices.length,
+                        (index) => ValueListenableBuilder<bool>(
+                            valueListenable: valueNotifiers[index],
+                            builder: (context, isChecked, child) {
+                              print(
+                                  'modal sheet: ${valueNotifiers}, ${valueNotifiers[index]}');
+                              return CustomCheckboxListTile(
+                                title: widget.allChoices[index],
+                                valueNotifier: valueNotifiers[index],
+                                index: index,
+                                type: 'modal sheet',
+                                infoText:
+                                    infoTexts != null ? infoTexts[index] : null,
+                                onChanged: (bool value) {
+                                  selectedValues[index] = value;
+                                  valueNotifiers[index].value = value;
+                                  widget.onSelectionChanged(selectedValues);
+                                },
+                              );
+                            })),
                   ),
                 ),
               ],
@@ -97,14 +108,14 @@ class _CheckboxCardState extends State<CheckboxCard> {
           ),
         );
       },
-    );
+    ).whenComplete(() {
+      // Add this part to ensure UI updates when modal is dismissed
+      setState(() {});
+    });
   }
 
   Widget expansionCard(BuildContext context) {
-    int itemCount = widget.allChoices.length > 10
-        ? 10
-        : widget.allChoices.length; // Display up to 10 options
-
+    // print(selectedValues);
     return Container(
       margin: const EdgeInsets.only(left: 10),
       height: 200,
@@ -138,25 +149,31 @@ class _CheckboxCardState extends State<CheckboxCard> {
                     childAspectRatio: MediaQuery.of(context).size.width /
                         (MediaQuery.of(context).size.height / 9),
                     children: List.generate(
-                      widget.allChoices.length > 10
-                          ? 10
-                          : widget
-                              .allChoices.length, // Limit display to up to 10
-                      (index) => CustomCheckboxListTile(
-                        title: widget.allChoices[index], // choices to display
-                        initialValue: selectedValues[index],
-                        infoText: widget.infoTexts != null &&
-                                widget.infoTexts!.length > index
-                            ? widget.infoTexts![index]
-                            : null,
-                        onChanged: (bool value) {
-                          setState(() {
-                            selectedValues[index] = value;
-                            widget.onSelectionChanged(selectedValues);
-                          });
-                        },
-                      ),
-                    ),
+                        widget.allChoices.length > 10
+                            ? 10
+                            : widget
+                                .allChoices.length, // Limit display to up to 10
+                        (index) => ValueListenableBuilder<bool>(
+                            valueListenable: valueNotifiers[index],
+                            builder: (context, isChecked, child) {
+                              print('checkbox card: ${valueNotifiers[index]}');
+
+                              return CustomCheckboxListTile(
+                                title: widget.allChoices[index],
+                                valueNotifier: valueNotifiers[index],
+                                index: index,
+                                type: 'checkbox card',
+                                infoText: widget.infoTexts != null &&
+                                        widget.infoTexts!.length > index
+                                    ? widget.infoTexts![index]
+                                    : null,
+                                onChanged: (bool value) {
+                                  selectedValues[index] = value;
+                                  valueNotifiers[index].value = value;
+                                  widget.onSelectionChanged(selectedValues);
+                                },
+                              );
+                            })),
                   ),
                 ),
               ],
