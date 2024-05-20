@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sp_tastebud/features/user-profile/data/user_profile_repository.dart';
+import 'package:sp_tastebud/shared/checkbox_card/options.dart';
 
 part 'user_profile_event.dart';
 part 'user_profile_state.dart';
@@ -12,6 +13,45 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     on<LoadUserProfile>(_onLoadUserProfile);
     on<UpdateUserProfile>(_onUpdateUserProfile);
     on<ChangeEmail>(_onChangeEmail);
+  }
+
+  // New method to get all user preferences as a single string
+  String getUserPreferences() {
+    if (state is UserProfileLoaded) {
+      final loadedState = state as UserProfileLoaded;
+      return _buildHealthTags(loadedState.dietaryPreferences) +
+          _buildHealthTags(loadedState.allergies) +
+          _mapNutrients(loadedState.macronutrients, Options.macronutrients,
+              Options.nutrientTag1) +
+          _mapNutrients(loadedState.micronutrients, Options.micronutrients,
+              Options.nutrientTag2);
+    } else if (state is UserProfileUpdated) {
+      final updatedState = state as UserProfileUpdated;
+      return _buildHealthTags(updatedState.dietaryPreferences) +
+          _buildHealthTags(updatedState.allergies) +
+          _mapNutrients(updatedState.macronutrients, Options.macronutrients,
+              Options.nutrientTag1) +
+          _mapNutrients(updatedState.micronutrients, Options.micronutrients,
+              Options.nutrientTag2);
+    } else {
+      return ''; // Return an empty string if user preferences are not loaded
+    }
+  }
+
+  String _buildHealthTags(List<dynamic> tags) {
+    return tags
+        .map((tag) =>
+            '&health=${tag.toString().toLowerCase().replaceAll(" ", "%20")}')
+        .join('');
+  }
+
+  String _mapNutrients(List<dynamic> nutrients, List<String> optionToMap,
+      List<String> tagToMap) {
+    Map<String, String> tagMapMacro = Map.fromIterables(optionToMap, tagToMap);
+    return nutrients
+        .map((nutrient) =>
+            '&nutrients%5B${tagMapMacro[nutrient.toString()]}%5D=0%2B')
+        .join('');
   }
 
   void _onChangeEmail(ChangeEmail event, Emitter<UserProfileState> emit) async {

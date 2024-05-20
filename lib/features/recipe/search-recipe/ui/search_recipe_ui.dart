@@ -38,9 +38,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
   bool _appRefresh = false;
   String? _nextUrl;
   String _searchKey = '';
-  String _healthQuery = '';
-  String _macroQuery = '';
-  String _microQuery = '';
+  String _userPreferences = '';
   Timer? _debounce;
 
   final Map<String, Set<String>> selectedFilters = {
@@ -65,8 +63,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
             print('111111');
             _appRefresh = true;
             _nextUrl = null; // Reset next URL here
-            _getAllIngredients(_ingredientsBloc);
-            _initializeQueries(_userProfileBloc.state as UserProfileLoaded);
+            _getAllIngredients();
+            _initializeQueries();
             _loadMoreRecipes('');
           }
         }
@@ -75,9 +73,10 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
     // Create streams to listen to changes to other pages
     _userProfileBloc.stream.listen((state) {
-      if (state is UserProfileLoaded) {
+      print(state);
+      if (state is UserProfileLoaded || state is UserProfileUpdated) {
         print('22222');
-        _initializeQueries(state);
+        _initializeQueries();
         _recipes.clear();
         _appRefresh = true;
         _nextUrl = null; // Reset if there are updates
@@ -88,7 +87,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
     _ingredientsBloc.stream.listen((state) {
       if (state is IngredientsLoaded || state is IngredientsUpdated) {
         print('33333');
-        _getAllIngredients(_ingredientsBloc);
+        _getAllIngredients();
         _recipes.clear();
         _appRefresh = true;
         _nextUrl = null; // Reset if there are updates
@@ -131,20 +130,14 @@ class _SearchRecipeState extends State<SearchRecipe> {
     });
   }
 
-  void _initializeQueries(UserProfileLoaded state) {
-    _healthQuery = buildHealthTags(state.dietaryPreferences) +
-        buildHealthTags(state.allergies);
-    _macroQuery = mapNutrients(
-        state.macronutrients, Options.macronutrients, Options.nutrientTag1);
-    _microQuery = mapNutrients(
-        state.micronutrients, Options.micronutrients, Options.nutrientTag2);
-
-    print('initialize queries: $_healthQuery, $_macroQuery, $_microQuery');
+  void _initializeQueries() {
+    _userPreferences = _userProfileBloc.getUserPreferences();
+    print('initialize queries: $_userPreferences');
   }
 
   // Get all ingredients from IngredientsBloc
-  void _getAllIngredients(IngredientsBloc ingredientsBloc) {
-    _allIngredients = ingredientsBloc.allIngredients;
+  void _getAllIngredients() {
+    _allIngredients = _ingredientsBloc.allIngredients;
   }
 
   Future<void> _loadMoreRecipes(String searchKey,
@@ -157,7 +150,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
       final data = await RecipeSearchAPI.searchRecipes(
         searchKey: searchKey,
-        queryParams: _healthQuery + _macroQuery + _microQuery,
+        queryParams: _userPreferences,
         nextUrl: _nextUrl,
         filters: filterQuery,
         ingredients: _allIngredients,
@@ -206,7 +199,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
         final data = await RecipeSearchAPI.searchRecipes(
           searchKey: searchKey,
-          queryParams: _healthQuery + _macroQuery + _microQuery,
+          queryParams: _userPreferences,
           nextUrl: _nextUrl,
           filters: filterQuery,
           ingredients: _allIngredients,
@@ -379,35 +372,11 @@ class _SearchRecipeState extends State<SearchRecipe> {
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return ConnectivityListenerWidget(
-  //     child: BlocBuilder<UserProfileBloc, UserProfileState>(
-  //       buildWhen: (previous, current) =>
-  //           current is UserProfileLoaded ||
-  //           current is UserProfileError ||
-  //           current is UserProfileInitial ||
-  //           current is UserProfileUpdated,
-  //       builder: (context, userProfileState) {
-  //         if (userProfileState is UserProfileLoaded) {
-  //           return _buildSearchRecipeUI(userProfileState);
-  //         } else if (userProfileState is UserProfileUpdated) {
-  //           return _buildSearchRecipeUI(
-  //               userProfileState); // Handle updated state
-  //         } else if (userProfileState is UserProfileError) {
-  //           return Center(child: Text(userProfileState.error));
-  //         }
-  //         return Center(child: CircularProgressIndicator());
-  //       },
-  //     ),
-  //   );
-  // }
-
   Widget _buildSearchRecipeUI(UserProfileLoaded state) {
     if (_recipes.isEmpty && !_isLoading && !_initialLoadComplete) {
       _recipes.clear();
-      _getAllIngredients(_ingredientsBloc);
-      _initializeQueries(state);
+      _getAllIngredients();
+      _initializeQueries();
     }
     return _buildRecipeList();
   }
@@ -453,18 +422,18 @@ class _SearchRecipeState extends State<SearchRecipe> {
         _buildFilterCategories(),
         SizedBox(height: (10.toVHLength).toPX()),
 
-        // Apply Filters Button
-        ElevatedButton(
-          onPressed: () {
-            _loadMoreRecipes(_searchKey);
-          },
-          child: Text('Apply Filters'),
-          style: ElevatedButton.styleFrom(
-            foregroundColor: AppColors.orangeDarkerColor,
-            backgroundColor: AppColors.orangeDisabledColor,
-          ),
-        ),
-        SizedBox(height: (10.toVHLength).toPX()),
+        // // Apply Filters Button
+        // ElevatedButton(
+        //   onPressed: () {
+        //     _loadMoreRecipes(_searchKey);
+        //   },
+        //   child: Text('Apply Filters'),
+        //   style: ElevatedButton.styleFrom(
+        //     foregroundColor: AppColors.orangeDarkerColor,
+        //     backgroundColor: AppColors.orangeDisabledColor,
+        //   ),
+        // ),
+        // SizedBox(height: (10.toVHLength).toPX()),
 
         if (_recipes.isEmpty && !_isLoading && _initialLoadComplete)
           // If no matching recipe
@@ -486,11 +455,15 @@ class _SearchRecipeState extends State<SearchRecipe> {
                       if (!_isLoading && _nextUrl != null) {
                         // Load more at the end of the list
                         _loadMoreRecipes(_searchKey);
-                      } else if (!_isLoading &&
-                          _nextUrl == null &&
-                          _searchKey.isEmpty) {
-                        // Only load default results if searchKey is empty and there are no more next URLs
-                        _loadMoreRecipes('');
+                      } else if (!_isLoading && _nextUrl == null) {
+                        if (_searchKey.isEmpty) {
+                          // Only load default results if searchKey is empty and there are no more next URLs
+                          _loadMoreRecipes('');
+                        } else {
+                          return const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Center(child: Text("End of results.")));
+                        }
                       } else if (_nextUrl == null &&
                           _initialLoadComplete &&
                           !_appRefresh) {
