@@ -33,12 +33,20 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           fillColor: Colors.white60,
           labelText: 'Search',
           border: OutlineInputBorder(),
+
           // search icon
           prefixIcon: Icon(Icons.search),
           prefixIconColor: Colors.blueGrey,
-          // filter icon
-          suffixIcon: Icon(Icons.filter_alt_outlined),
+
+          // clear search bar icon
           suffixIconColor: Colors.blueGrey,
+          suffixIcon: IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: () {
+              _controller.clear();
+              widget.onSubmitted('');
+            },
+          ),
         ),
       ),
     );

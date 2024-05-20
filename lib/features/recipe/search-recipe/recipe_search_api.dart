@@ -9,46 +9,35 @@ class RecipeSearchAPI {
   static final Map<String, CacheEntry> _cache = {};
   static const int cacheDuration = 3600;
 
-  static Future<Map<String, dynamic>> searchRecipes(
-      {required String searchKey,
-      required String queryParams,
-      required List<String> ingredients,
-      String? nextUrl,
-      bool forceUpdate = false // for clearing cache
-      }) async {
-    String query;
-
-    if (forceUpdate) {
-      print('force update !!');
-      print(searchKey);
-      print(ingredients);
-      print(queryParams);
-      print('end of force update.');
-    }
-    if (ingredients.isNotEmpty) {
-      // Join the ingredients list into a single string with replacements
-      String formattedIngredients = ingredients
-          .map((ingredient) => ingredient
-              .toLowerCase()
-              .replaceAll(' ', '%20')) // Replace spaces with '%20'
-          .join('%2C'); // Join elements with '%2C'
-
-      // Joining search key with ingredients
-      query = '$searchKey%2C$formattedIngredients';
-    } else {
-      query = '$searchKey';
-    }
-
-    print('query: $query');
-
-    final String url = nextUrl ??
-        '$baseUrl/api/recipes/v2?q=$query&app_id=$appId&app_key=$appKey&type=public$queryParams';
-
-    // Clear the cache if forceUpdate is true
+  static Future<Map<String, dynamic>> searchRecipes({
+    required String searchKey,
+    required String queryParams,
+    required List<String> ingredients,
+    required String filters,
+    String? nextUrl,
+    bool forceUpdate = false, // for clearing cache
+  }) async {
+    // If force update, clear the cache
     if (forceUpdate) {
       _cache.clear();
     }
 
+    // Construct the base query with searchKey and ingredients
+    String query = '';
+    if (searchKey.isNotEmpty || ingredients.isNotEmpty) {
+      String formattedIngredients = ingredients
+          .map((ingredient) => ingredient.toLowerCase().replaceAll(' ', '%20'))
+          .join('%2C');
+
+      query = searchKey.isNotEmpty
+          ? '$searchKey${formattedIngredients.isNotEmpty ? '%2C$formattedIngredients' : ''}'
+          : formattedIngredients;
+    }
+
+    final String url = nextUrl ??
+        '$baseUrl/api/recipes/v2?type=public&q=$query&app_id=$appId&app_key=$appKey$queryParams$filters';
+
+    // If cache contains the URL, check the cache duration
     if (_cache.containsKey(url)) {
       CacheEntry entry = _cache[url]!;
       final currentTime = DateTime.now().millisecondsSinceEpoch;
@@ -60,7 +49,6 @@ class RecipeSearchAPI {
       }
     }
 
-    print('received ingredients: $ingredients');
     print('Fetching from API: $url');
     try {
       final response = await http.get(Uri.parse(url));

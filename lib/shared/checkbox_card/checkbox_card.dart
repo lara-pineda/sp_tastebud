@@ -52,6 +52,7 @@ class _CheckboxCardState extends State<CheckboxCard> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: Colors.white,
       builder: (context) {
         return Padding(
           padding:
@@ -66,6 +67,7 @@ class _CheckboxCardState extends State<CheckboxCard> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
+                    color: AppColors.purpleColor,
                   ),
                 ),
                 SizedBox(height: 5),

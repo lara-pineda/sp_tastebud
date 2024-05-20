@@ -1,8 +1,8 @@
 // options to display inside checkbox cards
 
 class Options {
-  // FILTERS=================================================================
-  static const List<String> dietTags = [
+  // FILTERS========================================================================================================================================
+  static const List<String> diet = [
     'balanced',
     'high-fiber',
     'high-protein',
@@ -11,66 +11,54 @@ class Options {
     'low-sodium',
   ];
   static const List<String> mealType = [
-    'breakfast',
-    'brunch',
-    'breakfast',
-    'lunch/dinner',
-    'snack',
-    'teatime',
+    'Breakfast',
+    'Lunch',
+    'Dinner',
+    'Snack',
+    'Teatime',
   ];
   static const List<String> cuisineType = [
-    'american',
-    'asian',
-    'british',
-    'caribbean',
-    'central europe',
-    'chinese',
-    'eastern europe',
-    'french',
-    'american',
-    'greek',
-    'indian',
-    'italian',
-    'japanese',
-    'korean',
-    'kosher',
-    'mediterranean',
-    'mexican',
-    'middle eastern',
-    'nordic',
-    'south american',
-    'south east asian',
-    'world',
+    'American',
+    'Asian',
+    'British',
+    'Caribbean',
+    'Central Europe',
+    'Chinese',
+    'Eastern Europe',
+    'French',
+    'Indian',
+    'Italian',
+    'Japanese',
+    'Korean',
+    'Kosher',
+    'Mediterranean',
+    'Mexican',
+    'Middle Eastern',
+    'Nordic',
+    'South American',
+    'South East Asian',
   ];
   static const List<String> dishType = [
-    'alcohol cocktail',
-    'biscuits and cookies',
-    'bread',
-    'cereals',
-    'condiments and sauces',
-    'desserts',
-    'drinks',
-    'egg',
-    'ice cream and custard',
-    'main course',
-    'pancake',
-    'pasta',
-    'pastry',
-    'pies and tarts',
-    'pizza',
-    'preps',
-    'preserve',
-    'salad',
-    'sandwiches',
-    'seafood',
-    'side dish',
-    'soup',
-    'special occasions',
-    'starter',
-    'sweets',
+    'Biscuits and cookies',
+    'Bread',
+    'Cereals',
+    'Condiments and sauces',
+    'Desserts',
+    'Drinks',
+    'Main course',
+    'Pancake',
+    'Pasta',
+    'Preps',
+    'Preserve',
+    'Salad',
+    'Sandwiches',
+    'Side dish',
+    'Soup',
+    'Starter',
+    'Sweets',
   ];
 
-  // USER PROFILE=============================================================
+  // USER PROFILE====================================================================================================================================
   static const List<String> dietaryPreferences = [
     'Keto-friendly',
     'Kosher',
@@ -162,7 +150,7 @@ class Options {
     'Vitamin K'
   ];
 
-  // INFO TEXTS==============================================================
+  // INFO TEXTS=====================================================================================================================================
   static const List<String> dietInfoText = [
     'Protein/Fat/Carb values in 15/35/50 ratio',
     'More than 5g fiber per serving',
@@ -200,7 +188,7 @@ class Options {
     'No wheat, can have gluten though.',
   ];
 
-  // INGREDIENTS=============================================================
+  // INGREDIENTS====================================================================================================================================
   static const List<String> pantryEssentials = [
     'Baking powder',
     'Baking soda',

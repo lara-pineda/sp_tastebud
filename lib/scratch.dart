@@ -1,1 +1,23 @@
+// https://api.edamam.com/api/recipes/v2?
+// type=public
+// &q=chicken
+// &app_id=944184b7
+// &app_key=32a51da0f5bf093de7b4cd19e2f55112
+// &diet=high-fiber
+// &diet=high-protein
+// &health=alcohol-free
+// &health=celery-free
+// &cuisineType=Asian
+// &mealType=Breakfast
 
+// https://api.edamam.com/api/recipes/v2?
+// type=public
+// &q=chicken
+// &app_id=944184b7
+// &app_key=32a51da0f5bf093de7b4cd19e2f55112
+// &diet=high-fiber
+// &diet=high-protein
+// &health=sesame-free
+// &cuisineType=South%20East%20Asian
+// &mealType=Lunch
+// &dishType=Condiments%20and%20sauces

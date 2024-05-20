@@ -11,4 +11,6 @@ abstract class AppColors {
   static Color redDisabledColor = '#FFD4D4'.toColor();
   static Color purpleColor = '#BB6E9C'.toColor();
   static Color grayColor = '#EDE9E6'.toColor();
+  static Color pastelPinkColor = '#FFE6F7'.toColor();
+  static Color darkerPinkColor = '#B34D91'.toColor();
 }

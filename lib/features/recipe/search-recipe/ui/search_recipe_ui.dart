@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'dart:async';
 import 'package:go_router/go_router.dart';
+import 'package:sp_tastebud/shared/filter/custom_filter.dart';
 import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
 import 'package:sp_tastebud/shared/search_bar/custom_search_bar.dart';
 import 'package:sp_tastebud/shared/recipe_card/ui/recipe_card_search.dart';
@@ -28,21 +29,26 @@ class _SearchRecipeState extends State<SearchRecipe> {
   final UserProfileBloc _userProfileBloc = GetIt.instance<UserProfileBloc>();
   final RecipeCardBloc _recipeCardBloc = GetIt.instance<RecipeCardBloc>();
 
-  String _healthQuery = '';
-  String _macroQuery = '';
-  String _microQuery = '';
-  List<String> _allIngredients = [];
-
   final TextEditingController _searchController = TextEditingController();
 
-  List<dynamic> _recipes = [];
+  List<String> _allIngredients = [];
+  final List<dynamic> _recipes = [];
   bool _isLoading = false;
   bool _initialLoadComplete = false;
   bool _appRefresh = false;
   String? _nextUrl;
   String _searchKey = '';
-
+  String _healthQuery = '';
+  String _macroQuery = '';
+  String _microQuery = '';
   Timer? _debounce;
+
+  final Map<String, Set<String>> selectedFilters = {
+    'diet': {},
+    'cuisineType': {},
+    'dishType': {},
+    'mealType': {},
+  };
 
   @override
   void initState() {
@@ -51,7 +57,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
     _searchController.addListener(_onSearchChanged);
     _recipeCardBloc.add(LoadInitialData());
 
-    // load user profile and ingredients upon component mount
+    // Load user profile and ingredients upon component mount
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_userProfileBloc.state is UserProfileLoaded) {
         if (_ingredientsBloc.state is IngredientsLoaded) {
@@ -67,14 +73,14 @@ class _SearchRecipeState extends State<SearchRecipe> {
       }
     });
 
-    // create streams to listen to changes to other pages
+    // Create streams to listen to changes to other pages
     _userProfileBloc.stream.listen((state) {
       if (state is UserProfileLoaded) {
         print('22222');
         _initializeQueries(state);
         _recipes.clear();
         _appRefresh = true;
-        _nextUrl = null; // reset if there are updates
+        _nextUrl = null; // Reset if there are updates
         _loadMoreRecipes(_searchKey);
       }
     });
@@ -85,12 +91,12 @@ class _SearchRecipeState extends State<SearchRecipe> {
         _getAllIngredients(_ingredientsBloc);
         _recipes.clear();
         _appRefresh = true;
-        _nextUrl = null; // reset if there are updates
+        _nextUrl = null; // Reset if there are updates
         _loadMoreRecipes(_searchKey, forceUpdate: true);
       }
     });
 
-    // listener to handle changes in the RecipeCardBloc
+    // Listener to handle changes in the RecipeCardBloc
     _recipeCardBloc.stream.listen((state) {
       if (state is RecipeCardUpdated && mounted) {
         // Check first if mounted
@@ -132,12 +138,13 @@ class _SearchRecipeState extends State<SearchRecipe> {
         state.macronutrients, Options.macronutrients, Options.nutrientTag1);
     _microQuery = mapNutrients(
         state.micronutrients, Options.micronutrients, Options.nutrientTag2);
+
+    print('initialize queries: $_healthQuery, $_macroQuery, $_microQuery');
   }
 
   // Get all ingredients from IngredientsBloc
   void _getAllIngredients(IngredientsBloc ingredientsBloc) {
     _allIngredients = ingredientsBloc.allIngredients;
-    print('ingredients fetched: $_allIngredients');
   }
 
   Future<void> _loadMoreRecipes(String searchKey,
@@ -146,12 +153,13 @@ class _SearchRecipeState extends State<SearchRecipe> {
     _isLoading = true;
 
     try {
-      print("all ingredients: $_allIngredients");
+      String filterQuery = _buildFilterQuery();
 
       final data = await RecipeSearchAPI.searchRecipes(
         searchKey: searchKey,
         queryParams: _healthQuery + _macroQuery + _microQuery,
         nextUrl: _nextUrl,
+        filters: filterQuery,
         ingredients: _allIngredients,
         forceUpdate: forceUpdate,
       );
@@ -166,7 +174,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
       _nextUrl = data['_links']?['next']?['href'];
 
       if (mounted) {
-        // mounted check
+        // Mounted check
         setState(() {
           if (newRecipes.isNotEmpty) {
             _recipes.addAll(newRecipes);
@@ -194,13 +202,13 @@ class _SearchRecipeState extends State<SearchRecipe> {
       await Future.delayed(retryInterval);
       retryCount++;
       try {
-        // Get all ingredients from IngredientsBloc
-        // final allIngredients = _ingredientsBloc.allIngredients;
+        String filterQuery = _buildFilterQuery();
 
         final data = await RecipeSearchAPI.searchRecipes(
           searchKey: searchKey,
           queryParams: _healthQuery + _macroQuery + _microQuery,
           nextUrl: _nextUrl,
+          filters: filterQuery,
           ingredients: _allIngredients,
           forceUpdate: forceUpdate,
         );
@@ -225,7 +233,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
       }
     }
 
-    // reset loading state on final error
+    // Reset loading state on final error
     if (mounted) {
       setState(() {
         _isLoading = false;
@@ -250,24 +258,150 @@ class _SearchRecipeState extends State<SearchRecipe> {
         .join('');
   }
 
+  String _buildFilterQuery() {
+    List<String> queries = [];
+    selectedFilters.forEach((category, options) {
+      options.forEach((option) {
+        queries.add('&${category}=${option.replaceAll(" ", "%20")}');
+      });
+    });
+    return queries.join('');
+  }
+
+  // Row of filter buttons
+  Widget _buildFilterCategories() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          SizedBox(width: 20),
+          Text(
+            'Filters:',
+            style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: AppColors.purpleColor),
+            textAlign: TextAlign.left,
+          ),
+          SizedBox(width: 15),
+          CustomFilter(
+            category: 'Diet',
+            tag: 'diet',
+            options: Options.diet,
+            selectedOptions: selectedFilters['diet']!,
+            onFilterChanged: (tag, selectedOptions) {
+              setState(() {
+                selectedFilters[tag] = selectedOptions;
+              });
+            },
+            onFilterCleared: (tag) {
+              setState(() {
+                selectedFilters[tag]!.clear();
+              });
+            },
+          ),
+          SizedBox(width: 15),
+          CustomFilter(
+            category: 'Cuisine Type',
+            tag: 'cuisineType',
+            options: Options.cuisineType,
+            selectedOptions: selectedFilters['cuisineType']!,
+            onFilterChanged: (tag, selectedOptions) {
+              setState(() {
+                selectedFilters[tag] = selectedOptions;
+              });
+            },
+            onFilterCleared: (tag) {
+              setState(() {
+                selectedFilters[tag]!.clear();
+              });
+            },
+          ),
+          SizedBox(width: 15),
+          CustomFilter(
+            category: 'Dish Type',
+            tag: 'dishType',
+            options: Options.dishType,
+            selectedOptions: selectedFilters['dishType']!,
+            onFilterChanged: (tag, selectedOptions) {
+              setState(() {
+                selectedFilters[tag] = selectedOptions;
+              });
+            },
+            onFilterCleared: (tag) {
+              setState(() {
+                selectedFilters[tag]!.clear();
+              });
+            },
+          ),
+          SizedBox(width: 15),
+          CustomFilter(
+            category: 'Meal Type',
+            tag: 'mealType',
+            options: Options.mealType,
+            selectedOptions: selectedFilters['mealType']!,
+            onFilterChanged: (tag, selectedOptions) {
+              setState(() {
+                selectedFilters[tag] = selectedOptions;
+              });
+            },
+            onFilterCleared: (tag) {
+              setState(() {
+                selectedFilters[tag]!.clear();
+              });
+            },
+          ),
+          SizedBox(width: 15)
+        ],
+      ),
+    );
+  }
+
+  // original
   @override
   Widget build(BuildContext context) {
     return ConnectivityListenerWidget(
-        child: BlocBuilder<UserProfileBloc, UserProfileState>(
-      buildWhen: (previous, current) =>
-          current is UserProfileLoaded ||
-          current is UserProfileError ||
-          current is UserProfileInitial,
-      builder: (context, userProfileState) {
-        if (userProfileState is UserProfileLoaded) {
-          return _buildSearchRecipeUI(userProfileState);
-        } else if (userProfileState is UserProfileError) {
-          return Center(child: Text(userProfileState.error));
-        }
-        return Center(child: CircularProgressIndicator());
-      },
-    ));
+      child: BlocBuilder<UserProfileBloc, UserProfileState>(
+        buildWhen: (previous, current) =>
+            current is UserProfileLoaded ||
+            current is UserProfileError ||
+            current is UserProfileInitial,
+        builder: (context, userProfileState) {
+          if (userProfileState is UserProfileLoaded) {
+            return _buildSearchRecipeUI(userProfileState);
+          } else if (userProfileState is UserProfileError) {
+            return Center(child: Text(userProfileState.error));
+          }
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return ConnectivityListenerWidget(
+  //     child: BlocBuilder<UserProfileBloc, UserProfileState>(
+  //       buildWhen: (previous, current) =>
+  //           current is UserProfileLoaded ||
+  //           current is UserProfileError ||
+  //           current is UserProfileInitial ||
+  //           current is UserProfileUpdated,
+  //       builder: (context, userProfileState) {
+  //         if (userProfileState is UserProfileLoaded) {
+  //           return _buildSearchRecipeUI(userProfileState);
+  //         } else if (userProfileState is UserProfileUpdated) {
+  //           return _buildSearchRecipeUI(
+  //               userProfileState); // Handle updated state
+  //         } else if (userProfileState is UserProfileError) {
+  //           return Center(child: Text(userProfileState.error));
+  //         }
+  //         return Center(child: CircularProgressIndicator());
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget _buildSearchRecipeUI(UserProfileLoaded state) {
     if (_recipes.isEmpty && !_isLoading && !_initialLoadComplete) {
@@ -293,6 +427,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
           },
         ),
         SizedBox(height: (10.toVHLength).toPX()),
+
+        // Page tagline
         Container(
           width:
               double.infinity, // Ensures the container takes up the full width
@@ -310,8 +446,28 @@ class _SearchRecipeState extends State<SearchRecipe> {
             maxLines: 2,
           ),
         ),
+
+        SizedBox(height: (5.toVHLength).toPX()),
+
+        // Filters
+        _buildFilterCategories(),
         SizedBox(height: (10.toVHLength).toPX()),
+
+        // Apply Filters Button
+        ElevatedButton(
+          onPressed: () {
+            _loadMoreRecipes(_searchKey);
+          },
+          child: Text('Apply Filters'),
+          style: ElevatedButton.styleFrom(
+            foregroundColor: AppColors.orangeDarkerColor,
+            backgroundColor: AppColors.orangeDisabledColor,
+          ),
+        ),
+        SizedBox(height: (10.toVHLength).toPX()),
+
         if (_recipes.isEmpty && !_isLoading && _initialLoadComplete)
+          // If no matching recipe
           Expanded(
               child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
@@ -320,6 +476,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
             ),
           ))
         else
+          // Display recipe list
           Expanded(
               child: ListView.builder(
                   itemCount:

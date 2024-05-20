@@ -81,6 +81,7 @@ class Assets {
       'lib/features/auth/data/user_repository.dart';
   static const String dataViewRecipeRepository =
       'lib/features/recipe/view-recipe/data/view_recipe_repository.dart';
+  static const String filterFilterRow = 'lib/shared/filter/custom_filter.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesAppIcon = 'assets/images/AppIcon.png';
   static const String imagesBackground = 'assets/images/Background.png';
