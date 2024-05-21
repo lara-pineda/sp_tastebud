@@ -196,8 +196,10 @@ class Options {
     'Coconut milk',
     'Cooking oil',
     'Egg',
+    'Fish Sauce',
     'Flour',
     'Garlic',
+    'Ginger',
     'Honey',
     'Olive oil',
     'Onion',
@@ -206,6 +208,7 @@ class Options {
     'Paprika',
     'Soy Sauce',
     'Sugar',
+    'Water',
     'Vanilla',
     'Vegetable oil',
   ];
@@ -228,7 +231,7 @@ class Options {
   static const List<String> fishAndPoultry = [
     'Bangus',
     'Chicken breast',
-    'Chicken leg',
+    'Chicken drumstick',
     'Chicken thighs',
     'Chicken wings',
     'Fish fillet',

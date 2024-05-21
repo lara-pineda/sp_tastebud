@@ -31,7 +31,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
   final TextEditingController _searchController = TextEditingController();
 
-  List<String> _allIngredients = [];
+  // List<String> _allIngredients = [];
   final List<dynamic> _recipes = [];
   bool _isLoading = false;
   bool _initialLoadComplete = false;
@@ -63,7 +63,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
             print('111111');
             _appRefresh = true;
             _nextUrl = null; // Reset next URL here
-            _getAllIngredients();
+            // _getAllIngredients();
             _initializeQueries();
             _loadMoreRecipes('');
           }
@@ -84,16 +84,17 @@ class _SearchRecipeState extends State<SearchRecipe> {
       }
     });
 
-    _ingredientsBloc.stream.listen((state) {
-      if (state is IngredientsLoaded || state is IngredientsUpdated) {
-        print('33333');
-        _getAllIngredients();
-        _recipes.clear();
-        _appRefresh = true;
-        _nextUrl = null; // Reset if there are updates
-        _loadMoreRecipes(_searchKey, forceUpdate: true);
-      }
-    });
+    // no need to listen to ingredients bloc string anymore because ingredients are no longer included in search query string
+    // _ingredientsBloc.stream.listen((state) {
+    //   if (state is IngredientsLoaded || state is IngredientsUpdated) {
+    //     print('33333');
+    //     _getAllIngredients();
+    //     _recipes.clear();
+    //     _appRefresh = true;
+    //     _nextUrl = null; // Reset if there are updates
+    //     _loadMoreRecipes(_searchKey, forceUpdate: true);
+    //   }
+    // });
 
     // Listener to handle changes in the RecipeCardBloc
     _recipeCardBloc.stream.listen((state) {
@@ -135,10 +136,10 @@ class _SearchRecipeState extends State<SearchRecipe> {
     print('initialize queries: $_userPreferences');
   }
 
-  // Get all ingredients from IngredientsBloc
-  void _getAllIngredients() {
-    _allIngredients = _ingredientsBloc.allIngredients;
-  }
+  // // Get all ingredients from IngredientsBloc
+  // void _getAllIngredients() {
+  //   _allIngredients = _ingredientsBloc.allIngredients;
+  // }
 
   Future<void> _loadMoreRecipes(String searchKey,
       {bool forceUpdate = false}) async {
@@ -153,7 +154,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
         queryParams: _userPreferences,
         nextUrl: _nextUrl,
         filters: filterQuery,
-        ingredients: _allIngredients,
+        // ingredients: _allIngredients,
         forceUpdate: forceUpdate,
       );
 
@@ -202,7 +203,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
           queryParams: _userPreferences,
           nextUrl: _nextUrl,
           filters: filterQuery,
-          ingredients: _allIngredients,
+          // ingredients: _allIngredients,
           forceUpdate: forceUpdate,
         );
 
@@ -293,6 +294,11 @@ class _SearchRecipeState extends State<SearchRecipe> {
                 selectedFilters[tag]!.clear();
               });
             },
+            onApplyFilters: () {
+              _recipes.clear(); // Clear the results first
+              _nextUrl = null; // Reset next URL
+              _loadMoreRecipes(_searchKey);
+            },
           ),
           SizedBox(width: 15),
           CustomFilter(
@@ -309,6 +315,11 @@ class _SearchRecipeState extends State<SearchRecipe> {
               setState(() {
                 selectedFilters[tag]!.clear();
               });
+            },
+            onApplyFilters: () {
+              _recipes.clear(); // Clear the results first
+              _nextUrl = null; // Reset next URL
+              _loadMoreRecipes(_searchKey);
             },
           ),
           SizedBox(width: 15),
@@ -327,6 +338,11 @@ class _SearchRecipeState extends State<SearchRecipe> {
                 selectedFilters[tag]!.clear();
               });
             },
+            onApplyFilters: () {
+              _recipes.clear(); // Clear the results first
+              _nextUrl = null; // Reset next URL
+              _loadMoreRecipes(_searchKey);
+            },
           ),
           SizedBox(width: 15),
           CustomFilter(
@@ -343,6 +359,11 @@ class _SearchRecipeState extends State<SearchRecipe> {
               setState(() {
                 selectedFilters[tag]!.clear();
               });
+            },
+            onApplyFilters: () {
+              _recipes.clear(); // Clear the results first
+              _nextUrl = null; // Reset next URL
+              _loadMoreRecipes(_searchKey);
             },
           ),
           SizedBox(width: 15)
@@ -375,7 +396,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
   Widget _buildSearchRecipeUI(UserProfileLoaded state) {
     if (_recipes.isEmpty && !_isLoading && !_initialLoadComplete) {
       _recipes.clear();
-      _getAllIngredients();
+      // _getAllIngredients();
       _initializeQueries();
     }
     return _buildRecipeList();
@@ -486,8 +507,9 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
                     return GestureDetector(
                       onTap: () {
-                        context.goNamed('viewRecipe',
-                            pathParameters: {'recipeId': recipeId});
+                        context.goNamed('viewRecipe', pathParameters: {
+                          'recipeId': recipeId,
+                        });
                       },
                       child: RecipeCardSearch(
                         recipeName: recipe['label'],

@@ -283,7 +283,20 @@ class _IngredientsState extends State<IngredientManagement> {
                         color: AppColors.purpleColor),
                     textAlign: TextAlign.left,
                   ),
+
                   SizedBox(height: (20.toVHLength).toPX()),
+
+                  Text(
+                    'Check the ingredients that you have available that you also want the recipe to have.\n\nYou may save your changes by clicking the button on the lower right.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black87,
+                    ),
+                  ),
+
+                  SizedBox(height: (30.toVHLength).toPX()),
 
                   // PANTRY ESSENTIALS
                   Text(
@@ -399,11 +412,15 @@ class _IngredientsState extends State<IngredientManagement> {
           builder: (context, isModified, child) {
             return FloatingActionButton(
               onPressed: isModified ? _handleConfirmSave : null,
-              backgroundColor: isModified ? Colors.white : Colors.grey[100],
+              backgroundColor:
+                  // isModified ? Colors.white : Colors.grey[100],
+                  isModified ? AppColors.orangeDisabledColor : Colors.grey[100],
               elevation: 4,
               child: Icon(
                 Icons.save_outlined,
-                color: isModified ? Colors.black54 : Colors.grey[300],
+                color:
+                    // isModified ? Colors.black87 : Colors.grey[300],
+                    isModified ? AppColors.orangeDarkerColor : Colors.grey[300],
               ),
             );
           },

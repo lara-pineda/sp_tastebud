@@ -18,7 +18,6 @@ import 'tabs/nutrition_tab.dart';
 
 class ViewRecipe extends StatefulWidget {
   final String recipeId;
-
   const ViewRecipe({super.key, required this.recipeId});
 
   @override
@@ -31,6 +30,7 @@ class _ViewRecipeState extends State<ViewRecipe>
   late final ViewRecipeBloc _viewRecipeBloc = GetIt.instance<ViewRecipeBloc>();
   final IngredientsBloc _ingredientsBloc = GetIt.instance<IngredientsBloc>();
   final RecipeCardBloc _recipeCardBloc = GetIt.instance<RecipeCardBloc>();
+  List<String> _allIngredients = [];
 
   @override
   void initState() {
@@ -55,12 +55,23 @@ class _ViewRecipeState extends State<ViewRecipe>
         });
       }
     });
+
+    _ingredientsBloc.stream.listen((state) {
+      if (state is IngredientsLoaded || state is IngredientsUpdated) {
+        _getAllIngredients();
+      }
+    });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  // Get all ingredients from IngredientsBloc
+  void _getAllIngredients() {
+    _allIngredients = _ingredientsBloc.allIngredients;
   }
 
   void _handleActionConfirmation(BuildContext context, String collectionType,
@@ -89,9 +100,10 @@ class _ViewRecipeState extends State<ViewRecipe>
         if (state is RecipeLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (state is RecipeLoaded) {
+          _getAllIngredients();
           // Get all ingredients from IngredientsBloc
-          final allIngredients = _ingredientsBloc.allIngredients
-              .map((ingredient) => ingredient.toLowerCase());
+          final allIngredients =
+              _allIngredients.map((ingredient) => ingredient.toLowerCase());
 
           return _buildRecipePage(state.recipe, allIngredients);
         } else if (state is RecipeError) {
@@ -327,9 +339,29 @@ class _ViewRecipeState extends State<ViewRecipe>
                     controller: _tabController,
                     // contents of each tab
                     children: <Widget>[
+                      // overview tab
                       OverviewTab(recipe: recipe),
-                      IngredientsTab(
-                          recipe: recipe, allIngredients: ingredients),
+
+                      // ingredients tab
+                      // using bloc builder to reflect changes in ingredients real-time
+                      BlocBuilder<IngredientsBloc, IngredientsState>(
+                        bloc: _ingredientsBloc,
+                        builder: (context, ingredientsState) {
+                          if (ingredientsState is IngredientsLoaded ||
+                              ingredientsState is IngredientsUpdated) {
+                            final allIngredients = _ingredientsBloc
+                                .allIngredients
+                                .map((ingredient) => ingredient.toLowerCase());
+                            return IngredientsTab(
+                              recipe: recipe,
+                              allIngredients: allIngredients,
+                            );
+                          }
+                          return Center(child: CircularProgressIndicator());
+                        },
+                      ),
+
+                      // nutrition tab
                       NutritionTab(recipe: recipe),
                     ],
                   ),

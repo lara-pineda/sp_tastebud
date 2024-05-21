@@ -54,7 +54,7 @@ class IngredientsTab extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w400,
-                            fontSize: 16.0,
+                            fontSize: 14.0,
                             color:
                                 containsIngredient ? Colors.black : Colors.red,
                           ),

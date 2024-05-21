@@ -435,7 +435,7 @@ class _UserProfileState extends State<UserProfile> {
                   SizedBox(height: (30.toVHLength).toPX()),
 
                   Text(
-                    'Click on the circle next to an option to check the option.\n\nOptions with asterisks mean that you can click on it to see what the option means.',
+                    'Click on the circle next to an option to check the option.\n\nOptions with asterisks mean that you can click on it to see what the option means.\n\nYou may save your changes by clicking the button on the lower right.',
                     // 'Click on the circle next to an option to check the option.\n\nOptions with asterisks mean that you can click on it to see what the option means.\n\nClicking the save button on the lower right will save your changes if any changes have been made on the page.',
                     style: TextStyle(
                       fontSize: 14,
@@ -542,11 +542,15 @@ class _UserProfileState extends State<UserProfile> {
           builder: (context, isModified, child) {
             return FloatingActionButton(
               onPressed: isModified ? _handleConfirmSave : null,
-              backgroundColor: isModified ? Colors.white : Colors.grey[100],
+              backgroundColor:
+                  // isModified ? Colors.white : Colors.grey[100],
+                  isModified ? AppColors.orangeDisabledColor : Colors.grey[100],
               elevation: 4,
               child: Icon(
                 Icons.save_outlined,
-                color: isModified ? Colors.black54 : Colors.grey[300],
+                color:
+                    // isModified ? Colors.black87 : Colors.grey[300],
+                    isModified ? AppColors.orangeDarkerColor : Colors.grey[300],
               ),
             );
           },

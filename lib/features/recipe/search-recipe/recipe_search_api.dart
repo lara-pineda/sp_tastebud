@@ -12,7 +12,7 @@ class RecipeSearchAPI {
   static Future<Map<String, dynamic>> searchRecipes({
     required String searchKey,
     required String queryParams,
-    required List<String> ingredients,
+    // required List<String> ingredients,
     required String filters,
     String? nextUrl,
     bool forceUpdate = false, // for clearing cache
@@ -23,19 +23,20 @@ class RecipeSearchAPI {
     }
 
     // Construct the base query with searchKey and ingredients
-    String query = '';
-    if (searchKey.isNotEmpty || ingredients.isNotEmpty) {
-      String formattedIngredients = ingredients
-          .map((ingredient) => ingredient.toLowerCase().replaceAll(' ', '%20'))
-          .join('%2C');
+    // if (searchKey.isNotEmpty || ingredients.isNotEmpty) {
+    //   String formattedIngredients = ingredients
+    //       .map((ingredient) => ingredient.toLowerCase().replaceAll(' ', '%20'))
+    //       .join('%2C');
+    //
+    //   query = searchKey.isNotEmpty
+    //       ? '$searchKey${formattedIngredients.isNotEmpty ? '%2C$formattedIngredients' : ''}'
+    //       : formattedIngredients;
+    // }
 
-      query = searchKey.isNotEmpty
-          ? '$searchKey${formattedIngredients.isNotEmpty ? '%2C$formattedIngredients' : ''}'
-          : formattedIngredients;
-    }
+    String query = searchKey.isNotEmpty ? '&q=$searchKey' : '';
 
     final String url = nextUrl ??
-        '$baseUrl/api/recipes/v2?type=public&q=$query&app_id=$appId&app_key=$appKey$queryParams$filters';
+        '$baseUrl/api/recipes/v2?type=public$query&app_id=$appId&app_key=$appKey$queryParams$filters';
 
     // If cache contains the URL, check the cache duration
     if (_cache.containsKey(url)) {
