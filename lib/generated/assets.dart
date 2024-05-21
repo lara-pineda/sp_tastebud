@@ -81,7 +81,8 @@ class Assets {
       'lib/features/auth/data/user_repository.dart';
   static const String dataViewRecipeRepository =
       'lib/features/recipe/view-recipe/data/view_recipe_repository.dart';
-  static const String filterFilterRow = 'lib/shared/filter/custom_filter.dart';
+  static const String filterCustomFilter =
+      'lib/shared/filter/custom_filter.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesAppIcon = 'assets/images/AppIcon.png';
   static const String imagesBackground = 'assets/images/Background.png';
@@ -155,6 +156,8 @@ class Assets {
   static const String utilsLoadSvg = 'lib/core/utils/load_svg.dart';
   static const String utilsUserNotFoundException =
       'lib/core/utils/user_not_found_exception.dart';
+  static const String viewRecipeFoodDatabaseApi =
+      'lib/features/recipe/view-recipe/food_database_api.dart';
   static const String viewRecipeIngredientSubstitutionApi =
       'lib/features/recipe/view-recipe/ingredient_substitution_api.dart';
 }

@@ -232,6 +232,29 @@ class _SignupState extends State<SignupPage> {
 
             // email address
             const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 5,
+                  horizontal: 3,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      'Please fill in the following details to get registered.',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black87,
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                )),
+
+            SizedBox(height: (20.toVHLength).toPX()),
+
+            // email address
+            const Padding(
               padding: EdgeInsets.symmetric(
                 vertical: 5,
               ),

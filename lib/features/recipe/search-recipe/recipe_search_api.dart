@@ -12,7 +12,6 @@ class RecipeSearchAPI {
   static Future<Map<String, dynamic>> searchRecipes({
     required String searchKey,
     required String queryParams,
-    // required List<String> ingredients,
     required String filters,
     String? nextUrl,
     bool forceUpdate = false, // for clearing cache
@@ -21,17 +20,6 @@ class RecipeSearchAPI {
     if (forceUpdate) {
       _cache.clear();
     }
-
-    // Construct the base query with searchKey and ingredients
-    // if (searchKey.isNotEmpty || ingredients.isNotEmpty) {
-    //   String formattedIngredients = ingredients
-    //       .map((ingredient) => ingredient.toLowerCase().replaceAll(' ', '%20'))
-    //       .join('%2C');
-    //
-    //   query = searchKey.isNotEmpty
-    //       ? '$searchKey${formattedIngredients.isNotEmpty ? '%2C$formattedIngredients' : ''}'
-    //       : formattedIngredients;
-    // }
 
     String query = searchKey.isNotEmpty ? '&q=$searchKey' : '';
 

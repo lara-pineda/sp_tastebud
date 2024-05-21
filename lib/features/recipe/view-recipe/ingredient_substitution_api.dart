@@ -4,6 +4,30 @@ import 'package:openapi/api.dart';
 import 'model/ingredient_substitute_response_model.dart';
 
 class IngredientSubstitutionAPI {
+  static const String apiKey = '1c91b8b1f14e4993abc834a80a93c564';
+  static const String baseUrl =
+      'https://api.spoonacular.com/food/ingredients/substitutes';
+
+  static Future<IngredientSubstituteResponseSpoonacular?>
+      getIngredientSubstitute({String query = ''}) async {
+    final url = '$baseUrl?ingredientName=$query&apiKey=$apiKey';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        return IngredientSubstituteResponseSpoonacular.fromJson(jsonResponse);
+      } else {
+        print('Failed to load ingredient substitutes');
+        return null;
+      }
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
   void getIngredientSubstitutesRapidAPI(String ingredientName) async {
     // pre-defined headers
     final Map<String, String> headers = {
@@ -26,7 +50,7 @@ class IngredientSubstitutionAPI {
       if (response.statusCode == 200) {
         var jsonResponse = json.decode(response.body);
         var ingredientSubstitutes =
-            IngredientSubstituteResponse.fromJson(jsonResponse);
+            IngredientSubstituteResponseRapidAPI.fromJson(jsonResponse);
 
         // use `ingredientSubstitutes` to access the properties
         print('Status: ${ingredientSubstitutes.status}');
@@ -40,57 +64,4 @@ class IngredientSubstitutionAPI {
       print('An error occurred: $e');
     }
   }
-
-  // void setupSpoonacularAPI(String ingredientName) async {
-  //   final apiInstance = DefaultApi();
-  //   final analyzeRecipeRequest =
-  //       AnalyzeRecipeRequest(); // example request body.
-  //   const language = 'en';
-  //   const includeNutrition = false;
-  //   const includeTaste = false;
-  //
-  //   try {
-  //     // TODO Configure API key authorization: apiKeyScheme
-  //     defaultApiClient.authentication?.apiKey =
-  //         '1c91b8b1f14e4993abc834a80a93c564';
-  //     // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-  //     defaultApiClient
-  //         .getAuthentication<ApiKeyAuth>('apiKeyScheme')
-  //         .apiKeyPrefix = 'Bearer';
-  //
-  //     try {
-  //       final result = apiInstance.analyzeRecipe(analyzeRecipeRequest,
-  //           language: language,
-  //           includeNutrition: includeNutrition,
-  //           includeTaste: includeTaste);
-  //       print(result);
-  //     } catch (e) {
-  //       print('Exception when calling DefaultApi->analyzeRecipe: $e\n');
-  //     }
-  //   } catch (e) {
-  //     print("Exception when calling RecipeApi: $e\n");
-  //   }
-  // }
-  //
-  // void getIngredientSubstituteSpoonacular(String ingredientName) {
-  //   // TODO Configure API key authorization: apiKeyScheme
-  //   defaultApiClient.getAuthentication<ApiKeyAuth>('apiKeyScheme').apiKey =
-  //       '1c91b8b1f14e4993abc834a80a93c564';
-  //   // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-  //   //defaultApiClient.getAuthentication<ApiKeyAuth>('apiKeyScheme').apiKeyPrefix = 'Bearer';
-  //
-  //   final encodedIngredientName = ingredientName.replaceAll(' ', '%20');
-  //   print(encodedIngredientName);
-  //   // var url = Uri.parse('$baseUrl?ingredientName=$encodedIngredientName');
-  //
-  //   final api_instance = IngredientsApi();
-  //
-  //   try {
-  //     final result = api_instance.getIngredientSubstitutes(ingredientName);
-  //     print(result);
-  //   } catch (e) {
-  //     print(
-  //         'Exception when calling IngredientsApi->getIngredientSubstitutes: $e\n');
-  //   }
-  // }
 }

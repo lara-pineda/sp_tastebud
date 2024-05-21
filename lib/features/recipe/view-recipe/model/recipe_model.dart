@@ -19,7 +19,7 @@ class Recipe {
   final int totalTime;
   final List<String> cuisineType;
   final List<String> mealType;
-  // final List<String> dishType;
+  final List<String> dishType;
   // final List<String> instructions;
   final List<String> tags;
   // final String externalId;
@@ -48,7 +48,7 @@ class Recipe {
     required this.totalTime,
     required this.cuisineType,
     required this.mealType,
-    // required this.dishType,
+    required this.dishType,
     // required this.instructions,
     required this.tags,
     // required this.externalId,
@@ -83,7 +83,7 @@ class Recipe {
         totalTime: (json['totalTime'] as num?)?.toInt() ?? 0,
         cuisineType: List<String>.from(json['cuisineType'] ?? []),
         mealType: List<String>.from(json['mealType'] ?? []),
-        // dishType: List<String>.from(json['dishType']),
+        dishType: List<String>.from(json['dishType'] ?? []),
         // instructions: List<String>.from(json['instructions']),
         tags: List<String>.from(json['tags'] ?? []),
         // externalId: json['externalId'],

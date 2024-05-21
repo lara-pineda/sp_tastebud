@@ -15,12 +15,11 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     on<ChangeEmail>(_onChangeEmail);
   }
 
-  // New method to get all user preferences as a single string
+  // Method to get all user preferences as a single string. Does not include user allergies.
   String getUserPreferences() {
     if (state is UserProfileLoaded) {
       final loadedState = state as UserProfileLoaded;
       return _buildHealthTags(loadedState.dietaryPreferences) +
-          _buildHealthTags(loadedState.allergies) +
           _mapNutrients(loadedState.macronutrients, Options.macronutrients,
               Options.nutrientTag1) +
           _mapNutrients(loadedState.micronutrients, Options.micronutrients,
@@ -28,13 +27,25 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     } else if (state is UserProfileUpdated) {
       final updatedState = state as UserProfileUpdated;
       return _buildHealthTags(updatedState.dietaryPreferences) +
-          _buildHealthTags(updatedState.allergies) +
           _mapNutrients(updatedState.macronutrients, Options.macronutrients,
               Options.nutrientTag1) +
           _mapNutrients(updatedState.micronutrients, Options.micronutrients,
               Options.nutrientTag2);
     } else {
       return ''; // Return an empty string if user preferences are not loaded
+    }
+  }
+
+  // Method to get specifically user allergens as a single string only
+  String getUserAllergens() {
+    if (state is UserProfileLoaded) {
+      final loadedState = state as UserProfileLoaded;
+      return _buildHealthTags(loadedState.allergies);
+    } else if (state is UserProfileUpdated) {
+      final updatedState = state as UserProfileUpdated;
+      return _buildHealthTags(updatedState.allergies);
+    } else {
+      return ''; // Return an empty string if user profile details are not loaded
     }
   }
 

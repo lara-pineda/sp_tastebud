@@ -1,8 +1,8 @@
+import 'dart:async';
 import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'dart:async';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/shared/filter/custom_filter.dart';
 import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
@@ -59,7 +59,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
       if (_userProfileBloc.state is UserProfileLoaded) {
         if (_ingredientsBloc.state is IngredientsLoaded) {
           if (_recipeCardBloc.state is RecipeCardUpdated) {
-            print('111111');
             _appRefresh = true;
             _nextUrl = null; // Reset next URL here
             // _getAllIngredients();
@@ -74,7 +73,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
     _userProfileBloc.stream.listen((state) {
       print(state);
       if (state is UserProfileLoaded || state is UserProfileUpdated) {
-        print('22222');
         _initializeQueries();
         _recipes.clear();
         _appRefresh = true;
@@ -109,7 +107,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       setState(() {
-        print('4444');
         _searchKey = _searchController.text;
         _recipes.clear();
         _nextUrl = null;
@@ -120,13 +117,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
   void _initializeQueries() {
     _userPreferences = _userProfileBloc.getUserPreferences();
-    print('initialize queries: $_userPreferences');
   }
-
-  // // Get all ingredients from IngredientsBloc
-  // void _getAllIngredients() {
-  //   _allIngredients = _ingredientsBloc.allIngredients;
-  // }
 
   Future<void> _loadMoreRecipes(String searchKey,
       {bool forceUpdate = false}) async {
@@ -189,7 +180,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
           queryParams: _userPreferences,
           nextUrl: _nextUrl,
           filters: filterQuery,
-          // ingredients: _allIngredients,
           forceUpdate: forceUpdate,
         );
 
@@ -220,22 +210,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
         _initialLoadComplete = true; // Mark initial load as complete
       });
     }
-  }
-
-  String buildHealthTags(List<dynamic> tags) {
-    return tags
-        .map((tag) =>
-            '&health=${tag.toString().toLowerCase().replaceAll(" ", "-")}')
-        .join('');
-  }
-
-  String mapNutrients(List<dynamic> nutrients, List<String> optionToMap,
-      List<String> tagToMap) {
-    Map<String, String> tagMapMacro = Map.fromIterables(optionToMap, tagToMap);
-    return nutrients
-        .map((nutrient) =>
-            '&nutrients%5B${tagMapMacro[nutrient.toString()]}%5D=0%2B')
-        .join('');
   }
 
   String _buildFilterQuery() {

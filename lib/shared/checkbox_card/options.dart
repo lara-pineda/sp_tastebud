@@ -261,14 +261,17 @@ class Options {
   ];
   static const List<String> baking = [
     'Buttermilk',
+    'Condensed milk',
     'Cornstarch',
     'Cream',
     'Chocolate chips',
     'Condensed milk',
+    'Evaporated milk',
     'Heavy cream',
     'Margarine',
     'Milk powder',
     'Shortening',
+    'Whole milk',
     'Whipped cream',
     'Yeast',
   ];

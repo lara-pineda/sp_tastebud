@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
+import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
 import '../../model/recipe_model.dart';
+import '../../food_database_api.dart';
 import 'info_row.dart';
 
-class IngredientsTab extends StatelessWidget {
+class IngredientsTab extends StatefulWidget {
   final Recipe recipe;
   final Iterable<String> allIngredients;
 
@@ -12,6 +15,55 @@ class IngredientsTab extends StatelessWidget {
     required this.recipe,
     required this.allIngredients,
   });
+
+  @override
+  State<IngredientsTab> createState() => _IngredientsTabState();
+}
+
+class _IngredientsTabState extends State<IngredientsTab> {
+  late UserProfileBloc _userProfileBloc;
+  late List<String> userAllergens;
+
+  @override
+  void initState() {
+    super.initState();
+    _userProfileBloc = GetIt.instance<UserProfileBloc>();
+    userAllergens = _userProfileBloc
+        .getUserAllergens()
+        .split('&health=')
+        .where((e) => e.isNotEmpty)
+        .toList()
+        .map((allergen) => allergenToHealthLabelMap[allergen] ?? allergen)
+        .toList();
+  }
+
+  Future<List<String>> fetchHealthLabelsOfIngredient(String foodId) async {
+    try {
+      final response = await FoodDatabaseAPI.getNutritionalInfo(foodId);
+      return List<String>.from(response['healthLabels']);
+    } catch (e) {
+      print('Error fetching health labels: $e');
+      return [];
+    }
+  }
+
+  // Define a mapping between user allergens and health labels
+  static const Map<String, String> allergenToHealthLabelMap = {
+    'alcohol-free': 'ALCOHOL_FREE',
+    'celery-free': 'CELERY_FREE',
+    'crustacean-free': 'CRUSTACEAN_FREE',
+    'dairy-free': 'DAIRY_FREE',
+    'egg-free': 'EGG_FREE',
+    'fish-free': 'FISH_FREE',
+    'gluten-free': 'GLUTEN_FREE',
+    'mollusk-free': 'MOLLUSK_FREE',
+    'mustard-free': 'MUSTARD_FREE',
+    'peanut-free': 'PEANUT_FREE',
+    'pork-free': 'PORK_FREE',
+    'red-meat-free': 'RED_MEAT_FREE',
+    'soy-free': 'SOY_FREE',
+    'wheat-free': 'WHEAT_FREE',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -24,45 +76,122 @@ class IngredientsTab extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(10),
               child: Text(
-                  'Note: Texts colored in red mean that the ingredient is missing from your inventory or it does not fit your preferences.',
-                  style: TextStyle(
-                      color: Colors.black54,
-                      fontFamily: 'Inter',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400)),
+                'Note: Texts colored in red mean that the ingredient is missing from your inventory while texts colored in green are identified as allergens according to you user profile.',
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontFamily: 'Inter',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400),
+              ),
             ),
-            ...recipe.ingredients.map((line) {
-              bool containsIngredient = allIngredients.any((ingredient) =>
-                  line.food.toLowerCase().contains(ingredient.toLowerCase()));
+            ...widget.recipe.ingredients.map((line) {
+              return FutureBuilder<List<String>>(
+                future: fetchHealthLabelsOfIngredient(line.foodId),
+                builder: (context, snapshot) {
+                  bool containsIngredient = widget.allIngredients.any(
+                      (ingredient) => line.food
+                          .toLowerCase()
+                          .contains(ingredient.toLowerCase()));
 
-              return InfoRow(
-                columns: [
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "> ",
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.0,
-                            color: AppColors.purpleColor,
-                          ),
-                        ),
-                        TextSpan(
-                          text: line.text.replaceAll('Â', ''),
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14.0,
-                            color:
-                                containsIngredient ? Colors.black : Colors.red,
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return InfoRow(
+                      columns: [
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "> ",
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16.0,
+                                  color: AppColors.purpleColor,
+                                ),
+                              ),
+                              TextSpan(
+                                text: line.text.replaceAll('Â', ''),
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14.0,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                ],
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    final healthLabels = snapshot.data ?? [];
+                    final missingAllergens = userAllergens
+                        .where((allergen) => !healthLabels.contains(allergen))
+                        .toList()
+                        .map((allergen) =>
+                            allergen.toLowerCase().replaceAll("_", "-"));
+                    ;
+                    final isAllergen = missingAllergens.isNotEmpty;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InfoRow(
+                          columns: [
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "> ",
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16.0,
+                                      color: AppColors.purpleColor,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: line.text.replaceAll('Â', ''),
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.0,
+                                      color: isAllergen
+                                          ? Colors.green
+                                          : (containsIngredient
+                                              ? Colors.black
+                                              : Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (isAllergen)
+                          Padding(
+                              padding: EdgeInsets.only(left: 50),
+                              // alignment: Alignment.centerRight,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "*The above ingredient is not ${missingAllergens.join(', ')}.",
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.0,
+                                      color: Colors.black87,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                  // Display substitute ingredients here
+                                ],
+                              )),
+                      ],
+                    );
+                  }
+                },
               );
             }),
           ],

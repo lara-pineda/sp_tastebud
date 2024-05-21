@@ -23,7 +23,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -45,7 +45,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -55,7 +55,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                   ),
                 ),
               ],
@@ -67,7 +67,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -76,7 +76,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                   ),
                   textAlign: TextAlign.end,
                 ),
@@ -89,7 +89,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -103,7 +103,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                   ),
                   textAlign: TextAlign.end,
                 ),
@@ -116,7 +116,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -130,7 +130,36 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
+                  ),
+                  textAlign: TextAlign.end,
+                ),
+              ],
+            ),
+            InfoRow(
+              columns: [
+                Text(
+                  'Dish Type',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14.0,
+                    color: AppColors.purpleColor,
+                  ),
+                ),
+                Text(
+                  recipe.dishType.isNotEmpty
+                      ? recipe.dishType
+                          .map((type) {
+                            return capitalizeFirstLetters(type);
+                          })
+                          .toList()
+                          .join(', ')
+                      : 'N/A',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14.0,
                   ),
                   textAlign: TextAlign.end,
                 ),
@@ -143,7 +172,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -152,7 +181,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                   ),
                   softWrap: true,
                   overflow: TextOverflow.visible,

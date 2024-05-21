@@ -63,12 +63,9 @@ sp_tastebud/
 
 ## Features TODO
 
-TODO
--   substitute recipe
--   wag siguro ilagay sa query allergies para lumabas pa rin sa results and mapakita substitute ingredients?
--   confirmation windows for saving changes when switching tabs (dropped; baka masyadoong disruptive sa user experience)
 
 SUGGESTIONS
+-   confirmation windows for saving changes when switching tabs (dropped)
 -   add collection for rejected recipes (done)
 -   add more information regarding options (done)
 -   add more filters (done)
