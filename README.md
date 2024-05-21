@@ -25,7 +25,6 @@ sp_tastebud/
     │   ├── config/                             # Essential for the app
     │   │   ├── app_router.dart                 # Defines routes for navigation
     │   │   ├── assets_path.dart                # Resource path for assets
-    │   │   ├── connectivity_service.dart       # Checker for internet connection on device
     │   │   └── service_locator.dart            # Dependency injection
     │   │
     │   ├── themes/                             # Custom app theme
@@ -54,6 +53,7 @@ sp_tastebud/
     │   ├── checkbox_card/
     │   ├── connectivity/
     │   ├── custom_dialog/
+    │   ├── filter/
     │   ├── recipe_card/
     │   └── search_bar/
     │
@@ -63,6 +63,8 @@ sp_tastebud/
 
 ## Features TODO
 
+TODO
+-   add image for app startup: "Type on the searchbar, use filters or update your profile to start searching!"
 
 SUGGESTIONS
 -   confirmation windows for saving changes when switching tabs (dropped)
@@ -84,8 +86,12 @@ Features:
 2. Update User Profile 
 3. Update Ingredients
 4. Search Recipe
-5. Filter Recipe
-6. Recipe Collection
+5. View Recipe
+   - missing ingredients
+   - allergens
+   - allergen substitutes (TODO)
+6. Filter Recipe
+7. Recipe Collection
    - Saved Recipes
         > Add from search recipe page, view recipe page
         > Remove from search recipe page, view recipe page, saved recipe collection page
