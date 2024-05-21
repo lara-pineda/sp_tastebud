@@ -31,7 +31,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
   final TextEditingController _searchController = TextEditingController();
 
-  // List<String> _allIngredients = [];
   final List<dynamic> _recipes = [];
   bool _isLoading = false;
   bool _initialLoadComplete = false;
@@ -83,18 +82,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
         _loadMoreRecipes(_searchKey);
       }
     });
-
-    // no need to listen to ingredients bloc string anymore because ingredients are no longer included in search query string
-    // _ingredientsBloc.stream.listen((state) {
-    //   if (state is IngredientsLoaded || state is IngredientsUpdated) {
-    //     print('33333');
-    //     _getAllIngredients();
-    //     _recipes.clear();
-    //     _appRefresh = true;
-    //     _nextUrl = null; // Reset if there are updates
-    //     _loadMoreRecipes(_searchKey, forceUpdate: true);
-    //   }
-    // });
 
     // Listener to handle changes in the RecipeCardBloc
     _recipeCardBloc.stream.listen((state) {
@@ -154,7 +141,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
         queryParams: _userPreferences,
         nextUrl: _nextUrl,
         filters: filterQuery,
-        // ingredients: _allIngredients,
         forceUpdate: forceUpdate,
       );
 
