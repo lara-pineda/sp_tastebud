@@ -99,6 +99,7 @@ class Assets {
   static const String imagesRejectedRecipe = 'assets/images/rejectedRecipe.png';
   static const String imagesSavedRecipe = 'assets/images/savedRecipe.png';
   static const String imagesStarIcon = 'assets/images/StarIcon.svg';
+  static const String imagesStartSearching = 'assets/images/startSearching.png';
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
   static const String libScratch = 'lib/scratch.dart';
@@ -125,6 +126,8 @@ class Assets {
       'lib/features/auth/ui/forgot_password_ui.dart';
   static const String uiIngredientManagementUi =
       'lib/features/ingredients/ui/ingredient_management_ui.dart';
+  static const String uiIngredientSubstitutesDailog =
+      'lib/features/recipe/view-recipe/ui/ingredient_substitutes_dialog.dart';
   static const String uiLoginUi = 'lib/features/auth/ui/login_ui.dart';
   static const String uiMainMenuUi = 'lib/features/auth/ui/main_menu_ui.dart';
   static const String uiNavigationBarItems =

@@ -35,6 +35,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
   bool _isLoading = false;
   bool _initialLoadComplete = false;
   bool _appRefresh = false;
+  // bool _isFirstTime = true;
   String? _nextUrl;
   String _searchKey = '';
   String _userPreferences = '';
@@ -76,7 +77,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
         _initializeQueries();
         _recipes.clear();
         _appRefresh = true;
-        _nextUrl = null; // Reset if there are updates
+        _nextUrl = null; // Reset if there are update to user profile
         _loadMoreRecipes(_searchKey);
       }
     });
@@ -154,6 +155,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
           }
           _isLoading = false;
           _initialLoadComplete = true;
+          // _isFirstTime = false;
         });
       }
     } catch (e) {
@@ -195,6 +197,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
             }
             _isLoading = false;
             _initialLoadComplete = true; // Mark initial load as complete
+            // _isFirstTime = false;
           });
         }
         return; // Exit the retry loop if successful
@@ -416,8 +419,34 @@ class _SearchRecipeState extends State<SearchRecipe> {
         // ),
         // SizedBox(height: (10.toVHLength).toPX()),
 
-        if (_recipes.isEmpty && !_isLoading && _initialLoadComplete)
-          // If no matching recipe
+        if (_recipes.isEmpty &&
+            _searchKey.isEmpty &&
+            selectedFilters.values.every((set) => set.isEmpty))
+          Expanded(
+            child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 30),
+                    Center(
+                      child: Text(
+                        "Type on the searchbar,\nor use the filters to start searching!",
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 14,
+                          color: Colors.black87,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Center(
+                      child: Image.asset(Assets.imagesStartSearching),
+                    ),
+                  ],
+                )),
+          )
+        else if (_recipes.isEmpty && !_isLoading && _initialLoadComplete)
           Expanded(
               child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),

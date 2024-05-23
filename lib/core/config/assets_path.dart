@@ -17,6 +17,7 @@ class Assets {
   static const String rejectedRecipe = 'assets/images/rejectedRecipe.png';
   static const String noMatchingRecipe = 'assets/images/noMatchingRecipe.png';
   static const String emptyCollection = 'assets/images/emptyCollection.png';
+  static const String imagesStartSearching = 'assets/images/startSearching.png';
 }
 
 // USAGE

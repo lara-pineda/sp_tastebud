@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
+import '../../ingredient_substitution_api.dart';
 import '../../model/recipe_model.dart';
 import '../../food_database_api.dart';
+import '../ingredient_substitutes_dialog.dart';
 import 'info_row.dart';
 
 class IngredientsTab extends StatefulWidget {
@@ -47,6 +49,25 @@ class _IngredientsTabState extends State<IngredientsTab> {
     }
   }
 
+  Future<void> _showSubstituteDialog(String ingredient) async {
+    final encodedIngredient = ingredient.toLowerCase();
+    final substitutes = await IngredientSubstitutionAPI.getIngredientSubstitute(
+      query: encodedIngredient,
+    );
+
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return IngredientSubstitutesDialog(
+            substitutes: substitutes?.substitutes ?? [],
+            message: substitutes?.message ?? '',
+          );
+        },
+      );
+    }
+  }
+
   // Define a mapping between user allergens and health labels
   static const Map<String, String> allergenToHealthLabelMap = {
     'alcohol-free': 'ALCOHOL_FREE',
@@ -76,7 +97,7 @@ class _IngredientsTabState extends State<IngredientsTab> {
             Padding(
               padding: EdgeInsets.all(10),
               child: Text(
-                'Note: Texts colored in red mean that the ingredient is missing from your inventory while texts colored in green are identified as allergens according to you user profile.',
+                'Note: Texts colored in red mean that the ingredient is missing from your inventory while texts colored in green are identified as allergens according to your user profile.',
                 style: TextStyle(
                     color: Colors.black54,
                     fontFamily: 'Inter',
@@ -131,7 +152,6 @@ class _IngredientsTabState extends State<IngredientsTab> {
                         .toList()
                         .map((allergen) =>
                             allergen.toLowerCase().replaceAll("_", "-"));
-                    ;
                     final isAllergen = missingAllergens.isNotEmpty;
 
                     return Column(
@@ -172,22 +192,41 @@ class _IngredientsTabState extends State<IngredientsTab> {
                         if (isAllergen)
                           Padding(
                               padding: EdgeInsets.only(left: 50),
-                              // alignment: Alignment.centerRight,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "*The above ingredient is not ${missingAllergens.join(', ')}.",
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14.0,
-                                      color: Colors.black87,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                  ),
-                                  // Display substitute ingredients here
-                                ],
-                              )),
+                              child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "*The above ingredient is not ${missingAllergens.join(', ')}.",
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14.0,
+                                          color: Colors.black87,
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                        textAlign: TextAlign.right,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () =>
+                                            _showSubstituteDialog(line.food),
+                                        child: Text(
+                                          "See suggested substitutes",
+                                          style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14.0,
+                                            color: Colors.black87,
+                                            fontStyle: FontStyle.italic,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                      // Display substitute ingredients here
+                                    ],
+                                  ))),
                       ],
                     );
                   }

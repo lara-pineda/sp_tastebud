@@ -1,6 +1,5 @@
 import 'dart:convert'; // Import JSON decoder
 import 'package:http/http.dart' as http;
-import 'package:openapi/api.dart';
 import 'model/ingredient_substitute_response_model.dart';
 
 class IngredientSubstitutionAPI {
@@ -17,7 +16,19 @@ class IngredientSubstitutionAPI {
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-        return IngredientSubstituteResponseSpoonacular.fromJson(jsonResponse);
+
+        // Check if substitutes are found
+        if (jsonResponse.containsKey('substitutes')) {
+          // Substitutes found, parse the response
+          return IngredientSubstituteResponseSpoonacular.fromJson(jsonResponse);
+        } else {
+          // No substitutes found, construct response manually
+          return IngredientSubstituteResponseSpoonacular(
+            ingredient: query,
+            substitutes: [],
+            message: jsonResponse['message'],
+          );
+        }
       } else {
         print('Failed to load ingredient substitutes');
         return null;

@@ -119,6 +119,7 @@ flutter:
     - assets/images/rejectedRecipe.png
     - assets/images/savedRecipe.png
     - assets/images/StarIcon.svg
+    - assets/images/startSearching.png
     - lib/features/navigation/ui/
 
   # An image asset can refer to one or more resolution-specific "variants", see

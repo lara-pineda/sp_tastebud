@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/config/app_router.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
 import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
@@ -10,6 +9,7 @@ import 'core/config/service_locator.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/user-profile/bloc/user_profile_bloc.dart';
 import 'firebase_options.dart';
+import 'dart:io';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +24,9 @@ void main() async {
 
   // log all transitions, including closures
   Bloc.observer = SimpleBlocObserver();
+
+  // for post request
+  HttpOverrides.global = MyHttpOverrides();
 
   runApp(MyApp());
 }
@@ -99,44 +102,6 @@ class MyApp extends StatelessWidget {
                     }
                   },
                   child: child!,
-                  // builder: (context, child) => BlocListener<AuthBloc, AuthState>(
-                  //       listener: (context, state) {
-                  //         if (state is AuthSuccess) {
-                  //           // Trigger user profile and ingredients fetch upon successful authentication.
-                  //           getIt<UserProfileBloc>().add(LoadUserProfile());
-                  //           getIt<IngredientsBloc>().add(LoadIngredients());
-                  //           getIt<RecipeCardBloc>().add(LoadInitialData());
-                  //         }
-                  //       },
-                  //       child: child!,
-                  // child: BlocListener<ConnectivityCubit, ConnectivityStatus>(
-                  //   listener: (context, status) {
-                  //     if (status == ConnectivityStatus.disconnected) {
-                  //       WidgetsBinding.instance.addPostFrameCallback((_) {
-                  //         if (context.mounted) {
-                  //           _showNoInternetDialog(context);
-                  //         }
-                  //       });
-                  //     } else {
-                  //       WidgetsBinding.instance.addPostFrameCallback((_) {
-                  //         if (context.mounted && Navigator.canPop(context)) {
-                  //           Navigator.of(context, rootNavigator: true)
-                  //               .popUntil((route) => route.isFirst);
-                  //         }
-                  //       });
-                  //     }
-                  //   },
-                  //   child: MaterialApp.router(
-                  //     debugShowCheckedModeBanner: false,
-                  //     title: 'TasteBud',
-                  //     theme: ThemeData(
-                  //       colorScheme: ColorScheme.fromSeed(seedColor: Colors.black87),
-                  //       scaffoldBackgroundColor: Colors.white,
-                  //       useMaterial3: true,
-                  //     ),
-                  //     routerConfig: AppRoutes.router,
-                  //   ),
-                  // ),
                 )));
   }
 }
@@ -146,5 +111,14 @@ class SimpleBlocObserver extends BlocObserver {
   void onClose(BlocBase bloc) {
     super.onClose(bloc);
     print('${bloc.runtimeType} is closing');
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

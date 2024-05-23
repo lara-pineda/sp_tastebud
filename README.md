@@ -24,8 +24,8 @@ sp_tastebud/
     ├── core/
     │   ├── config/                             # Essential for the app
     │   │   ├── app_router.dart                 # Defines routes for navigation
-    │   │   ├── assets_path.dart                # Resource path for assets
-    │   │   └── service_locator.dart            # Dependency injection
+    │   │   ├── assets_path.dart                # Resource path for image assets
+    │   │   └── service_locator.dart            # For dependency injection
     │   │
     │   ├── themes/                             # Custom app theme
     │   │   ├── app_palette.dart
@@ -62,9 +62,6 @@ sp_tastebud/
 ```
 
 ## Features TODO
-
-TODO
--   add image for app startup: "Type on the searchbar, use filters or update your profile to start searching!"
 
 SUGGESTIONS
 -   confirmation windows for saving changes when switching tabs (dropped)
