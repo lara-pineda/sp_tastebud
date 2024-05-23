@@ -21,7 +21,8 @@ class AppBottomNavBar extends StatelessWidget {
     // Dispatch the TabChange event to update the state
     context.read<AppNavigationBloc>().add(TabChange(tabIndex: index));
 
-    bool initialLocation = index == 2;
+    bool initialLocation = index ==
+        2; // make navigation return to initial location only for recipe collection tab
 
     navigationShell.goBranch(
       index,
