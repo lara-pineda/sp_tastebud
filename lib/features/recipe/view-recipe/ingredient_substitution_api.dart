@@ -1,4 +1,4 @@
-import 'dart:convert'; // Import JSON decoder
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'model/ingredient_substitute_response_model.dart';
 
@@ -49,7 +49,6 @@ class IngredientSubstitutionAPI {
     const String baseUrl =
         "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/ingredients/substitutes";
 
-    // final encodedIngredientName = ingredientName.replaceAll(' ', '%20');
     final encodedIngredientName = Uri.encodeComponent(ingredientName);
     print(encodedIngredientName);
 

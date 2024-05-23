@@ -124,7 +124,6 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
                     : Alignment.bottomLeft;
 
                 return Container(
-                  // color: AppColors.orangeColor,
                   color: Colors.transparent,
                   padding: EdgeInsets.only(top: 15, left: 25.0, bottom: 16.0),
                   alignment: titleAlignment,
@@ -177,7 +176,6 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
                     },
                   ),
           ),
-          // SizedBox(height: (20.toVHLength).toPX()),
         ],
       ),
     );

@@ -141,11 +141,8 @@ class _LoginState extends State<LoginPage> {
                       SnackBar(content: Text("Login successful!")),
                     );
                     context.go('/search');
-                    // GoRouter.of(context).push('/search');
                     // Login failed
                   } else if (state is AuthFailure) {
-                    // ScaffoldMessenger.of(context)
-                    //     .showSnackBar(SnackBar(content: Text(state.error)));
                     setState(() {
                       _errorMessage =
                           state.error; // Set the error message to be displayed
@@ -168,8 +165,6 @@ class _LoginState extends State<LoginPage> {
                             color: AppColors.orangeColor,
                           ),
                         ),
-
-                        // hand wave emoji here
                       ],
                     ),
 

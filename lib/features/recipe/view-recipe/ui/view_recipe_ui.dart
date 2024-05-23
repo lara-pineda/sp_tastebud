@@ -121,7 +121,7 @@ class _ViewRecipeState extends State<ViewRecipe>
       // Check if the widget is still mounted
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not launch $url')),
+          SnackBar(content: Text('Could not launch $url. Please try again.')),
         );
       }
     }
@@ -375,8 +375,6 @@ class _ViewRecipeState extends State<ViewRecipe>
                     Assets.imagesEdamamAttribution,
                     width: 250,
                     errorBuilder: (context, error, stackTrace) {
-                      // Print error to console
-                      print('Failed to load image: $error');
                       return Image.asset(
                         Assets.imagePlaceholder, // Use a local fallback image
                       );

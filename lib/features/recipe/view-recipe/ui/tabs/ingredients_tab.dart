@@ -44,7 +44,6 @@ class _IngredientsTabState extends State<IngredientsTab> {
       final response = await FoodDatabaseAPI.getNutritionalInfo(foodId);
       return List<String>.from(response['healthLabels']);
     } catch (e) {
-      print('Error fetching health labels: $e');
       return [];
     }
   }
@@ -106,6 +105,8 @@ class _IngredientsTabState extends State<IngredientsTab> {
               ),
             ),
             ...widget.recipe.ingredients.map((line) {
+              print('ingredient: $line');
+
               return FutureBuilder<List<String>>(
                 future: fetchHealthLabelsOfIngredient(line.foodId),
                 builder: (context, snapshot) {

@@ -71,7 +71,6 @@ class RecipeCollection extends StatelessWidget {
                   onTap: () => navigateToRecipePage(context, title),
                   child: _buildRecipeCard(title),
                 );
-                return _buildRecipeCard(title);
               }).toList(),
             ),
           )

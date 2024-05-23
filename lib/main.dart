@@ -34,32 +34,11 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  void _showNoInternetDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false, // make it uncloseable
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('No Internet Connection'),
-          content: Text(
-              'This app requires an internet connection. Please check your connection and try again.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                // The dialog cannot be closed until the connection is restored
-              },
-              child: Text('Retry'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
+        // global blocs
         providers: [
           BlocProvider<AuthBloc>(
             create: (context) => getIt<AuthBloc>(),

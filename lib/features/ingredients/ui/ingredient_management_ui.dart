@@ -413,13 +413,11 @@ class _IngredientsState extends State<IngredientManagement> {
             return FloatingActionButton(
               onPressed: isModified ? _handleConfirmSave : null,
               backgroundColor:
-                  // isModified ? Colors.white : Colors.grey[100],
                   isModified ? AppColors.orangeDisabledColor : Colors.grey[100],
               elevation: 4,
               child: Icon(
                 Icons.save_outlined,
                 color:
-                    // isModified ? Colors.black87 : Colors.grey[300],
                     isModified ? AppColors.orangeDarkerColor : Colors.grey[300],
               ),
             );

@@ -28,7 +28,6 @@ class _MainMenuState extends State<MainMenu> {
 
   // navigate to login page
   void signinClicked() {
-    print("sign in button clicked!");
     context.go("/login");
   }
 

@@ -56,12 +56,6 @@ class IngredientsBloc extends Bloc<IngredientsEvent, IngredientsState> {
         var fetchFishAndPoultry = data['fishAndPoultry'] as List<dynamic>;
         var fetchBaking = data['baking'] as List<dynamic>;
 
-        print("fetchPantryEssentials: $fetchPantryEssentials");
-        print("fetchMeat: $fetchMeat");
-        print("fetchVegetablesAndGreens: $fetchVegetablesAndGreens");
-        print("fetchFishAndPoultry: $fetchFishAndPoultry");
-        print("fetchBaking: $fetchBaking");
-
         emit(IngredientsLoaded(
           fetchPantryEssentials.cast<String>(),
           fetchMeat.cast<String>(),

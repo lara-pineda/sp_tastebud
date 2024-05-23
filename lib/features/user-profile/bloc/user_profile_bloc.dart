@@ -109,12 +109,6 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
         var fetchMacro = data['macronutrients'] as List<dynamic>;
         var fetchMicro = data['micronutrients'] as List<dynamic>;
 
-        print("fetchDietPref: $fetchDietPref");
-        print("fetchAllergies: $fetchAllergies");
-        print("fetchMacro: $fetchMacro");
-        print("fetchMicro: $fetchMicro");
-        print("email: $userEmail");
-
         // Update state with the loaded profile data
         emit(UserProfileLoaded(
             fetchDietPref.cast<String>(),

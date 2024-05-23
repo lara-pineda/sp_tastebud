@@ -121,8 +121,6 @@ class AppRoutes {
                             // Extract the 'collectionType' parameter from the route
                             final collectionType =
                                 state.pathParameters['collectionType']!;
-                            print(
-                                'collectiontype from parameter: $collectionType');
                             return MultiBlocProvider(
                               providers: [
                                 BlocProvider<RecipeCollectionBloc>.value(

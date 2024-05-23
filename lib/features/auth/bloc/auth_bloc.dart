@@ -47,7 +47,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       User user = await _userRepository.signIn(event.email, event.password);
       emit(AuthSuccess(user));
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       if (e.code == 'invalid-credential') {
         emit(AuthFailure('Incorrect email or password.'));
       } else if (e.code == 'invalid-email') {

@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../shared/connectivity/connectivity_service.dart';
+import 'package:sp_tastebud/shared/connectivity/connectivity_service.dart';
 
 //BLoCs
 import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';

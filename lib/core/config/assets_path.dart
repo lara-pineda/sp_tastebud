@@ -1,6 +1,4 @@
-// relative path for assets
-// for easy updates of paths
-
+/// Relative path for assets; for easy updates of paths
 class Assets {
   Assets._();
 
@@ -19,12 +17,3 @@ class Assets {
   static const String emptyCollection = 'assets/images/emptyCollection.png';
   static const String imagesStartSearching = 'assets/images/startSearching.png';
 }
-
-// USAGE
-
-// Image.asset(
-// Assets.imageLoading,
-// width: 24,
-// height: 24,
-// fit: BoxFit.contain,
-// )

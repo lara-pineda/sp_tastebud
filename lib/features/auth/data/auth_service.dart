@@ -1,5 +1,4 @@
-// Direct interaction with Firebase for authentication and user data initialization.
-
+/// Direct interaction with Firebase for authentication and user data initialization.
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sp_tastebud/core/utils/user_not_found_exception.dart';
@@ -38,7 +37,6 @@ class AuthService {
     String photoURL = user.photoURL ?? '';
 
     DocumentReference userDocRef = _firestore.collection('users').doc(user.uid);
-    print(userDocRef);
 
     // Firestore user data initialization
     await userDocRef.set({
@@ -83,14 +81,11 @@ class AuthService {
       // Execute the query and check if the document exists:
       QuerySnapshot querySnapshot = await queryByEmail.limit(1).get();
       if (querySnapshot.docs.isNotEmpty) {
-        print("User already exists.");
         return true;
       } else {
-        print("User doesn't exist.");
         return false;
       }
     } catch (e) {
-      print("Error checking user existence: $e");
       return false;
     }
   }
@@ -102,7 +97,6 @@ class AuthService {
       try {
         // User exists, send password reset email
         await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-        print("Reset email sent!");
       } on FirebaseAuthException catch (e) {
         throw FirebaseAuthException(code: e.code, message: e.message);
       }

@@ -529,8 +529,6 @@ class _SignupState extends State<SignupPage> {
 
                   // Signup failed
                 } else if (state is AuthFailure) {
-                  // ScaffoldMessenger.of(context)
-                  //     .showSnackBar(SnackBar(content: Text(state.error)));
                   // Show error message
                   setState(() {
                     _errorMessage =

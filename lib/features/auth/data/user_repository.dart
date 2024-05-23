@@ -1,6 +1,4 @@
-// Abstracts and exposes all the firebase functionalities provided by AuthService, possibly serving additional
-// data-related functionalities or as a facade for more complex data operations.
-
+/// Abstracts and exposes all the firebase functionalities provided by AuthService, possibly serving additional data-related functionalities or as a facade for more complex data operations.
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth_service.dart';
 

@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sp_tastebud/core/utils/extract_recipe_id.dart'; // Ensure the path is correct
+import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
 
 part 'recipe_event.dart';
 part 'recipe_state.dart';
@@ -45,7 +45,6 @@ class RecipeCardBloc extends Bloc<RecipeCardEvent, RecipeCardState> {
           'recipeUri': event.recipeUri,
           'timestamp': FieldValue.serverTimestamp(),
         });
-        print("added to firestore!");
         _addFavorite(recipeId, emit);
       }
     } catch (e) {
@@ -118,12 +117,10 @@ class RecipeCardBloc extends Bloc<RecipeCardEvent, RecipeCardState> {
 
   void _addFavorite(String recipeId, Emitter<RecipeCardState> emit) {
     if (state is RecipeCardUpdated) {
-      print("hereeee");
       final currentState = state as RecipeCardUpdated;
       final updatedFavorites = currentState.favorites.toSet()..add(recipeId);
       emit(currentState.copyWith(favorites: updatedFavorites));
     }
-    print("noooo");
   }
 
   void _removeFavorite(String recipeId, Emitter<RecipeCardState> emit) {

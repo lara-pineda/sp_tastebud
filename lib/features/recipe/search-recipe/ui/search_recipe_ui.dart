@@ -35,7 +35,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
   bool _isLoading = false;
   bool _initialLoadComplete = false;
   bool _appRefresh = false;
-  // bool _isFirstTime = true;
   String? _nextUrl;
   String _searchKey = '';
   String _userPreferences = '';
@@ -62,7 +61,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
           if (_recipeCardBloc.state is RecipeCardUpdated) {
             _appRefresh = true;
             _nextUrl = null; // Reset next URL here
-            // _getAllIngredients();
             _initializeQueries();
             _loadMoreRecipes('');
           }
@@ -72,7 +70,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
 
     // Create streams to listen to changes to other pages
     _userProfileBloc.stream.listen((state) {
-      print(state);
       if (state is UserProfileLoaded || state is UserProfileUpdated) {
         _initializeQueries();
         _recipes.clear();
@@ -150,16 +147,12 @@ class _SearchRecipeState extends State<SearchRecipe> {
         setState(() {
           if (newRecipes.isNotEmpty) {
             _recipes.addAll(newRecipes);
-          } else {
-            print("SEARCH RESULTS LIST EMPTY!");
           }
           _isLoading = false;
           _initialLoadComplete = true;
-          // _isFirstTime = false;
         });
       }
     } catch (e) {
-      print('Error: $e');
       _retryLoadRecipes(searchKey, forceUpdate: forceUpdate);
     }
   }
@@ -192,12 +185,9 @@ class _SearchRecipeState extends State<SearchRecipe> {
           setState(() {
             if (newRecipes.isNotEmpty) {
               _recipes.addAll(newRecipes);
-            } else {
-              print("SEARCH RESULTS LIST EMPTY!");
             }
             _isLoading = false;
             _initialLoadComplete = true; // Mark initial load as complete
-            // _isFirstTime = false;
           });
         }
         return; // Exit the retry loop if successful
@@ -359,7 +349,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
   Widget _buildSearchRecipeUI(UserProfileLoaded state) {
     if (_recipes.isEmpty && !_isLoading && !_initialLoadComplete) {
       _recipes.clear();
-      // _getAllIngredients();
       _initializeQueries();
     }
     return _buildRecipeList();
@@ -405,19 +394,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
         // Filters
         _buildFilterCategories(),
         SizedBox(height: (10.toVHLength).toPX()),
-
-        // // Apply Filters Button
-        // ElevatedButton(
-        //   onPressed: () {
-        //     _loadMoreRecipes(_searchKey);
-        //   },
-        //   child: Text('Apply Filters'),
-        //   style: ElevatedButton.styleFrom(
-        //     foregroundColor: AppColors.orangeDarkerColor,
-        //     backgroundColor: AppColors.orangeDisabledColor,
-        //   ),
-        // ),
-        // SizedBox(height: (10.toVHLength).toPX()),
 
         if (_recipes.isEmpty &&
             _searchKey.isEmpty &&

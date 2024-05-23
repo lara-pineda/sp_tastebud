@@ -11,10 +11,8 @@ class FoodDatabaseAPI {
 
   static Future<Map<String, dynamic>> getNutritionalInfo(String foodId) async {
     const String endpoint = '/api/food-database/v2/nutrients';
-
     final url = Uri.parse('$baseUrl$endpoint?app_id=$appId&app_key=$appKey');
 
-    print('Fetching with Food Database API: $url');
     // Build the request body
     final requestBody = {
       'ingredients': [

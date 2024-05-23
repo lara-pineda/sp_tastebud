@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../search-recipe/recipe_search_api.dart';
 
 class ViewRecipeRepository {
@@ -19,12 +18,6 @@ class ViewRecipeRepository {
     if (user == null) {
       throw Exception('No user logged in!');
     }
-
-    // print("in search repository");
-    // print(recipeName);
-    // print(image);
-    // print(source);
-    // print(recipeId);
 
     DocumentReference recipeRef = _firestore
         .collection('users')

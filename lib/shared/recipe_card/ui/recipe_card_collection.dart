@@ -85,8 +85,6 @@ class _RecipeCardCollectionState extends State<RecipeCardCollection> {
                         widget.imageUrl,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
-                          // Print error to console
-                          print('Failed to load image: $error');
                           return Image.asset(
                             Assets
                                 .imagePlaceholder, // Use a local fallback image

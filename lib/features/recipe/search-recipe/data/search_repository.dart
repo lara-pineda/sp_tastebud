@@ -14,12 +14,6 @@ class SearchRecipeRepository {
       throw Exception('No user logged in!');
     }
 
-    // print("in search repository");
-    // print(recipeName);
-    // print(image);
-    // print(source);
-    // print(recipeUri);
-
     DocumentReference recipeRef = _firestore
         .collection('users')
         .doc(user.uid)
@@ -47,12 +41,6 @@ class SearchRecipeRepository {
       throw Exception('No user logged in!');
     }
 
-    // print("in search repository");
-    // print(recipeName);
-    // print(image);
-    // print(source);
-    // print(recipeId);
-
     DocumentReference recipeRef = _firestore
         .collection('users')
         .doc(user.uid)
@@ -74,9 +62,6 @@ class SearchRecipeRepository {
   }
 
   Future<void> removeFromFavorites(String recipeId) async {
-    print('in remove from favorites, search repository');
-    print(recipeId);
-
     try {
       User? user = _firebaseAuth.currentUser;
       if (user == null) {
@@ -96,7 +81,6 @@ class SearchRecipeRepository {
 
       await recipeRef.delete();
     } catch (e) {
-      print(e);
       throw e;
     }
   }
@@ -116,7 +100,6 @@ class SearchRecipeRepository {
 
       await recipeRef.delete();
     } catch (e) {
-      print('Failed to remove from rejected: $e');
       throw Exception('Error removing recipe from rejected.');
     }
   }
