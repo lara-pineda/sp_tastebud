@@ -49,7 +49,7 @@ sp_tastebud/
     │   ├── recipe-collection/
     │   └── user-profile/
     │
-    ├── shared/                             # Reusable small, custom widgets used in the pages
+    ├── shared/                                 # Reusable small, custom widgets used in the pages
     │   ├── checkbox_card/
     │   ├── connectivity/
     │   ├── custom_dialog/
@@ -57,11 +57,19 @@ sp_tastebud/
     │   ├── recipe_card/
     │   └── search_bar/
     │
-    ├── firebase_options.dart               # For firebase
-    └── main.dart                           # Entry point that launches the application
+    ├── firebase_options.dart                   # For firebase
+    └── main.dart                               # Entry point that launches the application
 ```
 
 ## Features TODO
+- build with substitutes
+- build w/o substitutes
+- modified view collection page to only load recipes related to collection
+- added more text cleaning before displaying ingredient quantity
+- moved webview icon to overview page
+- automatically logs in the user if remember me is set to true
+- added loading dialog on main menu while logging in 
+- added cache clearing before logging in to prevent unnecessary api calls
 
 SUGGESTIONS
 -   confirmation windows for saving changes when switching tabs (dropped)

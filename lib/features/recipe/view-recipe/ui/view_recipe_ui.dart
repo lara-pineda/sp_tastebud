@@ -154,19 +154,6 @@ class _ViewRecipeState extends State<ViewRecipe>
                   onPressed: () => context.pop(),
                 ),
               ),
-              // webview icon
-              actions: [
-                Container(
-                    margin: EdgeInsets.only(right: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.white70,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.link),
-                      onPressed: () => _launchURL(recipe.url),
-                    ))
-              ],
               flexibleSpace: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
                   // Calculate opacity based on scroll

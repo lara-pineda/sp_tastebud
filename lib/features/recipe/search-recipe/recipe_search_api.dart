@@ -9,6 +9,11 @@ class RecipeSearchAPI {
   static final Map<String, CacheEntry> _cache = {};
   static const int cacheDuration = 3600;
 
+  // Add this method to clear the cache
+  static void clearCache() {
+    _cache.clear();
+  }
+
   static Future<Map<String, dynamic>> searchRecipes({
     required String searchKey,
     required String queryParams,
@@ -31,14 +36,12 @@ class RecipeSearchAPI {
       CacheEntry entry = _cache[url]!;
       final currentTime = DateTime.now().millisecondsSinceEpoch;
       if (currentTime - entry.timestamp < cacheDuration * 1000) {
-        print('Loading from cache: $url');
         return entry.data;
       } else {
         _cache.remove(url);
       }
     }
 
-    print('Fetching from API: $url');
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {

@@ -221,13 +221,29 @@ class _UserProfileState extends State<UserProfile> {
             child: BlocBuilder<AuthBloc, AuthState>(
               bloc: _authBloc,
               builder: (context, AuthState loginState) {
-                if (loginState is AuthFailure) {
+                if (loginState is AuthLoading) {
+                  // show loading dialog
+                  return Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ),
+                  );
+                } else if (loginState is AuthFailure) {
                   // Trigger navigation outside the build phase
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     context.go('/');
                   });
-                  // Return error text if login fails
-                  return Text("User not logged in.");
+                  return Container();
                 } else {
                   // If login is successful, proceed with UserProfileBloc
                   return BlocBuilder<UserProfileBloc, UserProfileState>(

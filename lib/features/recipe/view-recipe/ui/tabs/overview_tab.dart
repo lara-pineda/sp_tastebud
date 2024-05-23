@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
+import 'package:sp_tastebud/core/utils/capitalize_first_letter.dart';
 import '../../model/recipe_model.dart';
 import 'info_row.dart';
-import 'package:sp_tastebud/core/utils/capitalize_first_letter.dart';
 
 class OverviewTab extends StatelessWidget {
   final Recipe recipe;
 
   const OverviewTab({super.key, required this.recipe});
+
+  void _launchURL(BuildContext context, String? url) async {
+    if (url != null && await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not launch $url. Please try again.')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +29,38 @@ class OverviewTab extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           children: [
+            // webview link button here
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.only(right: 0.0),
+                    icon: Icon(Icons.link, color: AppColors.orangeDarkerColor),
+                    onPressed: () => _launchURL(context, recipe.url),
+                  ),
+                  TextButton(
+                    onPressed: () => _launchURL(context, recipe.url),
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.all(0)),
+                    ),
+                    child: Text(
+                      'View recipe instructions on web',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14.0,
+                        color: AppColors.orangeDarkerColor,
+                        decoration: TextDecoration.underline,
+                        decorationColor: AppColors.orangeDarkerColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             InfoRow(
               columns: [
                 Text(

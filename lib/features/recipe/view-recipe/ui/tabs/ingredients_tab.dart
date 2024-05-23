@@ -105,8 +105,6 @@ class _IngredientsTabState extends State<IngredientsTab> {
               ),
             ),
             ...widget.recipe.ingredients.map((line) {
-              print('ingredient: $line');
-
               return FutureBuilder<List<String>>(
                 future: fetchHealthLabelsOfIngredient(line.foodId),
                 builder: (context, snapshot) {
@@ -131,7 +129,11 @@ class _IngredientsTabState extends State<IngredientsTab> {
                                 ),
                               ),
                               TextSpan(
-                                text: line.text.replaceAll('Â', ''),
+                                text: line.text
+                                    .replaceAll('Â', '')
+                                    .replaceAll('â', '')
+                                    .replaceAllMapped(RegExp(r'[^\x20-\x7E]+'),
+                                        (match) => '/'),
                                 style: TextStyle(
                                   fontFamily: 'Inter',
                                   fontWeight: FontWeight.w400,
@@ -173,7 +175,12 @@ class _IngredientsTabState extends State<IngredientsTab> {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: line.text.replaceAll('Â', ''),
+                                    text: line.text
+                                        .replaceAll('Â', '')
+                                        .replaceAll('â', '')
+                                        .replaceAllMapped(
+                                            RegExp(r'[^\x20-\x7E]+'),
+                                            (match) => '/'),
                                     style: TextStyle(
                                       fontFamily: 'Inter',
                                       fontWeight: FontWeight.w400,
@@ -196,6 +203,7 @@ class _IngredientsTabState extends State<IngredientsTab> {
                               child: Align(
                                   alignment: Alignment.centerRight,
                                   child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(
                                         "*The above ingredient is not ${missingAllergens.join(', ')}.",

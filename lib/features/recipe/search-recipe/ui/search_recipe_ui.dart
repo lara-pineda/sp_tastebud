@@ -72,10 +72,12 @@ class _SearchRecipeState extends State<SearchRecipe> {
     _userProfileBloc.stream.listen((state) {
       if (state is UserProfileLoaded || state is UserProfileUpdated) {
         _initializeQueries();
-        _recipes.clear();
-        _appRefresh = true;
-        _nextUrl = null; // Reset if there are update to user profile
-        _loadMoreRecipes(_searchKey);
+        if (_userPreferences.isNotEmpty) {
+          _recipes.clear();
+          _appRefresh = true;
+          _nextUrl = null; // Reset if there are update to user profile
+          _loadMoreRecipes(_searchKey);
+        }
       }
     });
 
@@ -457,7 +459,10 @@ class _SearchRecipeState extends State<SearchRecipe> {
                             padding: EdgeInsets.symmetric(vertical: 10),
                             child: Center(child: Text("End of results.")));
                       }
-                      return Center(child: CircularProgressIndicator());
+                      return Center(
+                          child: Padding(
+                              padding: EdgeInsets.only(top: 30),
+                              child: CircularProgressIndicator()));
                     }
                     final recipe = _recipes[index];
                     final recipeId = extractRecipeIdUsingRegExp(recipe['uri']);

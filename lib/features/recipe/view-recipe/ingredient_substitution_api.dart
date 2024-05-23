@@ -50,8 +50,6 @@ class IngredientSubstitutionAPI {
         "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/ingredients/substitutes";
 
     final encodedIngredientName = Uri.encodeComponent(ingredientName);
-    print(encodedIngredientName);
-
     var url = Uri.parse('$baseUrl?ingredientName=$encodedIngredientName');
 
     try {
@@ -61,12 +59,6 @@ class IngredientSubstitutionAPI {
         var jsonResponse = json.decode(response.body);
         var ingredientSubstitutes =
             IngredientSubstituteResponseRapidAPI.fromJson(jsonResponse);
-
-        // use `ingredientSubstitutes` to access the properties
-        print('Status: ${ingredientSubstitutes.status}');
-        print('Ingredient: ${ingredientSubstitutes.ingredient}');
-        print('Substitutes: ${ingredientSubstitutes.substitutes.join(", ")}');
-        print('Message: ${ingredientSubstitutes.message}');
       } else {
         print('Request failed with status: ${response.statusCode}.');
       }

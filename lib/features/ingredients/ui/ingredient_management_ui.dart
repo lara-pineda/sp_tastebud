@@ -210,7 +210,7 @@ class _IngredientsState extends State<IngredientManagement> {
                     context.go('/');
                   });
                   // Return error text if login fails
-                  return Text("User not logged in.");
+                  return Container();
                 } else {
                   // If login is successful, proceed with IngredientsBloc
                   return BlocBuilder<IngredientsBloc, IngredientsState>(

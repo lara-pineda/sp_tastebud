@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:equatable/equatable.dart';
 import 'package:sp_tastebud/core/utils/user_not_found_exception.dart';
+import 'package:sp_tastebud/features/recipe/search-recipe/recipe_search_api.dart';
 import '../data/preferences_service.dart';
 import '../data/user_repository.dart';
 
@@ -96,6 +97,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onCheckLoginStatus(CheckLoginStatus event, Emitter<AuthState> emit) {
     var user = _userRepository.getCurrentUser();
     if (user != null) {
+      RecipeSearchAPI.clearCache(); // clear cache
       emit(AuthSuccess(user));
     } else {
       emit(AuthFailure("User not logged in."));

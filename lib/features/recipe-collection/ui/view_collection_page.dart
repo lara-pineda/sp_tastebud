@@ -62,11 +62,14 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
   Widget build(BuildContext context) {
     return ConnectivityListenerWidget(
         child: BlocBuilder<RecipeCollectionBloc, RecipeCollectionState>(
+      bloc: _recipeCollectionBloc,
       builder: (context, state) {
         if (state is RecipeCollectionLoading) {
           return Center(child: CircularProgressIndicator());
-        } else if (state is SavedRecipesLoaded ||
-            state is RejectedRecipesLoaded) {
+        } else if (state is SavedRecipesLoaded &&
+                widget.collectionType.toLowerCase() == 'saved' ||
+            state is RejectedRecipesLoaded &&
+                widget.collectionType.toLowerCase() == 'rejected') {
           final recipes = state is SavedRecipesLoaded
               ? state.savedRecipes
               : (state as RejectedRecipesLoaded).rejectedRecipes;
@@ -84,8 +87,6 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
           );
         } else if (state is RecipeCollectionError) {
           return Center(child: Text(state.error));
-        } else if (state is RecipeCollectionInitial) {
-          return Center(child: Text('Initial'));
         } else {
           return Container();
         }
