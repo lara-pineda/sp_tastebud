@@ -21,13 +21,17 @@ class AppBottomNavBar extends StatelessWidget {
     // Dispatch the TabChange event to update the state
     context.read<AppNavigationBloc>().add(TabChange(tabIndex: index));
 
+    bool initialLocation = index == 2;
+
     navigationShell.goBranch(
       index,
       // A common pattern when using bottom navigation bars is to support
       // navigating to the initial location when tapping the item that is
       // already active. This example demonstrates how to support this behavior,
       // using the initialLocation parameter of goBranch.
-      initialLocation: index == navigationShell.currentIndex,
+
+      initialLocation: initialLocation,
+      // initialLocation: index == navigationShell.currentIndex,
     );
   }
 

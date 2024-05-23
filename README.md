@@ -64,12 +64,6 @@ sp_tastebud/
 ## Features TODO
 - build with substitutes
 - build w/o substitutes
-- modified view collection page to only load recipes related to collection
-- added more text cleaning before displaying ingredient quantity
-- moved webview icon to overview page
-- automatically logs in the user if remember me is set to true
-- added loading dialog on main menu while logging in 
-- added cache clearing before logging in to prevent unnecessary api calls
 
 SUGGESTIONS
 -   confirmation windows for saving changes when switching tabs (dropped)

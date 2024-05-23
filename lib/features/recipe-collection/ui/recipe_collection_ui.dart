@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
-import '../../auth/bloc/auth_bloc.dart';
+import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
 
 class RecipeCollection extends StatelessWidget {
   RecipeCollection({super.key});
