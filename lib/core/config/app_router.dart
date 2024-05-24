@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sp_tastebud/core/config/service_locator.dart';
-import 'package:sp_tastebud/features/auth/ui/forgot_password_ui.dart';
+import 'package:TasteBud/core/config/service_locator.dart';
+import 'package:TasteBud/features/auth/ui/forgot_password_ui.dart';
 
 // UI widgets
-import 'package:sp_tastebud/features/auth/ui/login_ui.dart';
-import 'package:sp_tastebud/features/auth/ui/main_menu_ui.dart';
-import 'package:sp_tastebud/features/auth/ui/signup_ui.dart';
-import 'package:sp_tastebud/features/ingredients/ui/ingredient_management_ui.dart';
-import 'package:sp_tastebud/features/navigation/ui/navigation_bar_ui.dart';
-import 'package:sp_tastebud/features/recipe-collection/bloc/recipe_collection_bloc.dart';
-import 'package:sp_tastebud/features/recipe-collection/ui/recipe_collection_ui.dart';
-import 'package:sp_tastebud/features/recipe-collection/ui/view_collection_page.dart';
-import 'package:sp_tastebud/features/recipe/search-recipe/ui/search_recipe_ui.dart';
-import 'package:sp_tastebud/features/recipe/view-recipe/bloc/view_recipe_bloc.dart';
-import 'package:sp_tastebud/features/user-profile/ui/user_profile_ui.dart';
-import 'package:sp_tastebud/features/recipe/view-recipe/ui/view_recipe_ui.dart';
+import 'package:TasteBud/features/auth/ui/login_ui.dart';
+import 'package:TasteBud/features/auth/ui/main_menu_ui.dart';
+import 'package:TasteBud/features/auth/ui/signup_ui.dart';
+import 'package:TasteBud/features/ingredients/ui/ingredient_management_ui.dart';
+import 'package:TasteBud/features/navigation/ui/navigation_bar_ui.dart';
+import 'package:TasteBud/features/recipe-collection/bloc/recipe_collection_bloc.dart';
+import 'package:TasteBud/features/recipe-collection/ui/recipe_collection_ui.dart';
+import 'package:TasteBud/features/recipe-collection/ui/view_collection_page.dart';
+import 'package:TasteBud/features/recipe/search-recipe/ui/search_recipe_ui.dart';
+import 'package:TasteBud/features/recipe/view-recipe/bloc/view_recipe_bloc.dart';
+import 'package:TasteBud/features/user-profile/ui/user_profile_ui.dart';
+import 'package:TasteBud/features/recipe/view-recipe/ui/view_recipe_ui.dart';
 
 //BLoCs
-import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
-import 'package:sp_tastebud/features/navigation/bloc/app_navigation_bloc.dart';
+import 'package:TasteBud/shared/recipe_card/bloc/recipe_bloc.dart';
+import 'package:TasteBud/features/navigation/bloc/app_navigation_bloc.dart';
 
 class AppRoutes {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();

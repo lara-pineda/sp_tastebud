@@ -9,7 +9,7 @@ University of the Philippines Los Baños
 
 ## 📌 File Structure
 ```
-sp_tastebud/
+TasteBud/
 │
 ├── .dart_tool/
 ├── .idea/

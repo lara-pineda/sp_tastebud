@@ -1,4 +1,4 @@
-import 'package:sp_tastebud/features/ingredients/data/ingredients_services.dart';
+import 'package:TasteBud/features/ingredients/data/ingredients_services.dart';
 
 class IngredientsRepository {
   final IngredientsService _ingredientsService;

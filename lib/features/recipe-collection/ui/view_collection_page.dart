@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
-import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
-import 'package:sp_tastebud/shared/recipe_card/ui/recipe_card_collection.dart';
-import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
-import 'package:sp_tastebud/core/themes/app_palette.dart';
-import 'package:sp_tastebud/core/config/assets_path.dart';
+import 'package:TasteBud/shared/connectivity/connectivity_listener_widget.dart';
+import 'package:TasteBud/shared/recipe_card/bloc/recipe_bloc.dart';
+import 'package:TasteBud/shared/recipe_card/ui/recipe_card_collection.dart';
+import 'package:TasteBud/core/utils/extract_recipe_id.dart';
+import 'package:TasteBud/core/themes/app_palette.dart';
+import 'package:TasteBud/core/config/assets_path.dart';
 import '../bloc/recipe_collection_bloc.dart';
 
 class ViewCollectionPage extends StatefulWidget {

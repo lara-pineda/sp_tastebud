@@ -1,4 +1,4 @@
-package com.example.tastebud.sp.sp_tastebud
+package com.example.tastebud.sp.TasteBud
 
 import io.flutter.embedding.android.FlutterActivity
 

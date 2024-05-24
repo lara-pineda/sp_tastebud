@@ -5,8 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:dimension/dimension.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sp_tastebud/core/themes/app_palette.dart';
-import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
+import 'package:TasteBud/core/themes/app_palette.dart';
+import 'package:TasteBud/shared/connectivity/connectivity_listener_widget.dart';
 import '../bloc/auth_bloc.dart';
 
 class ForgotPassword extends StatefulWidget {

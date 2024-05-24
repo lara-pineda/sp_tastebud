@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sp_tastebud/core/themes/app_palette.dart';
-import 'package:sp_tastebud/features/user-profile/bloc/user_profile_bloc.dart';
+import 'package:TasteBud/core/themes/app_palette.dart';
+import 'package:TasteBud/features/user-profile/bloc/user_profile_bloc.dart';
 import '../../ingredient_substitution_api.dart';
 import '../../model/recipe_model.dart';
 import '../../food_database_api.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sp_tastebud/core/utils/hex_to_color.dart';
-import 'package:sp_tastebud/features/navigation/ui/navigation_bar_items.dart';
+import 'package:TasteBud/core/utils/hex_to_color.dart';
+import 'package:TasteBud/features/navigation/ui/navigation_bar_items.dart';
 
 import '../bloc/app_navigation_bloc.dart';
 

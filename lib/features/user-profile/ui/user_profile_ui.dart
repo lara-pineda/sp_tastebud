@@ -4,12 +4,12 @@ import 'package:dimension/dimension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sp_tastebud/core/themes/app_palette.dart';
-import 'package:sp_tastebud/features/auth/bloc/auth_bloc.dart';
-import 'package:sp_tastebud/shared/checkbox_card/checkbox_card.dart';
-import 'package:sp_tastebud/shared/checkbox_card/options.dart';
-import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
-import 'package:sp_tastebud/shared/custom_dialog/custom_dialog.dart';
+import 'package:TasteBud/core/themes/app_palette.dart';
+import 'package:TasteBud/features/auth/bloc/auth_bloc.dart';
+import 'package:TasteBud/shared/checkbox_card/checkbox_card.dart';
+import 'package:TasteBud/shared/checkbox_card/options.dart';
+import 'package:TasteBud/shared/connectivity/connectivity_listener_widget.dart';
+import 'package:TasteBud/shared/custom_dialog/custom_dialog.dart';
 import '../bloc/user_profile_bloc.dart';
 
 class UserProfile extends StatefulWidget {

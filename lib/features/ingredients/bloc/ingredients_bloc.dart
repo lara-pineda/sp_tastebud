@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sp_tastebud/features/ingredients/data/ingredients_repository.dart';
+import 'package:TasteBud/features/ingredients/data/ingredients_repository.dart';
 
 part 'ingredients_event.dart';
 part 'ingredients_state.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sp_tastebud/core/themes/app_palette.dart';
+import 'package:TasteBud/core/themes/app_palette.dart';
 import '../../model/recipe_model.dart';
 import 'info_row.dart';
 
