@@ -1,4 +1,4 @@
-import 'package:TasteBud/features/user-profile/data/user_profile_services.dart';
+import 'package:sp_tastebud/features/user-profile/data/user_profile_services.dart';
 
 class UserProfileRepository {
   final UserProfileService _userProfileService;

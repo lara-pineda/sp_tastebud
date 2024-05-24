@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:label="TasteBud"
+        android:label="sp_tastebud"
         android:name="TasteBud"
         android:icon="@mipmap/ic_launcher">
         <activity

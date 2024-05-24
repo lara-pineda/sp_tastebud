@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:TasteBud/core/themes/app_palette.dart';
+import 'package:sp_tastebud/core/themes/app_palette.dart';
 
 class CustomFilter extends StatefulWidget {
   final String category;

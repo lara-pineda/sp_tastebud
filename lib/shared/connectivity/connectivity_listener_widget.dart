@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:TasteBud/core/config/service_locator.dart';
+import 'package:sp_tastebud/core/config/service_locator.dart';
 import 'connectivity_service.dart';
 
 class ConnectivityListenerWidget extends StatelessWidget {

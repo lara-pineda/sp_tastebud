@@ -1,5 +1,5 @@
 import 'package:flutter/painting.dart';
-import 'package:TasteBud/core/utils/hex_to_color.dart';
+import 'package:sp_tastebud/core/utils/hex_to_color.dart';
 
 /// Convenience class to access application colors.
 abstract class AppColors {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:TasteBud/core/themes/app_palette.dart';
-import 'package:TasteBud/core/utils/capitalize_first_letter.dart';
+import 'package:sp_tastebud/core/themes/app_palette.dart';
+import 'package:sp_tastebud/core/utils/capitalize_first_letter.dart';
 import '../../model/recipe_model.dart';
 import 'info_row.dart';
 

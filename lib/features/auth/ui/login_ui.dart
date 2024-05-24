@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:TasteBud/core/themes/app_palette.dart';
-import 'package:TasteBud/shared/connectivity/connectivity_listener_widget.dart';
+import 'package:sp_tastebud/core/themes/app_palette.dart';
+import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
 import '../bloc/auth_bloc.dart';
 import '../data/preferences_service.dart';
 

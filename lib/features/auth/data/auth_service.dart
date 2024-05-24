@@ -1,7 +1,7 @@
 /// Direct interaction with Firebase for authentication and user data initialization.
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:TasteBud/core/utils/user_not_found_exception.dart';
+import 'package:sp_tastebud/core/utils/user_not_found_exception.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth;

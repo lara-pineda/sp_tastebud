@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:TasteBud/core/config/app_router.dart';
-import 'package:TasteBud/features/ingredients/bloc/ingredients_bloc.dart';
-import 'package:TasteBud/shared/recipe_card/bloc/recipe_bloc.dart';
+import 'package:sp_tastebud/core/config/app_router.dart';
+import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
+import 'package:sp_tastebud/shared/recipe_card/bloc/recipe_bloc.dart';
 import 'shared/connectivity/connectivity_service.dart';
 import 'core/config/service_locator.dart';
 import 'features/auth/bloc/auth_bloc.dart';

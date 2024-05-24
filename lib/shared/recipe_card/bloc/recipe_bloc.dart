@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:TasteBud/core/utils/extract_recipe_id.dart';
+import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
 
 part 'recipe_event.dart';
 part 'recipe_state.dart';

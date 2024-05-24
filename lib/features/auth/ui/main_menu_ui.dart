@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:TasteBud/core/themes/app_palette.dart';
-import 'package:TasteBud/shared/connectivity/connectivity_listener_widget.dart';
-import 'package:TasteBud/features/recipe/search-recipe/recipe_search_api.dart';
+import 'package:sp_tastebud/core/themes/app_palette.dart';
+import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
+import 'package:sp_tastebud/features/recipe/search-recipe/recipe_search_api.dart';
 import '../bloc/auth_bloc.dart';
 import '../data/preferences_service.dart';
 
