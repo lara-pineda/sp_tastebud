@@ -12,10 +12,10 @@ void openDialog(BuildContext context, String windowTitle, String content,
       ),
       title: Text(windowTitle,
           style: const TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          )),
+              fontFamily: 'Inter',
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87)),
       content: SizedBox(
         child: SingleChildScrollView(
           child: Column(

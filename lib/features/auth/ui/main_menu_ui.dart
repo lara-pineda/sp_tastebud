@@ -1,4 +1,3 @@
-import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -113,22 +112,25 @@ class _MainMenuState extends State<MainMenu> {
                       // other children widgets
                       Positioned(
                           child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // empty container to act as marginTop
                           SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height / 2.85),
+                              height: MediaQuery.of(context).size.height / 3),
 
                           // Star Icon
                           Center(
                             child: SvgPicture.asset(
                               'assets/images/StarIcon.svg',
                               semanticsLabel: 'Star Icon',
-                              width: 200,
+                              width: 175,
                             ),
                           ),
 
-                          SizedBox(height: (35.toVHLength).toPX()),
+                          // SizedBox(height: 35),
+                          Spacer(),
 
                           // app name
                           Text.rich(
@@ -156,7 +158,7 @@ class _MainMenuState extends State<MainMenu> {
                             ),
                           ),
 
-                          SizedBox(height: (15.toVHLength).toPX()),
+                          SizedBox(height: 15),
 
                           // app tagline
                           SizedBox(
@@ -166,14 +168,15 @@ class _MainMenuState extends State<MainMenu> {
                               'Explore, discover, delight - Your personal food companion is here!',
                               style: TextStyle(
                                 fontFamily: 'Inter',
-                                fontSize: 17,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                               textAlign: TextAlign.center,
                             ),
                           ),
 
-                          SizedBox(height: (40.toVHLength).toPX()),
+                          // SizedBox(height: 35),
+                          Spacer(),
 
                           // sign in button
                           SizedBox(
@@ -189,7 +192,7 @@ class _MainMenuState extends State<MainMenu> {
                             ),
                           ),
 
-                          SizedBox(height: (15.toVHLength).toPX()),
+                          SizedBox(height: 15),
 
                           // create account button
                           SizedBox(
@@ -202,7 +205,9 @@ class _MainMenuState extends State<MainMenu> {
                               ),
                               child: const Text("Create Account"),
                             ),
-                          )
+                          ),
+
+                          Spacer()
                         ],
                       )),
                     ]),

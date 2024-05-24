@@ -48,10 +48,10 @@ class _CustomCheckboxListTileState extends State<CustomCheckboxListTile> {
         ),
         title: Text(widget.title,
             style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            )),
+                fontFamily: 'Inter',
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87)),
         content: SizedBox(
           child: SingleChildScrollView(
             child: Column(
@@ -93,7 +93,7 @@ class _CustomCheckboxListTileState extends State<CustomCheckboxListTile> {
                             TextSpan(
                               text: widget.title,
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 13,
                                 fontFamily: 'Inter',
                                 color: Colors.black87,
                               ),
@@ -101,7 +101,7 @@ class _CustomCheckboxListTileState extends State<CustomCheckboxListTile> {
                             TextSpan(
                                 text: '*',
                                 style: TextStyle(
-                                    fontSize: 18, color: AppColors.redColor))
+                                    fontSize: 16, color: AppColors.redColor))
                           ]),
                         ),
                       )
@@ -110,7 +110,7 @@ class _CustomCheckboxListTileState extends State<CustomCheckboxListTile> {
                     : Text(
                         widget.title,
                         style: const TextStyle(
-                            fontSize: 14, color: Colors.black87),
+                            fontSize: 13, color: Colors.black87),
                       ),
               ],
             )),

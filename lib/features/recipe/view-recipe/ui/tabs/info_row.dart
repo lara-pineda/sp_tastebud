@@ -33,7 +33,7 @@ class InfoRow extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w600,
-                fontSize: 16.0,
+                fontSize: 12.0,
               ),
             ),
           ),
@@ -48,7 +48,7 @@ class InfoRow extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w400,
-                fontSize: 16.0,
+                fontSize: 12.0,
               ),
               softWrap: true,
               overflow: TextOverflow.visible,

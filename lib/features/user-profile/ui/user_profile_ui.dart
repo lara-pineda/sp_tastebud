@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:dimension/dimension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -315,29 +314,32 @@ class _UserProfileState extends State<UserProfile> {
                             style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w600,
-                                fontSize: 16),
+                                fontSize: 14,
+                                color: Colors.black87),
                           ),
                         ),
-                        SizedBox(height: (20.toVHLength).toPX()),
+                        SizedBox(height: 20),
                         TextFormField(
                           controller: _newEmailController,
                           enableSuggestions: false,
                           autocorrect: false,
+                          style: TextStyle(fontSize: 14),
                           decoration: InputDecoration(
                             labelText: 'New Email Address',
                             border: OutlineInputBorder(),
                           ),
                         ),
-                        SizedBox(height: (20.toVHLength).toPX()),
+                        SizedBox(height: 20),
                         TextFormField(
                           controller: _passwordController,
                           obscureText: true,
+                          style: TextStyle(fontSize: 14),
                           decoration: InputDecoration(
                             labelText: 'Confirm Password',
                             border: OutlineInputBorder(),
                           ),
                         ),
-                        SizedBox(height: (20.toVHLength).toPX()),
+                        SizedBox(height: 20),
                         SizedBox(
                           width: (MediaQuery.of(context).size.width / 6) * 4.5,
                           child: ElevatedButton(
@@ -349,7 +351,7 @@ class _UserProfileState extends State<UserProfile> {
                             child: Text('Change Email'),
                           ),
                         ),
-                        SizedBox(height: (20.toVHLength).toPX()),
+                        SizedBox(height: 30),
                       ],
                     ),
                   ),
@@ -389,7 +391,7 @@ class _UserProfileState extends State<UserProfile> {
             Expanded(
               child: ListView(
                 children: [
-                  SizedBox(height: (20.toVHLength).toPX()),
+                  SizedBox(height: 50),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -398,30 +400,33 @@ class _UserProfileState extends State<UserProfile> {
                         'User Profile',
                         style: TextStyle(
                             fontFamily: 'Poppins',
-                            fontSize: 30,
+                            fontSize: 20,
                             fontWeight: FontWeight.w700,
                             color: AppColors.purpleColor),
-                        textAlign: TextAlign.left,
                       ),
 
                       // logout button on upper right
                       IconButton(
                         icon: Icon(Icons.logout),
                         onPressed: () => _logout(),
-                        iconSize: 36,
+                        iconSize: 22,
                         color: AppColors.seaGreenColor,
                       ),
                     ],
                   ),
 
-                  SizedBox(height: (30.toVHLength).toPX()),
+                  SizedBox(height: 30),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                       children: [
                         Expanded(
                           child: TextFormField(
                             controller: _emailController,
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.black87,
+                                fontFamily: 'Inter'),
                             decoration: InputDecoration(
                               labelText: 'Email Address',
                               border: OutlineInputBorder(),
@@ -438,18 +443,18 @@ class _UserProfileState extends State<UserProfile> {
                     ),
                   ),
 
-                  SizedBox(height: (30.toVHLength).toPX()),
+                  SizedBox(height: 30),
 
                   Text(
                     'Click on the circle next to an option to check the option.\n\nOptions with asterisks mean that you can click on it to see what the option means.\n\nYou may save your changes by clicking the button on the lower right.',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 13,
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w400,
                       color: Colors.black87,
                     ),
                   ),
-                  SizedBox(height: (30.toVHLength).toPX()),
+                  SizedBox(height: 30),
 
                   // DIETARY PREFERENCES
                   Text(
@@ -462,7 +467,7 @@ class _UserProfileState extends State<UserProfile> {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(height: (20.toVHLength).toPX()),
+                  SizedBox(height: 15),
                   CheckboxCard(
                     allChoices: Options.dietaryPreferences,
                     initialSelections: selectedDietaryPreferences,
@@ -470,9 +475,9 @@ class _UserProfileState extends State<UserProfile> {
                     infoTexts: Options.dietaryPreferencesInfoText,
                     cardLabel: 'Dietary Preferences',
                   ),
+                  SizedBox(height: 25),
 
                   // ALLERGIES
-                  SizedBox(height: (40.toVHLength).toPX()),
                   Text(
                     'Allergies',
                     style: TextStyle(
@@ -483,7 +488,7 @@ class _UserProfileState extends State<UserProfile> {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(height: (20.toVHLength).toPX()),
+                  SizedBox(height: 15),
                   CheckboxCard(
                     allChoices: Options.allergies,
                     initialSelections: selectedAllergies,
@@ -491,7 +496,7 @@ class _UserProfileState extends State<UserProfile> {
                     infoTexts: Options.allergiesInfoText,
                     cardLabel: 'Allergies',
                   ),
-                  SizedBox(height: (40.toVHLength).toPX()),
+                  SizedBox(height: 25),
 
                   // MACRONUTRIENTS
                   Text(
@@ -504,14 +509,14 @@ class _UserProfileState extends State<UserProfile> {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(height: (20.toVHLength).toPX()),
+                  SizedBox(height: 15),
                   CheckboxCard(
                     allChoices: Options.macronutrients,
                     initialSelections: selectedMacronutrients,
                     onSelectionChanged: _onMacronutrientSelectionChanged,
                     cardLabel: 'Macronutrients',
                   ),
-                  SizedBox(height: (40.toVHLength).toPX()),
+                  SizedBox(height: 25),
 
                   // MICRONUTRIENTS
                   Text(
@@ -524,14 +529,14 @@ class _UserProfileState extends State<UserProfile> {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(height: (20.toVHLength).toPX()),
+                  SizedBox(height: 15),
                   CheckboxCard(
                     allChoices: Options.micronutrients,
                     initialSelections: selectedMicronutrients,
                     onSelectionChanged: _onMicronutrientSelectionChanged,
                     cardLabel: 'Micronutrients',
                   ),
-                  SizedBox(height: (40.toVHLength).toPX()),
+                  SizedBox(height: 30),
                 ],
               ),
             ),

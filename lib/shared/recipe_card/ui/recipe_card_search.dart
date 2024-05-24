@@ -104,9 +104,9 @@ class _RecipeCardSearchState extends State<RecipeCardSearch> {
                             Text(
                               widget.recipeName,
                               style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.black87),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -121,7 +121,7 @@ class _RecipeCardSearchState extends State<RecipeCardSearch> {
                                     'Source: ${widget.sourceWebsite}',
                                     style: const TextStyle(
                                       color: Colors.grey,
-                                      fontSize: 14,
+                                      fontSize: 12,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
@@ -164,7 +164,7 @@ class _RecipeCardSearchState extends State<RecipeCardSearch> {
                             size: 24,
                           ),
                         ),
-                      const SizedBox(width: 8), // Spacing between icons
+                      const SizedBox(width: 6), // Spacing between icons
                       // Show reject icon if not in favorites collection
                       if (!isInFavorites)
                         GestureDetector(

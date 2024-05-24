@@ -102,6 +102,7 @@ class AppBottomNavBar extends StatelessWidget {
                 currentIndex: state.tabIndex,
                 selectedItemColor: '#45B5B4'.toColor(),
                 unselectedItemColor: '#ECAC70'.toColor(),
+                selectedFontSize: 12,
                 // showUnselectedLabels: false,
                 onTap: (index) => _goBranch(context, index),
               ));

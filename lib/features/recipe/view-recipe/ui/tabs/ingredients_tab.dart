@@ -100,7 +100,7 @@ class _IngredientsTabState extends State<IngredientsTab> {
                 style: TextStyle(
                     color: Colors.black54,
                     fontFamily: 'Inter',
-                    fontSize: 14,
+                    fontSize: 12.5,
                     fontWeight: FontWeight.w400),
               ),
             ),
@@ -137,7 +137,7 @@ class _IngredientsTabState extends State<IngredientsTab> {
                                 style: TextStyle(
                                   fontFamily: 'Inter',
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 14.0,
+                                  fontSize: 13,
                                   color: Colors.black,
                                 ),
                               ),
@@ -184,7 +184,7 @@ class _IngredientsTabState extends State<IngredientsTab> {
                                     style: TextStyle(
                                       fontFamily: 'Inter',
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 14.0,
+                                      fontSize: 13,
                                       color: isAllergen
                                           ? Colors.green
                                           : (containsIngredient
@@ -199,7 +199,7 @@ class _IngredientsTabState extends State<IngredientsTab> {
                         ),
                         if (isAllergen)
                           Padding(
-                              padding: EdgeInsets.only(left: 50),
+                              padding: EdgeInsets.only(left: 50, top: 5),
                               child: Align(
                                   alignment: Alignment.centerRight,
                                   child: Column(
@@ -210,7 +210,7 @@ class _IngredientsTabState extends State<IngredientsTab> {
                                         style: TextStyle(
                                           fontFamily: 'Inter',
                                           fontWeight: FontWeight.w400,
-                                          fontSize: 14.0,
+                                          fontSize: 13,
                                           color: Colors.black87,
                                           fontStyle: FontStyle.italic,
                                         ),
@@ -224,7 +224,7 @@ class _IngredientsTabState extends State<IngredientsTab> {
                                           style: TextStyle(
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w400,
-                                            fontSize: 14.0,
+                                            fontSize: 13,
                                             color: Colors.black87,
                                             fontStyle: FontStyle.italic,
                                             decoration:

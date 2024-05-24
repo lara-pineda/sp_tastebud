@@ -17,6 +17,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginPage> {
+  final FocusNode _passwordFocusNode = FocusNode();
+  final ScrollController _scrollController = ScrollController();
+
   String?
       _errorMessage; // error message variable to display authentication errors
   bool _obscurePassword = true; // for toggling show password option
@@ -25,6 +28,7 @@ class _LoginState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  @override
   @override
   void initState() {
     super.initState();
@@ -45,12 +49,19 @@ class _LoginState extends State<LoginPage> {
         });
       }
     });
+    _passwordFocusNode.addListener(() {
+      if (_passwordFocusNode.hasFocus) {
+        _scrollToFocusedField(_passwordFocusNode);
+      }
+    });
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -58,6 +69,18 @@ class _LoginState extends State<LoginPage> {
   void _togglePassword() {
     setState(() {
       _obscurePassword = !_obscurePassword;
+    });
+  }
+
+  void _scrollToFocusedField(FocusNode focusNode) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (focusNode.hasFocus) {
+        _scrollController.animateTo(
+          _scrollController.offset + focusNode.offset.dy,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
     });
   }
 
@@ -128,145 +151,171 @@ class _LoginState extends State<LoginPage> {
                 ),
               ],
             ),
-            body: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 25,
-              ),
-              // Listen to state changes
-              child: BlocListener<AuthBloc, AuthState>(
-                listener: (context, state) {
-                  // If login is successful, navigate to search recipe
-                  if (state is AuthSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Login successful!")),
-                    );
-                    context.go('/search');
-                    // Login failed
-                  } else if (state is AuthFailure) {
-                    setState(() {
-                      _errorMessage =
-                          state.error; // Set the error message to be displayed
-                    });
-                  }
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: (40.toVHLength).toPX()),
-
-                    Row(
-                      children: [
-                        Text(
-                          'Hi, Welcome back!',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 28,
-                            color: AppColors.orangeColor,
-                          ),
-                        ),
-                      ],
+            body: LayoutBuilder(builder: (context, constraints) {
+              return Column(
+                children: [
+                  Expanded(
+                      child: SingleChildScrollView(
+                    controller: _scrollController,
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
-
-                    SizedBox(height: (40.toVHLength).toPX()),
-
-                    // email address
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 5,
+                    child: IntrinsicHeight(
+                        child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 25,
                       ),
-                      child: Text(
-                        'Email Address',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
+                      // Listen to state changes
+                      child: BlocListener<AuthBloc, AuthState>(
+                        listener: (context, state) {
+                          // If login is successful, navigate to search recipe
+                          if (state is AuthSuccess) {
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //   SnackBar(content: Text("Login successful!")),
+                            // );
+                            context.go('/search');
+                            // Login failed
+                          } else if (state is AuthFailure) {
+                            setState(() {
+                              _errorMessage = state
+                                  .error; // Set the error message to be displayed
+                            });
+                          }
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: (40.toVHLength).toPX()),
 
-                    // email address text field
-                    TextField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white60,
-                          errorText: _errorMessage,
-                          enabledBorder: _getInputBorder(false, _errorMessage),
-                          focusedBorder: _getInputBorder(true, _errorMessage),
-                          hintText: 'example@gmail.com',
-                          contentPadding: EdgeInsets.all(15),
-                          border: OutlineInputBorder(),
-                        )),
-
-                    SizedBox(height: (20.toVHLength).toPX()),
-
-                    // password
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 5,
-                      ),
-                      child: Text(
-                        'Password',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-
-                    // password text field
-                    TextField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white60,
-                        hintText: 'Password',
-                        contentPadding: const EdgeInsets.all(15),
-                        border: const OutlineInputBorder(),
-                        enabledBorder: _getInputBorder(false, _errorMessage),
-                        focusedBorder: _getInputBorder(true, _errorMessage),
-
-                        // show password icon
-                        suffixIcon: IconButton(
-                          icon: Icon(_obscurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onPressed: _togglePassword,
-                        ),
-                      ),
-                    ),
-
-                    // forgot password
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: Text.rich(
-                            TextSpan(
-                              text: "Forgot Password?",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w400,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                // Navigate when tapped
-                                ..onTap = () {
-                                  context.goNamed('forgotPassword');
-                                },
+                            Row(
+                              children: [
+                                Text(
+                                  'Hi, Welcome back!',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 28,
+                                    color: AppColors.orangeColor,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        )
-                      ],
-                    ),
 
-                    const Spacer(),
+                            SizedBox(height: (40.toVHLength).toPX()),
 
-                    // widgets at the bottom of the screen
-                    Align(
+                            // email address
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 5,
+                              ),
+                              child: Text(
+                                'Email Address',
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+
+                            // email address text field
+                            TextField(
+                                controller: _emailController,
+                                style: TextStyle(
+                                    fontSize: 13, fontFamily: 'Inter'),
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white60,
+                                  errorText: _errorMessage,
+                                  enabledBorder:
+                                      _getInputBorder(false, _errorMessage),
+                                  focusedBorder:
+                                      _getInputBorder(true, _errorMessage),
+                                  hintText: 'example@gmail.com',
+                                  contentPadding: EdgeInsets.all(15),
+                                  border: OutlineInputBorder(),
+                                )),
+
+                            SizedBox(height: (20.toVHLength).toPX()),
+
+                            // password
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 5,
+                              ),
+                              child: Text(
+                                'Password',
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+
+                            // password text field
+                            TextField(
+                              focusNode: _passwordFocusNode,
+                              controller: _passwordController,
+                              obscureText: _obscurePassword,
+                              style:
+                                  TextStyle(fontSize: 13, fontFamily: 'Inter'),
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white60,
+                                hintText: 'Password',
+                                contentPadding: const EdgeInsets.all(15),
+                                border: const OutlineInputBorder(),
+                                enabledBorder:
+                                    _getInputBorder(false, _errorMessage),
+                                focusedBorder:
+                                    _getInputBorder(true, _errorMessage),
+
+                                // show password icon
+                                suffixIcon: IconButton(
+                                  icon: Icon(_obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility),
+                                  onPressed: _togglePassword,
+                                ),
+                              ),
+                            ),
+
+                            // forgot password
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 14),
+                                  child: Text.rich(
+                                    TextSpan(
+                                      text: "Forgot Password?",
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        // Navigate when tapped
+                                        ..onTap = () {
+                                          context.goNamed('forgotPassword');
+                                        },
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    )),
+                  )),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    child: // widgets at the bottom of the screen
+                        Align(
                       alignment: Alignment.bottomCenter,
                       child: Column(
                         children: [
@@ -322,6 +371,7 @@ class _LoginState extends State<LoginPage> {
                               style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w400,
+                                fontSize: 14,
                               ),
                             ),
                             TextSpan(
@@ -329,6 +379,7 @@ class _LoginState extends State<LoginPage> {
                               style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w700,
+                                fontSize: 14,
                               ),
                               recognizer: TapGestureRecognizer()
                                 // Navigate when tapped
@@ -340,11 +391,10 @@ class _LoginState extends State<LoginPage> {
                         ],
                       ),
                     ),
-
-                    SizedBox(height: (40.toVHLength).toPX()),
-                  ],
-                ),
-              ),
-            )));
+                  ),
+                  SizedBox(height: (40.toVHLength).toPX()),
+                ],
+              );
+            })));
   }
 }

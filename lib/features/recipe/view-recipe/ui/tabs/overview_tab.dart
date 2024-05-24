@@ -29,7 +29,7 @@ class OverviewTab extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           children: [
-            // webview link button here
+            // web view link button here
             Align(
               alignment: Alignment.centerLeft,
               child: Row(
@@ -51,7 +51,7 @@ class OverviewTab extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,
-                        fontSize: 14.0,
+                        fontSize: 13,
                         color: AppColors.orangeDarkerColor,
                         decoration: TextDecoration.underline,
                         decorationColor: AppColors.orangeDarkerColor,
@@ -68,7 +68,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 14.0,
+                    fontSize: 13,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -78,7 +78,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 14.0,
+                    fontSize: 13,
                   ),
                 ),
               ],
@@ -90,7 +90,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 14.0,
+                    fontSize: 13,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -100,7 +100,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 14.0,
+                    fontSize: 13,
                   ),
                 ),
               ],
@@ -112,7 +112,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 14.0,
+                    fontSize: 13,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -121,7 +121,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 14.0,
+                    fontSize: 13,
                   ),
                   textAlign: TextAlign.end,
                 ),
@@ -134,7 +134,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 14.0,
+                    fontSize: 13,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -148,7 +148,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 14.0,
+                    fontSize: 13,
                   ),
                   textAlign: TextAlign.end,
                 ),
@@ -161,7 +161,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 14.0,
+                    fontSize: 13,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -175,7 +175,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 14.0,
+                    fontSize: 13,
                   ),
                   textAlign: TextAlign.end,
                 ),
@@ -188,7 +188,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 14.0,
+                    fontSize: 13,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -204,7 +204,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 14.0,
+                    fontSize: 13,
                   ),
                   textAlign: TextAlign.end,
                 ),
@@ -217,7 +217,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
-                    fontSize: 14.0,
+                    fontSize: 13,
                     color: AppColors.purpleColor,
                   ),
                 ),
@@ -226,7 +226,7 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 14.0,
+                    fontSize: 13,
                   ),
                   softWrap: true,
                   overflow: TextOverflow.visible,

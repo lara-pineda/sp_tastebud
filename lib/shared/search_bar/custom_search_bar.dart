@@ -28,6 +28,8 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       child: TextField(
         controller: _controller,
         onSubmitted: widget.onSubmitted,
+        style:
+            TextStyle(fontSize: 13, color: Colors.black87, fontFamily: 'Inter'),
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white60,

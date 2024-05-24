@@ -194,14 +194,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w400,
                         color: Colors.black87,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                       textAlign: TextAlign.start,
                     ),
                   ],
                 )),
 
-            SizedBox(height: (20.toVHLength).toPX()),
+            SizedBox(height: 15),
 
             const Padding(
                 padding: EdgeInsets.symmetric(
@@ -216,17 +216,31 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w400,
                         color: Colors.black87,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                     ),
                   ],
                 )),
 
-            SizedBox(height: (20.toVHLength).toPX()),
+            const Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 5,
+              ),
+              child: Text(
+                'Email Address',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
 
             // email address text field
             TextField(
                 controller: _emailController,
+                style: TextStyle(fontSize: 13, fontFamily: 'Inter'),
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white60,
@@ -253,7 +267,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w400,
                         color: Colors.black,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                     ),
                   ],
@@ -273,7 +287,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w400,
                         color: Colors.green,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                     ),
                   ],
@@ -291,7 +305,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w400,
                         color: Colors.red,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                     ),
                   ],
@@ -340,8 +354,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           },
                         ),
                       ),
-                      child: const Text("Reset Password",
-                          style: TextStyle(fontSize: 14)),
+                      child: const Text("Reset Password"),
                     ),
                   ),
 
@@ -354,7 +367,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w400,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                     ),
                     TextSpan(
@@ -362,7 +375,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                       recognizer: TapGestureRecognizer()
                         // Navigate when tapped

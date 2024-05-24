@@ -267,36 +267,37 @@ class _IngredientsState extends State<IngredientManagement> {
 
     return Stack(children: [
       Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+        padding: EdgeInsets.symmetric(
+            vertical: 8.0, horizontal: MediaQuery.of(context).size.width / 14),
         child: Column(
           children: [
             Expanded(
               child: ListView(
                 children: [
-                  SizedBox(height: (50.toVHLength).toPX()),
+                  SizedBox(height: 50),
                   Text(
                     'Ingredients',
                     style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: 30,
+                        fontSize: 20,
                         fontWeight: FontWeight.w700,
                         color: AppColors.purpleColor),
                     textAlign: TextAlign.left,
                   ),
 
-                  SizedBox(height: (20.toVHLength).toPX()),
+                  SizedBox(height: 20),
 
                   Text(
                     'Check the ingredients that you have available that you also want the recipe to have.\n\nYou may save your changes by clicking the button on the lower right.',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 13,
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w400,
                       color: Colors.black87,
                     ),
                   ),
 
-                  SizedBox(height: (30.toVHLength).toPX()),
+                  SizedBox(height: 30),
 
                   // PANTRY ESSENTIALS
                   Text(
@@ -309,14 +310,14 @@ class _IngredientsState extends State<IngredientManagement> {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(height: (20.toVHLength).toPX()),
+                  SizedBox(height: 15),
                   CheckboxCard(
                     allChoices: Options.pantryEssentials,
                     initialSelections: selectedPantryEssentials,
                     onSelectionChanged: _onPantryEssentialsSelectionChanged,
                     cardLabel: 'Pantry Essentials',
                   ),
-                  SizedBox(height: (40.toVHLength).toPX()),
+                  SizedBox(height: 25),
 
                   // MEAT
                   Text(
@@ -329,14 +330,14 @@ class _IngredientsState extends State<IngredientManagement> {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(height: (20.toVHLength).toPX()),
+                  SizedBox(height: 15),
                   CheckboxCard(
                     allChoices: Options.meat,
                     initialSelections: selectedMeat,
                     onSelectionChanged: _onMeatSelectionChanged,
                     cardLabel: 'Meat',
                   ),
-                  SizedBox(height: (40.toVHLength).toPX()),
+                  SizedBox(height: 25),
 
                   // FISH AND POULTRY
                   Text(
@@ -349,14 +350,14 @@ class _IngredientsState extends State<IngredientManagement> {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(height: (20.toVHLength).toPX()),
+                  SizedBox(height: 15),
                   CheckboxCard(
                     allChoices: Options.fishAndPoultry,
                     initialSelections: selectedFishAndPoultry,
                     onSelectionChanged: _onFishAndPoultrySelectionChanged,
                     cardLabel: 'Fish and Poultry',
                   ),
-                  SizedBox(height: (40.toVHLength).toPX()),
+                  SizedBox(height: 25),
 
                   // VEGETABLES AND GREENS
                   Text(
@@ -369,14 +370,14 @@ class _IngredientsState extends State<IngredientManagement> {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(height: (20.toVHLength).toPX()),
+                  SizedBox(height: 15),
                   CheckboxCard(
                     allChoices: Options.vegetablesAndGreens,
                     initialSelections: selectedVegetablesAndGreens,
                     onSelectionChanged: _onVegetablesAndGreensSelectionChanged,
                     cardLabel: 'Vegetables and Greens',
                   ),
-                  SizedBox(height: (40.toVHLength).toPX()),
+                  SizedBox(height: 25),
 
                   // BAKING
                   Text(
@@ -389,14 +390,14 @@ class _IngredientsState extends State<IngredientManagement> {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(height: (20.toVHLength).toPX()),
+                  SizedBox(height: 15),
                   CheckboxCard(
                     allChoices: Options.baking,
                     initialSelections: selectedBaking,
                     onSelectionChanged: _onBakingSelectionChanged,
                     cardLabel: 'Baking',
                   ),
-                  SizedBox(height: (40.toVHLength).toPX()),
+                  SizedBox(height: 30),
                 ],
               ),
             ),

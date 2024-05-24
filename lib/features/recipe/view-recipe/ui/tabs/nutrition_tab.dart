@@ -48,7 +48,7 @@ class NutritionTab extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'Inter',
               fontWeight: FontWeight.w600,
-              fontSize: 16.0,
+              fontSize: 13,
               color: AppColors.purpleColor,
             ),
           ),
@@ -57,7 +57,7 @@ class NutritionTab extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'Inter',
               fontWeight: FontWeight.w600,
-              fontSize: 16.0,
+              fontSize: 14,
               color: AppColors.purpleColor,
             ),
             textAlign: TextAlign.end,
@@ -67,7 +67,7 @@ class NutritionTab extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'Inter',
               fontWeight: FontWeight.w600,
-              fontSize: 16.0,
+              fontSize: 14,
               color: AppColors.purpleColor,
             ),
             textAlign: TextAlign.end,
@@ -86,7 +86,7 @@ class NutritionTab extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w600,
-                fontSize: 16.0,
+                fontSize: 13,
                 color: AppColors.purpleColor,
               ),
             ),
@@ -95,7 +95,7 @@ class NutritionTab extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
-                    fontSize: 14.0,
+                    fontSize: 13,
                   ),
                   softWrap: true,
                   overflow: TextOverflow.visible,
@@ -117,17 +117,17 @@ class NutritionTab extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w600,
-                  fontSize: 18,
+                  fontSize: 16,
                   color: AppColors.purpleColor,
                 )),
-            SizedBox(height: 20),
+            SizedBox(height: 15),
             ...rows,
             Padding(
               padding: EdgeInsets.all(20),
               child: Text(
                 'Percent Daily Values are based on a 2,000 calorie diet. Your Daily Values may be higher or lower depending on your calorie intake.',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 12.5,
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w400,
                   color: Colors.black54,
