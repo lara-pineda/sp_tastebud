@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -133,7 +134,7 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
                         : 'Rejected Recipes',
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      fontSize: 20,
+                      fontSize: 22,
                       fontWeight: FontWeight.w600,
                       color: AppColors.purpleColor,
                     ),
@@ -146,7 +147,7 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
       },
       body: Column(
         children: [
-          SizedBox(height: 30),
+          SizedBox(height: (20.toVHLength).toPX()),
           Expanded(
             child: recipes.isEmpty
                 ? Center(
@@ -167,10 +168,10 @@ class _ViewCollectionPageState extends State<ViewCollectionPage> {
                               });
                         },
                         child: RecipeCardCollection(
-                          recipeName: recipe['label']!,
+                          recipeName: recipe['recipeName']!,
                           imageUrl: recipe['image']!,
                           sourceWebsite: recipe['source']!,
-                          recipeUri: recipe['uri'],
+                          recipeUri: recipe['recipeUri'],
                         ),
                       );
                     },

@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:sp_tastebud/features/recipe-collection/data/recipe_collection_repository.dart';
-import 'package:sp_tastebud/core/utils/extract_recipe_id.dart';
-import 'package:sp_tastebud/features/recipe/search-recipe/recipe_search_api.dart';
 
 part 'recipe_collection_event.dart';
 part 'recipe_collection_state.dart';
@@ -38,9 +36,8 @@ class RecipeCollectionBloc
       await _savedRecipesSubscription?.cancel();
       _savedRecipesSubscription =
           _recipeCollectionRepository.getSavedRecipesStream().listen(
-        (recipes) async {
-          final detailedRecipes = await _getDetailedRecipes(recipes);
-          add(SavedRecipesUpdated(detailedRecipes));
+        (recipes) {
+          add(SavedRecipesUpdated(recipes));
         },
         onError: (error) {
           emit(RecipeCollectionError(
@@ -60,9 +57,8 @@ class RecipeCollectionBloc
       await _rejectedRecipesSubscription?.cancel();
       _rejectedRecipesSubscription =
           _recipeCollectionRepository.getRejectedRecipesStream().listen(
-        (recipes) async {
-          final detailedRecipes = await _getDetailedRecipes(recipes);
-          add(RejectedRecipesUpdated(detailedRecipes));
+        (recipes) {
+          add(RejectedRecipesUpdated(recipes));
         },
         onError: (error) {
           emit(RecipeCollectionError(
@@ -73,19 +69,6 @@ class RecipeCollectionBloc
       emit(RecipeCollectionError(
           'Failed to load rejected recipes: ${e.toString()}'));
     }
-  }
-
-  Future<List<Map<String, dynamic>>> _getDetailedRecipes(
-      List<Map<String, dynamic>> recipes) async {
-    List<Map<String, dynamic>> detailedRecipes = [];
-    for (var recipe in recipes) {
-      String recipeUri = recipe['recipeUri'];
-      String recipeId = extractRecipeIdUsingRegExp(recipeUri);
-      Map<String, dynamic> recipeDetails =
-          await RecipeSearchAPI.searchRecipeById(recipeId);
-      detailedRecipes.add(recipeDetails);
-    }
-    return detailedRecipes;
   }
 
   void _onSavedRecipesUpdated(
