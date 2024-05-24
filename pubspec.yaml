@@ -31,8 +31,6 @@ dependencies:
   path:
     any
 
-  openapi:
-    path: /home/lbpineda/Desktop/spoonacular-api-clients/dart/
 
   flutter:
     sdk: flutter
