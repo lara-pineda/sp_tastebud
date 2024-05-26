@@ -25,11 +25,6 @@ class CustomCheckboxListTile extends StatefulWidget {
 }
 
 class _CustomCheckboxListTileState extends State<CustomCheckboxListTile> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void _onChanged(bool? newValue) {
     if (newValue != null) {
       widget.valueNotifier.value = newValue;
@@ -68,12 +63,21 @@ class _CustomCheckboxListTileState extends State<CustomCheckboxListTile> {
     );
   }
 
+  void _handleLabelTap() {
+    // _onChanged(!widget.valueNotifier.value);
+    if (widget.infoText != null) {
+      _showInfoDialog(widget.infoText!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: widget.valueNotifier,
-      builder: (context, value, child) {
-        return Row(
+    return GestureDetector(
+      onTap: () {
+        _onChanged(!widget.valueNotifier.value);
+      },
+      child: Container(
+        child: Row(
           children: [
             IconCheckbox(
               valueNotifier: widget.valueNotifier,
@@ -83,40 +87,35 @@ class _CustomCheckboxListTileState extends State<CustomCheckboxListTile> {
               onChanged: _onChanged,
             ),
             Expanded(
-                child: Row(
-              children: [
-                widget.infoText != null
-                    ? GestureDetector(
-                        onTap: () => _showInfoDialog(widget.infoText!),
-                        child: RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                              text: widget.title,
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontFamily: 'Inter',
-                                color: Colors.black87,
-                              ),
+              child: GestureDetector(
+                onTap: _handleLabelTap,
+                child: widget.infoText != null
+                    ? RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: widget.title,
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontFamily: 'Inter',
+                              color: Colors.black87,
                             ),
-                            TextSpan(
-                                text: '*',
-                                style: TextStyle(
-                                    fontSize: 16, color: AppColors.redColor))
-                          ]),
-                        ),
+                          ),
+                          TextSpan(
+                              text: '*',
+                              style: TextStyle(
+                                  fontSize: 16, color: AppColors.redColor))
+                        ]),
                       )
-
-                    // info text parameter is null, display as normal text
                     : Text(
                         widget.title,
                         style: const TextStyle(
                             fontSize: 13, color: Colors.black87),
                       ),
-              ],
-            )),
+              ),
+            ),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
 }
