@@ -31,8 +31,10 @@ class _RecipeCardSearchState extends State<RecipeCardSearch> {
       bool isInCollection, VoidCallback onConfirm) {
     final type = collectionType == 'favorite' ? 'saved' : 'rejected';
     final action = isInCollection == false ? 'add' : 'remove';
+    final preposition = action == 'add' ? 'to' : 'from';
+
     final confirmationMessage =
-        'Are you sure you want to $action this recipe from your $type recipe collection?';
+        'Are you sure you want to $action this recipe $preposition your $type recipe collection?';
 
     openDialog(
       context,
