@@ -49,8 +49,8 @@ class IconCheckbox extends StatelessWidget {
                   ))
                 : Container(
                     // Custom dot for unchecked state
-                    width: 7,
-                    height: 7,
+                    width: 8,
+                    height: 8,
                     // Adjust spacing around the dot
                     // margin: const EdgeInsets.symmetric(horizontal: 11),
                     decoration: BoxDecoration(

@@ -78,8 +78,10 @@ class _ViewRecipeState extends State<ViewRecipe>
       bool isInCollection, VoidCallback onConfirm) {
     final type = collectionType == 'favorite' ? 'saved' : 'rejected';
     final action = isInCollection == false ? 'add' : 'remove';
+    final preposition = action == 'add' ? 'to' : 'from';
+
     final confirmationMessage =
-        'Are you sure you want to $action this recipe from your $type recipe collection?';
+        'Are you sure you want to $action this recipe $preposition your $type recipe collection?';
 
     openDialog(
       context,
@@ -235,6 +237,7 @@ class _ViewRecipeState extends State<ViewRecipe>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    // show this button if recipe is not already in rejected recipes
                     if (!isInRejected)
                       ElevatedButton(
                         onPressed: () {
@@ -268,7 +271,7 @@ class _ViewRecipeState extends State<ViewRecipe>
                       ElevatedButton(
                         onPressed: () {
                           _handleActionConfirmation(
-                              context, 'favorite', isInFavorites, () {
+                              context, 'reject', isInFavorites, () {
                             // add/remove from rejected
                             _recipeCardBloc.add(ToggleReject(
                               recipeName: recipe.label ?? 'No Title',
