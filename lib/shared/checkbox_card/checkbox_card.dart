@@ -65,7 +65,7 @@ class _CheckboxCardState extends State<CheckboxCard> {
                 Text(
                   widget.cardLabel,
                   style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: AppColors.purpleColor,
                   ),
@@ -75,7 +75,7 @@ class _CheckboxCardState extends State<CheckboxCard> {
                 SizedBox(height: 5),
                 Container(
                   margin: EdgeInsets.only(
-                      left: MediaQuery.of(context).size.width / 14),
+                      left: MediaQuery.of(context).size.width / 12),
                   child: GridView.count(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -177,7 +177,7 @@ class _CheckboxCardState extends State<CheckboxCard> {
             ),
           ),
           Container(
-            width: 25,
+            width: 30,
             height: double.infinity,
             decoration: BoxDecoration(
               color: AppColors.redColor,
@@ -188,7 +188,7 @@ class _CheckboxCardState extends State<CheckboxCard> {
             ),
             child: IconButton(
               padding: EdgeInsets.zero,
-              icon: Icon(Icons.chevron_right, color: Colors.white, size: 25),
+              icon: Icon(Icons.chevron_right, color: Colors.white, size: 30),
               onPressed: () => _showFullList(context, widget.allChoices,
                   widget.cardLabel, widget.infoTexts),
             ),

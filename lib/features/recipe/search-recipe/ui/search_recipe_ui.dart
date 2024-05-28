@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -222,17 +223,17 @@ class _SearchRecipeState extends State<SearchRecipe> {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          SizedBox(width: 15),
+          SizedBox(width: 20),
           Text(
             'Filters:',
             style: TextStyle(
                 fontFamily: 'Inter',
-                fontSize: 14,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
                 color: AppColors.purpleColor),
             textAlign: TextAlign.left,
           ),
-          SizedBox(width: 12),
+          SizedBox(width: 15),
           CustomFilter(
             category: 'Diet',
             tag: 'diet',
@@ -254,7 +255,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
               _loadMoreRecipes(_searchKey);
             },
           ),
-          SizedBox(width: 12),
+          SizedBox(width: 15),
           CustomFilter(
             category: 'Cuisine Type',
             tag: 'cuisineType',
@@ -276,7 +277,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
               _loadMoreRecipes(_searchKey);
             },
           ),
-          SizedBox(width: 12),
+          SizedBox(width: 15),
           CustomFilter(
             category: 'Dish Type',
             tag: 'dishType',
@@ -298,7 +299,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
               _loadMoreRecipes(_searchKey);
             },
           ),
-          SizedBox(width: 12),
+          SizedBox(width: 15),
           CustomFilter(
             category: 'Meal Type',
             tag: 'mealType',
@@ -369,32 +370,32 @@ class _SearchRecipeState extends State<SearchRecipe> {
             _loadMoreRecipes(searchKey);
           },
         ),
-        SizedBox(height: 13),
+        SizedBox(height: (10.toVHLength).toPX()),
 
-        // // Page tagline
-        // Container(
-        //   width:
-        //       double.infinity, // Ensures the container takes up the full width
-        //   padding: EdgeInsets.symmetric(horizontal: 22.0),
-        //   child: Text(
-        //     'Recommended\nfor You',
-        //     style: TextStyle(
-        //         fontFamily: 'Poppins',
-        //         fontSize: 30,
-        //         fontWeight: FontWeight.w700,
-        //         color: AppColors.purpleColor),
-        //     textAlign: TextAlign.left,
-        //     softWrap: true,
-        //     overflow: TextOverflow.ellipsis,
-        //     maxLines: 2,
-        //   ),
-        // ),
+        // Page tagline
+        Container(
+          width:
+              double.infinity, // Ensures the container takes up the full width
+          padding: EdgeInsets.symmetric(horizontal: 22.0),
+          child: Text(
+            'Recommended\nfor You',
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 30,
+                fontWeight: FontWeight.w700,
+                color: AppColors.purpleColor),
+            textAlign: TextAlign.left,
+            softWrap: true,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+        ),
 
-        // SizedBox(height: (5.toVHLength).toPX()),
+        SizedBox(height: (5.toVHLength).toPX()),
 
         // Filters
         _buildFilterCategories(),
-        SizedBox(height: 18),
+        SizedBox(height: (10.toVHLength).toPX()),
 
         if (_recipes.isEmpty &&
             _searchKey.isEmpty &&
@@ -405,7 +406,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Spacer(),
+                    SizedBox(height: 30),
                     Center(
                       child: Text(
                         "Type on the searchbar,\nor use the filters to start searching!",
@@ -420,23 +421,17 @@ class _SearchRecipeState extends State<SearchRecipe> {
                     Center(
                       child: Image.asset(Assets.imagesStartSearching),
                     ),
-                    Spacer(),
                   ],
                 )),
           )
         else if (_recipes.isEmpty && !_isLoading && _initialLoadComplete)
           Expanded(
               child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Spacer(),
-                      Image.asset(Assets.noMatchingRecipe),
-                      Spacer(),
-                    ],
-                  )))
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Center(
+              child: Image.asset(Assets.noMatchingRecipe),
+            ),
+          ))
         else
           // Display recipe list
           Expanded(
@@ -462,14 +457,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
                           !_appRefresh) {
                         return const Padding(
                             padding: EdgeInsets.symmetric(vertical: 10),
-                            child: Column(
-                              children: [
-                                Center(child: Text("End of results.")),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                              ],
-                            ));
+                            child: Center(child: Text("End of results.")));
                       }
                       return Center(
                           child: Padding(

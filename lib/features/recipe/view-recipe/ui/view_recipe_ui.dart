@@ -200,7 +200,7 @@ class _ViewRecipeState extends State<ViewRecipe>
                               recipe.label ?? 'No Title',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: 20.0,
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w600,
                               ),
@@ -254,18 +254,13 @@ class _ViewRecipeState extends State<ViewRecipe>
                         ),
                         child: Row(
                           children: [
-                            Icon(
-                                isInFavorites
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                size: 22),
+                            Icon(isInFavorites
+                                ? Icons.favorite
+                                : Icons.favorite_border),
                             SizedBox(width: (10.toVWLength).toPX()),
-                            Text(
-                              isInFavorites
-                                  ? 'Remove from Saved Recipes'
-                                  : 'Save Recipe',
-                              style: TextStyle(fontSize: 13),
-                            ),
+                            Text(isInFavorites
+                                ? 'Remove from Saved Recipes'
+                                : 'Save Recipe'),
                           ],
                         ),
                       ),
@@ -289,19 +284,13 @@ class _ViewRecipeState extends State<ViewRecipe>
                         ),
                         child: Row(
                           children: [
-                            Icon(
-                              isInRejected
-                                  ? Icons.remove_circle
-                                  : Icons.remove_circle_outline,
-                              size: 22,
-                            ),
+                            Icon(isInRejected
+                                ? Icons.remove_circle
+                                : Icons.remove_circle_outline),
                             SizedBox(width: (10.toVWLength).toPX()),
-                            Text(
-                              isInRejected
-                                  ? 'Remove from Rejected Recipes'
-                                  : 'Reject Recipe',
-                              style: TextStyle(fontSize: 13),
-                            ),
+                            Text(isInRejected
+                                ? 'Remove from Rejected Recipes'
+                                : 'Reject Recipe'),
                           ],
                         ),
                       ),
@@ -314,7 +303,7 @@ class _ViewRecipeState extends State<ViewRecipe>
                   controller: _tabController,
                   indicatorColor: AppColors.seaGreenColor,
                   labelStyle: TextStyle(
-                    fontSize: 16.0,
+                    fontSize: 18.0,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w700,
                   ),
@@ -365,7 +354,7 @@ class _ViewRecipeState extends State<ViewRecipe>
                   ),
                 ),
 
-                SizedBox(height: 10),
+                SizedBox(height: (20.toVHLength).toPX()),
 
                 // edamam icon
                 Center(
@@ -379,7 +368,7 @@ class _ViewRecipeState extends State<ViewRecipe>
                     },
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: (20.toVHLength).toPX()),
               ],
             );
           },

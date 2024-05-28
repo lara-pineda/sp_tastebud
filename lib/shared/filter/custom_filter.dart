@@ -46,6 +46,32 @@ class _CustomFilterState extends State<CustomFilter> {
     });
   }
 
+  // Builds the option button for a filter
+  Widget buildOptionButton(String option) {
+    bool isSelected = selectedOptions.contains(option);
+    return Padding(
+      padding: const EdgeInsets.all(2.5),
+      child: IntrinsicWidth(
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            backgroundColor: isSelected ? AppColors.orangeDisabledColor : null,
+            foregroundColor:
+                isSelected ? AppColors.orangeDarkerColor : Colors.black87,
+            side: BorderSide(
+                color:
+                    isSelected ? AppColors.orangeDarkerColor : Colors.black87),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            textStyle: TextStyle(fontSize: 14),
+          ),
+          onPressed: () {
+            toggleOptionSelection(option);
+          },
+          child: Text(option),
+        ),
+      ),
+    );
+  }
+
   // Shows the filter options modal bottom sheet
   void showFilterOptions(BuildContext context) {
     showModalBottomSheet(
@@ -96,7 +122,7 @@ class _CustomFilterState extends State<CustomFilter> {
                               : Colors.black87),
                       padding:
                           EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      textStyle: TextStyle(fontSize: 13),
+                      textStyle: TextStyle(fontSize: 14),
                     ),
                     onPressed: () {
                       localToggleOptionSelection(option);
@@ -108,14 +134,14 @@ class _CustomFilterState extends State<CustomFilter> {
             }
 
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     widget.category,
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: AppColors.seaGreenColor,
                     ),
@@ -149,7 +175,7 @@ class _CustomFilterState extends State<CustomFilter> {
                           Navigator.pop(context);
                         },
                         child: Text('Clear Filters',
-                            style: TextStyle(fontSize: 14)),
+                            style: TextStyle(fontSize: 16)),
                       ),
                     ],
                   ),
@@ -174,10 +200,7 @@ class _CustomFilterState extends State<CustomFilter> {
               backgroundColor: AppColors.pastelPinkColor,
               foregroundColor: AppColors.darkerPinkColor,
             ),
-            child: Text(
-              widget.category,
-              style: TextStyle(fontSize: 14),
-            ),
+            child: Text(widget.category),
           )
         : OutlinedButton(
             onPressed: () => showFilterOptions(context),
@@ -187,10 +210,7 @@ class _CustomFilterState extends State<CustomFilter> {
                 color: AppColors.darkerPinkColor,
               ),
             ),
-            child: Text(
-              widget.category,
-              style: TextStyle(fontSize: 14),
-            ),
+            child: Text(widget.category),
           );
   }
 }

@@ -17,8 +17,6 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupState extends State<SignupPage> {
-  final ScrollController _scrollController = ScrollController();
-
   // error message variable to display authentication errors
   String? _errorMessage;
 
@@ -66,27 +64,24 @@ class _SignupState extends State<SignupPage> {
     // Hide requirements when focus is lost
     _createPasswordFocusNode.addListener(() {
       if (!_createPasswordFocusNode.hasFocus) {
-        // setState(() {
-        //   _showPasswordRequirements = false;
-        // });
-        _scrollToFocusedField(_createPasswordFocusNode);
+        setState(() {
+          _showPasswordRequirements = false;
+        });
       }
     });
 
     // Hide helper text when focus is lost
     _confirmPasswordFocusNode.addListener(() {
       if (!_confirmPasswordFocusNode.hasFocus) {
-        // setState(() {
-        //   _showConfirmPasswordHelper = false;
-        // });
-        _scrollToFocusedField(_confirmPasswordFocusNode);
+        setState(() {
+          _showConfirmPasswordHelper = false;
+        });
       }
     });
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
     _createPasswordController.dispose();
     _confirmPasswordController.dispose();
     _createPasswordFocusNode.dispose();
@@ -105,18 +100,6 @@ class _SignupState extends State<SignupPage> {
   void _toggleConfirmPassword() {
     setState(() {
       _obscureConfirmPassword = !_obscureConfirmPassword;
-    });
-  }
-
-  void _scrollToFocusedField(FocusNode focusNode) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (focusNode.hasFocus) {
-        _scrollController.animateTo(
-          _scrollController.offset + focusNode.offset.dy,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      }
     });
   }
 
@@ -176,435 +159,389 @@ class _SignupState extends State<SignupPage> {
 
     return ConnectivityListenerWidget(
         child: Scaffold(
-            // make widgets fixed even when keyboard appears
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
+      // make widgets fixed even when keyboard appears
+      resizeToAvoidBottomInset: false,
 
-              // arrow back icon
-              leadingWidth: 75,
-              leading: GestureDetector(
-                child: Container(
-                  margin: const EdgeInsets.only(
-                    left: 25,
-                    top: 5,
-                    bottom: 5,
-                  ),
-                  padding: const EdgeInsets.only(
-                    left: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7),
-                    border: Border.all(color: Colors.black12),
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.black,
-                  ),
-                ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
 
-                // on click for arrow back icon
-                onTap: () {
-                  context.go('/');
-                },
-              ),
-              actions: [
-                SvgPicture.asset(
-                  'assets/images/MiniStarIcon.svg',
-                  semanticsLabel: 'Mini Star Icon',
-                  width: (50.toVHLength).toPX(),
-                ),
-                const SizedBox(
-                  width: 20,
+        // arrow back icon
+        leadingWidth: 75,
+        leading: GestureDetector(
+          child: Container(
+            margin: const EdgeInsets.only(
+              left: 25,
+              top: 5,
+              bottom: 5,
+            ),
+            padding: const EdgeInsets.only(
+              left: 10,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(7),
+              border: Border.all(color: Colors.black12),
+            ),
+            width: MediaQuery.of(context).size.width,
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            ),
+          ),
+
+          // on click for arrow back icon
+          onTap: () {
+            context.go('/');
+          },
+        ),
+        actions: [
+          SvgPicture.asset(
+            'assets/images/MiniStarIcon.svg',
+            semanticsLabel: 'Mini Star Icon',
+            width: (50.toVHLength).toPX(),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+        ],
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 25,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: (40.toVHLength).toPX()),
+
+            Row(
+              children: [
+                Text(
+                  'Welcome!',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 28,
+                    color: AppColors.orangeColor,
+                  ),
                 ),
               ],
             ),
-            body: LayoutBuilder(builder: (context, constraints) {
-              return Column(
+
+            SizedBox(height: (40.toVHLength).toPX()),
+
+            // email address
+            const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 5,
+                  horizontal: 3,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      'Please fill in the following details to get registered.',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black87,
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                )),
+
+            SizedBox(height: (20.toVHLength).toPX()),
+
+            // email address
+            const Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 5,
+              ),
+              child: Text(
+                'Email Address',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w400,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
+
+            // email address text field
+            TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white60,
+                  errorText: _errorMessage,
+                  enabledBorder: _getInputBorder(true, false, _errorMessage),
+                  focusedBorder: _getInputBorder(true, true, _errorMessage),
+                  hintText: 'example@gmail.com',
+                  contentPadding: EdgeInsets.all(15),
+                  border: OutlineInputBorder(),
+                )),
+
+            SizedBox(height: (20.toVHLength).toPX()),
+
+            // create password
+            const Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 5,
+              ),
+              child: Text(
+                'Create Password',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w400,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
+
+            TextField(
+              controller: _createPasswordController,
+              focusNode: _createPasswordFocusNode,
+              obscureText: _obscureCreatePassword,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white60,
+                border: const OutlineInputBorder(),
+                contentPadding: const EdgeInsets.all(15),
+                hintText: 'Enter your password',
+
+                // Border when the TextField is not focused
+                enabledBorder: _getInputBorder(
+                    _isPasswordValid, _createPasswordFocusNode.hasFocus),
+                // Border when the TextField is focused
+                focusedBorder: _getInputBorder(
+                    _isPasswordValid, _createPasswordFocusNode.hasFocus),
+
+                // show password icon
+                suffixIcon: IconButton(
+                  icon: Icon(_obscureCreatePassword
+                      ? Icons.visibility_off
+                      : Icons.visibility),
+                  onPressed: _toggleCreatePassword,
+                ),
+
+                helperText: _showPasswordRequirements
+                    ? "Password must be at least 6 characters and alphanumeric"
+                    : null,
+                helperStyle: TextStyle(
+                    color: _isPasswordValid ? Colors.green : Colors.red),
+              ),
+              onChanged: (value) {
+                _validatePassword();
+                setState(() {
+                  // Always show password requirements when typing
+                  _showPasswordRequirements = true;
+                });
+              },
+            ),
+
+            // conditionally display the password requirements
+            if (_createPasswordFocusNode.hasFocus)
+              Column(
                 children: [
-                  Expanded(
-                      child: SingleChildScrollView(
-                    controller: _scrollController,
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: IntrinsicHeight(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 25,
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Icon(
+                        _isPasswordLongEnough ? Icons.check : Icons.close,
+                        color:
+                            _isPasswordLongEnough ? Colors.green : Colors.red,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        "At least 6 characters",
+                        style: TextStyle(
+                            color: _isPasswordLongEnough
+                                ? Colors.green
+                                : Colors.red),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        _isPasswordAlphanumeric ? Icons.check : Icons.close,
+                        color:
+                            _isPasswordAlphanumeric ? Colors.green : Colors.red,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        "Alphanumeric",
+                        style: TextStyle(
+                            color: _isPasswordAlphanumeric
+                                ? Colors.green
+                                : Colors.red),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+            SizedBox(height: (20.toVHLength).toPX()),
+
+            // confirm password
+            const Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 5,
+              ),
+              child: Text(
+                'Confirm Password',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w400,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
+
+            // create password text field
+            TextField(
+              focusNode: _confirmPasswordFocusNode,
+              controller: _confirmPasswordController,
+              obscureText: _obscureConfirmPassword,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white60,
+                border: const OutlineInputBorder(),
+                contentPadding: const EdgeInsets.all(15),
+                hintText: 'Confirm Password',
+
+                // Border when the TextField is not focused
+                enabledBorder: _getInputBorder(
+                    _doesPasswordMatch, _confirmPasswordFocusNode.hasFocus),
+                // Border when the TextField is focused
+                focusedBorder: _getInputBorder(
+                    _doesPasswordMatch, _confirmPasswordFocusNode.hasFocus),
+
+                helperText: _showConfirmPasswordHelper
+                    ? (_doesPasswordMatch ? null : "Passwords must match")
+                    : null,
+                helperStyle: TextStyle(
+                    color: _doesPasswordMatch ? Colors.green : Colors.red),
+
+                // show password icon
+                suffixIcon: IconButton(
+                  icon: Icon(_obscureConfirmPassword
+                      ? Icons.visibility_off
+                      : Icons.visibility),
+                  onPressed: _toggleConfirmPassword,
+                ),
+              ),
+              onChanged: (value) {
+                _validateConfirmPassword();
+                setState(() {
+                  // Always show password requirements when typing
+                  _showConfirmPasswordHelper = true;
+                });
+              },
+            ),
+
+            const Spacer(),
+
+            // widgets at the bottom of the screen
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                children: [
+                  // login button
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      onPressed: _doesPasswordMatch
+                          ? () {
+                              // Set remember me regardless of the toggle value
+                              PreferencesService().setRememberMe(true);
+                              // Dispatch login event
+                              signupBloc.add(SignUpRequested(
+                                  email: _emailController.text,
+                                  password: _confirmPasswordController.text));
+                            }
+                          : null,
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                            // Light red when disabled
+                            if (states.contains(MaterialState.disabled)) {
+                              return AppColors.redDisabledColor;
+                            }
+                            return AppColors.redColor;
+                          },
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: (40.toVHLength).toPX()),
-
-                            Row(
-                              children: [
-                                Text(
-                                  'Welcome!',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 28,
-                                    color: AppColors.orangeColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            SizedBox(height: 20),
-
-                            // email address
-                            const Padding(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 5,
-                                ),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      'Please fill in the following details to get registered.',
-                                      style: TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black87,
-                                        fontSize: 13,
-                                      ),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                  ],
-                                )),
-
-                            SizedBox(height: 20),
-
-                            // email address
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 5,
-                              ),
-                              child: Text(
-                                'Email Address',
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                ),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-
-                            // email address text field
-                            TextField(
-                              controller: _emailController,
-                              style:
-                                  TextStyle(fontSize: 13, fontFamily: 'Inter'),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white60,
-                                errorText: _errorMessage,
-                                enabledBorder:
-                                    _getInputBorder(true, false, _errorMessage),
-                                focusedBorder:
-                                    _getInputBorder(true, true, _errorMessage),
-                                hintText: 'example@gmail.com',
-                                contentPadding: EdgeInsets.all(15),
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-
-                            SizedBox(height: (20.toVHLength).toPX()),
-
-                            // create password
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 5,
-                              ),
-                              child: Text(
-                                'Create Password',
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                ),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-
-                            TextField(
-                              controller: _createPasswordController,
-                              focusNode: _createPasswordFocusNode,
-                              obscureText: _obscureCreatePassword,
-                              style:
-                                  TextStyle(fontSize: 13, fontFamily: 'Inter'),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white60,
-                                border: const OutlineInputBorder(),
-                                contentPadding: const EdgeInsets.all(15),
-                                hintText: 'Enter your password',
-
-                                // Border when the TextField is not focused
-                                enabledBorder: _getInputBorder(_isPasswordValid,
-                                    _createPasswordFocusNode.hasFocus),
-                                // Border when the TextField is focused
-                                focusedBorder: _getInputBorder(_isPasswordValid,
-                                    _createPasswordFocusNode.hasFocus),
-
-                                // show password icon
-                                suffixIcon: IconButton(
-                                  icon: Icon(_obscureCreatePassword
-                                      ? Icons.visibility_off
-                                      : Icons.visibility),
-                                  onPressed: _toggleCreatePassword,
-                                ),
-
-                                helperText: _showPasswordRequirements
-                                    ? "Password must be at least 6 characters and alphanumeric"
-                                    : null,
-                                helperStyle: TextStyle(
-                                    color: _isPasswordValid
-                                        ? Colors.green
-                                        : Colors.red),
-                              ),
-                              onChanged: (value) {
-                                _validatePassword();
-                                setState(() {
-                                  // Always show password requirements when typing
-                                  _showPasswordRequirements = true;
-                                });
-                              },
-                            ),
-
-                            // conditionally display the password requirements
-                            if (_createPasswordFocusNode.hasFocus)
-                              Column(
-                                children: [
-                                  SizedBox(height: 20),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        _isPasswordLongEnough
-                                            ? Icons.check
-                                            : Icons.close,
-                                        color: _isPasswordLongEnough
-                                            ? Colors.green
-                                            : Colors.red,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Text(
-                                        "At least 6 characters",
-                                        style: TextStyle(
-                                            color: _isPasswordLongEnough
-                                                ? Colors.green
-                                                : Colors.red),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        _isPasswordAlphanumeric
-                                            ? Icons.check
-                                            : Icons.close,
-                                        color: _isPasswordAlphanumeric
-                                            ? Colors.green
-                                            : Colors.red,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Text(
-                                        "Alphanumeric",
-                                        style: TextStyle(
-                                            color: _isPasswordAlphanumeric
-                                                ? Colors.green
-                                                : Colors.red),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-
-                            SizedBox(height: (20.toVHLength).toPX()),
-
-                            // confirm password
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 5,
-                              ),
-                              child: Text(
-                                'Confirm Password',
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                ),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-
-                            // create password text field
-                            TextField(
-                              focusNode: _confirmPasswordFocusNode,
-                              controller: _confirmPasswordController,
-                              obscureText: _obscureConfirmPassword,
-                              style:
-                                  TextStyle(fontSize: 13, fontFamily: 'Inter'),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white60,
-                                border: const OutlineInputBorder(),
-                                contentPadding: const EdgeInsets.all(15),
-                                hintText: 'Confirm Password',
-
-                                // Border when the TextField is not focused
-                                enabledBorder: _getInputBorder(
-                                    _doesPasswordMatch,
-                                    _confirmPasswordFocusNode.hasFocus),
-                                // Border when the TextField is focused
-                                focusedBorder: _getInputBorder(
-                                    _doesPasswordMatch,
-                                    _confirmPasswordFocusNode.hasFocus),
-
-                                helperText: _showConfirmPasswordHelper
-                                    ? (_doesPasswordMatch
-                                        ? null
-                                        : "Passwords must match")
-                                    : null,
-                                helperStyle: TextStyle(
-                                    color: _doesPasswordMatch
-                                        ? Colors.green
-                                        : Colors.red),
-
-                                // show password icon
-                                suffixIcon: IconButton(
-                                  icon: Icon(_obscureConfirmPassword
-                                      ? Icons.visibility_off
-                                      : Icons.visibility),
-                                  onPressed: _toggleConfirmPassword,
-                                ),
-                              ),
-                              onChanged: (value) {
-                                _validateConfirmPassword();
-                                setState(() {
-                                  // Always show password requirements when typing
-                                  _showConfirmPasswordHelper = true;
-                                });
-                              },
-                            ),
-
-                            // Listen to state changes
-                            BlocListener<AuthBloc, AuthState>(
-                              listener: (context, state) {
-                                // If signup is successful, navigate to main menu
-                                if (state is AuthSuccess) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text("Signup successful!")));
-                                  context.go('/search');
-
-                                  // Signup failed
-                                } else if (state is AuthFailure) {
-                                  // Show error message
-                                  setState(() {
-                                    _errorMessage = state
-                                        .error; // Set the error message to be displayed
-                                  });
-                                }
-                              },
-                              // placeholder, typically replaced by the whole signup_ui widget
-                              child: Container(),
-                            ),
-                          ],
+                        // text color for button
+                        foregroundColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.disabled)) {
+                              return Color(0xFFF7EBE8);
+                            }
+                            return Color(0xFFF7EBE8);
+                          },
                         ),
                       ),
-                    ),
-                  )),
-                  // widgets at the bottom of the screen
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 25,
-                    ),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Column(
-                        children: [
-                          // login button
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: ElevatedButton(
-                              onPressed: _doesPasswordMatch
-                                  ? () {
-                                      // Set remember me regardless of the toggle value
-                                      PreferencesService().setRememberMe(true);
-                                      // Dispatch login event
-                                      signupBloc.add(SignUpRequested(
-                                          email: _emailController.text,
-                                          password:
-                                              _confirmPasswordController.text));
-                                    }
-                                  : null,
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                    // Light red when disabled
-                                    if (states
-                                        .contains(MaterialState.disabled)) {
-                                      return AppColors.redDisabledColor;
-                                    }
-                                    return AppColors.redColor;
-                                  },
-                                ),
-                                // text color for button
-                                foregroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                    if (states
-                                        .contains(MaterialState.disabled)) {
-                                      return Color(0xFFF7EBE8);
-                                    }
-                                    return Color(0xFFF7EBE8);
-                                  },
-                                ),
-                              ),
-                              child: const Text("Sign Up"),
-                            ),
-                          ),
-
-                          SizedBox(height: (15.toVHLength).toPX()),
-
-                          // sign up helper text
-                          Text.rich(TextSpan(children: [
-                            TextSpan(
-                              text: "Already have an account? ",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14,
-                              ),
-                            ),
-                            TextSpan(
-                              text: "Log in",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                // Navigate when tapped
-                                ..onTap = () {
-                                  context.go('/login');
-                                },
-                            ),
-                          ]))
-                        ],
-                      ),
+                      child: const Text("Sign Up"),
                     ),
                   ),
 
-                  SizedBox(height: (40.toVHLength).toPX()),
+                  SizedBox(height: (15.toVHLength).toPX()),
+
+                  // sign up helper text
+                  Text.rich(TextSpan(children: [
+                    TextSpan(
+                      text: "Already have an account? ",
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    TextSpan(
+                      text: "Log in",
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w700,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        // Navigate when tapped
+                        ..onTap = () {
+                          context.go('/login');
+                        },
+                    ),
+                  ]))
                 ],
-              );
-            })));
+              ),
+            ),
+
+            SizedBox(height: (40.toVHLength).toPX()),
+
+            // Listen to state changes
+            BlocListener<AuthBloc, AuthState>(
+              listener: (context, state) {
+                // If signup is successful, navigate to main menu
+                if (state is AuthSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Signup successful!")));
+                  context.go('/search');
+
+                  // Signup failed
+                } else if (state is AuthFailure) {
+                  // Show error message
+                  setState(() {
+                    _errorMessage =
+                        state.error; // Set the error message to be displayed
+                  });
+                }
+              },
+              // placeholder, typically replaced by the whole signup_ui widget
+              child: Container(),
+            ),
+          ],
+        ),
+      ),
+    ));
   }
 }

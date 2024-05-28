@@ -15,14 +15,12 @@ class ConnectivityListenerWidget extends StatelessWidget {
         return AlertDialog(
           title: Text('No Internet Connection',
               style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87)),
+                fontFamily: 'Inter',
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              )),
           content: Text(
-            'This app requires an internet connection. Please check your connection and try again.',
-            style: TextStyle(fontSize: 14, color: Colors.black87),
-          ),
+              'This app requires an internet connection. Please check your connection and try again.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {

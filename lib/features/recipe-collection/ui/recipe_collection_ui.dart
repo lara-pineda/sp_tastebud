@@ -1,3 +1,4 @@
+import 'package:dimension/dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -44,17 +45,17 @@ class RecipeCollection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 50),
+          SizedBox(height: (50.toVHLength).toPX()),
           Text(
             'Collection',
             style: TextStyle(
                 fontFamily: 'Poppins',
-                fontSize: 20,
+                fontSize: 30,
                 fontWeight: FontWeight.w700,
                 color: AppColors.purpleColor),
             textAlign: TextAlign.left,
           ),
-          SizedBox(height: 20),
+          SizedBox(height: (20.toVHLength).toPX()),
           Container(
             height: 500,
             child: GridView.count(
@@ -110,12 +111,12 @@ class RecipeCollection extends StatelessWidget {
           flex: 1, // Allocates 1 part of the space to the text
           child: Padding(
             padding: const EdgeInsets.only(
-                top: 8, bottom: 8), // Space around the text
+                top: 8, bottom: 4), // Space around the text
             child: Text(
               title,
               style: TextStyle(
                 color: Colors.black87,
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
