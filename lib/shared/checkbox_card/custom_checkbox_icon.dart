@@ -30,20 +30,29 @@ class IconCheckbox extends StatelessWidget {
             }
           },
           child: Container(
+            // margin: const EdgeInsets.all(8.0), // Ensure margin is included
+            padding: !value
+                ? const EdgeInsets.all(11.0)
+                : const EdgeInsets.all(2), // Adjust padding if needed
+            decoration: BoxDecoration(
+              // shape: BoxShape.circle,
+              color:
+                  Colors.transparent, // Make sure the container is transparent
+            ),
             child: value
                 ? Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 2),
+                    // margin: const EdgeInsets.symmetric(horizontal: 3),
                     child: Icon(
-                      Icons.check_rounded,
-                      size: 25,
-                      color: AppColors.redColor,
-                    ))
+                    Icons.check_rounded,
+                    size: 25,
+                    color: AppColors.redColor,
+                  ))
                 : Container(
                     // Custom dot for unchecked state
-                    width: 7,
-                    height: 7,
+                    width: 8,
+                    height: 8,
                     // Adjust spacing around the dot
-                    margin: const EdgeInsets.symmetric(horizontal: 11),
+                    // margin: const EdgeInsets.symmetric(horizontal: 11),
                     decoration: BoxDecoration(
                       color: AppColors.seaGreenColor,
                       shape: BoxShape.circle,
