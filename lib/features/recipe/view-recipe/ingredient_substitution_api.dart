@@ -15,7 +15,8 @@ class IngredientSubstitutionAPI {
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
+        // final jsonResponse = json.decode(response.body);
+        final jsonResponse = jsonDecode(utf8.decode(response.body.codeUnits));
 
         // Check if substitutes are found
         if (jsonResponse.containsKey('substitutes')) {

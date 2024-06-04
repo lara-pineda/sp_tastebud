@@ -45,7 +45,9 @@ class RecipeSearchAPI {
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
+        // final Map<String, dynamic> data = json.decode(response.body);
+        final Map<String, dynamic> data =
+            jsonDecode(utf8.decode(response.body.codeUnits));
         _cache[url] = CacheEntry(data, DateTime.now().millisecondsSinceEpoch);
         return data;
       } else if (response.statusCode == 403) {
@@ -77,7 +79,9 @@ class RecipeSearchAPI {
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
+        // final Map<String, dynamic> data = json.decode(response.body);
+        final Map<String, dynamic> data =
+            jsonDecode(utf8.decode(response.body.codeUnits));
         _cache[url] = CacheEntry(data, DateTime.now().millisecondsSinceEpoch);
         return data;
       } else if (response.statusCode == 403) {

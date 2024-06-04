@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sp_tastebud/shared/connectivity/connectivity_listener_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:sp_tastebud/core/themes/app_palette.dart';
 import 'package:sp_tastebud/core/config/assets_path.dart';
 import 'package:sp_tastebud/features/ingredients/bloc/ingredients_bloc.dart';
@@ -15,6 +14,7 @@ import '../model/recipe_model.dart';
 import 'tabs/overview_tab.dart';
 import 'tabs/ingredients_tab.dart';
 import 'tabs/nutrition_tab.dart';
+import 'dart:convert';
 
 class ViewRecipe extends StatefulWidget {
   final String recipeId;
@@ -116,25 +116,14 @@ class _ViewRecipeState extends State<ViewRecipe>
     ));
   }
 
-  void _launchURL(String? url) async {
-    if (url != null && await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      // Check if the widget is still mounted
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not launch $url. Please try again.')),
-        );
-      }
-    }
-  }
-
   Widget _buildRecipePage(
     Map<String, dynamic> recipeData,
     Iterable<String> ingredients,
   ) {
     // Convert the map to a Recipe object right here within the method
-    Recipe recipe = Recipe.fromJson(recipeData['recipe']);
+    // Recipe recipe = Recipe.fromJson(recipeData['recipe']);
+    Recipe recipe = Recipe.fromJson(
+        jsonDecode(utf8.decode(utf8.encode(jsonEncode(recipeData['recipe'])))));
 
     return NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {

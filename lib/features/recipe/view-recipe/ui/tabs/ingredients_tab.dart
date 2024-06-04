@@ -175,12 +175,12 @@ class _IngredientsTabState extends State<IngredientsTab> {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: line.text
-                                        .replaceAll('Â', '')
-                                        .replaceAll('â', '')
-                                        .replaceAllMapped(
-                                            RegExp(r'[^\x20-\x7E]+'),
-                                            (match) => '/'),
+                                    text: line.text,
+                                    // .replaceAll('Â', '')
+                                    // .replaceAll('â', '')
+                                    // .replaceAllMapped(
+                                    //     RegExp(r'[^\x20-\x7E]+'),
+                                    //     (match) => '/'),
                                     style: TextStyle(
                                       fontFamily: 'Inter',
                                       fontWeight: FontWeight.w400,
