@@ -2,7 +2,8 @@
 
 * Flutter Project for CMSC 190-2 (A.Y. 2023-2024)
 * Author: Lara Patricia B. Pineda
-* lbpineda1@up.edu.ph
+* Email: lbpineda1@up.edu.ph
+
 * Institute of Computer Science,
 * College of Arts and Sciences,
 * University of the Philippines Los Baños
