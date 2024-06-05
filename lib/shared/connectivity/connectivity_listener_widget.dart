@@ -40,12 +40,14 @@ class ConnectivityListenerWidget extends StatelessWidget {
     return BlocListener<ConnectivityCubit, ConnectivityStatus>(
       listener: (context, status) {
         if (status == ConnectivityStatus.disconnected) {
-          _showNoInternetDialog(context);
+          // _showNoInternetDialog(context);
+          print('No internet connection.');
         } else if (status == ConnectivityStatus.connected) {
           // Dismiss the dialog when the connection is restored
-          if (Navigator.canPop(context)) {
-            Navigator.of(context, rootNavigator: true).pop();
-          }
+          // if (Navigator.canPop(context)) {
+          //   Navigator.of(context, rootNavigator: true).pop();
+          // }
+          print('Internet connection restored.');
         }
       },
       child: child,
