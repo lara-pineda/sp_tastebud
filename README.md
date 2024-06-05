@@ -61,14 +61,3 @@ sp_tastebud/
     └── main.dart                               # Entry point that launches the application
 ```
 
-## Features TODO
-- build with substitutes
-- build w/o substitutes
-
-SUGGESTIONS
--   confirmation windows for saving changes when switching tabs (dropped)
--   add collection for rejected recipes (done)
--   add more information regarding options (done)
--   add more filters (done)
--   manage equipments
--   leave a review
