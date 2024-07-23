@@ -41,6 +41,7 @@ dependencies:
   cupertino_icons: ^1.0.6
 
   # app architecture
+  flutter_dotenv: ^5.0.2
   equatable: ^2.0.5
   bloc: ^8.1.4
   flutter_bloc: ^8.1.5
@@ -48,6 +49,7 @@ dependencies:
   go_router: ^13.2.2    # routing
 
   # for svg icons
+  flutter_svg: ^2.0.9
 
   # for using css units of measurement
   dimension: ^0.1.7
@@ -58,12 +60,15 @@ dependencies:
   # for remember me functionality
   shared_preferences: ^2.2.3
 
+  # for directing to external website
+  url_launcher: ^6.2.6
+
   # firebase
   firebase_core: ^2.29.0
   firebase_auth: ^4.19.1
   cloud_firestore: ^4.16.1
-  url_launcher: ^6.2.6
-  flutter_svg: ^2.0.9
+
+  # for checking internet connection
   internet_connection_checker_plus: ^1.0.1
   connectivity_plus: ^6.0.3
 

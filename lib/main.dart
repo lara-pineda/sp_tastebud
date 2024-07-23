@@ -10,8 +10,12 @@ import 'features/auth/bloc/auth_bloc.dart';
 import 'features/user-profile/bloc/user_profile_bloc.dart';
 import 'firebase_options.dart';
 import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() async {
+
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
+
   WidgetsFlutterBinding.ensureInitialized();
 
   // initialize firebase

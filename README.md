@@ -1,14 +1,18 @@
 # TasteBud: A Food Recommendation System for Mobile Devices
 
-* Flutter Project for CMSC 190-2 (A.Y. 2023-2024)
-* Author: Lara Patricia B. Pineda
-* Email: lbpineda1@up.edu.ph
+## Project Overview
 
-* Institute of Computer Science,
-* College of Arts and Sciences,
-* University of the Philippines Los Baños
+This is a mobile application designed to recommend recipes based on users' dietary preferences, nutritional needs, available ingredients, and allergies, as well as provide alternative ingredients for dishes with those specific allergens. Only for devices with Android OS version 7.0 and above.
 
-## 📌 File Structure
+## Tech Stack
+* Flutter
+* Firebase
+* Edamam Recipe Search API
+* Edamam Food Database API
+* Spoonacular API
+
+
+## File Structure
 ```
 sp_tastebud/
 │
@@ -41,7 +45,7 @@ sp_tastebud/
 │   │       ├── load_svg.dart                   # Loads a given svg file to UI layer
 │   │       └── user_not_found_exception.dart   # Custom exception to throw
 │   │
-│   ├── features/                               # App features
+│   ├── features/                               # App features; uses BLoC for state management
 │   │   ├── auth/
 │   │   ├── ingredients/
 │   │   ├── navigation/

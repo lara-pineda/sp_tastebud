@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class RecipeSearchAPI {
-  static const String appId = '944184b7';
-  static const String appKey = '32a51da0f5bf093de7b4cd19e2f55112';
+  final appId = dotenv.env['RECIPE_SEARCH_APPID'];
+  final appKey = dotenv.env['RECIPE_SEARCH_APPKEY'];
+
   static const String baseUrl = 'https://api.edamam.com';
 
   static final Map<String, CacheEntry> _cache = {};

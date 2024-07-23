@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class FoodDatabaseAPI {
-  static const String appId = '40f6290c';
-  static const String appKey = 'ee0ac56c921059e42ec5c5052d2fba64';
+  final appId = dotenv.env['FOOD_DB_APPID'];
+  final appKey = dotenv.env['FOOD_DB_APPKEY'];
+
   static const String baseUrl = 'https://api.edamam.com';
   static const String measureUri =
       "http://www.edamam.com/ontologies/edamam.owl#Measure_serving";

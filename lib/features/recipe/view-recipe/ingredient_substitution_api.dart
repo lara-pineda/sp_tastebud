@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'model/ingredient_substitute_response_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class IngredientSubstitutionAPI {
-  static const String apiKey = '1c91b8b1f14e4993abc834a80a93c564';
+  final apiKey = dotenv.env['SPOONACULAR_APIKEY'];
   static const String baseUrl =
       'https://api.spoonacular.com/food/ingredients/substitutes';
 
