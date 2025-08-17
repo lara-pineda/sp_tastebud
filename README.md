@@ -4,13 +4,9 @@
 
 This is a mobile application designed to recommend recipes based on users' dietary preferences, nutritional needs, available ingredients, and allergies, as well as provide alternative ingredients for dishes with those specific allergens. Only for devices with Android OS version 7.0 and above.
 
-## Tech Stack
+## Tech
 * Flutter
 * Firebase
-* Edamam Recipe Search API
-* Edamam Food Database API
-* Spoonacular API
-
 
 ## File Structure
 ```
